@@ -20,6 +20,10 @@ public class Climber {
 		mode = Mode_Type.WAITING;
 	}
 	
+	public void stopClimbing(){
+		mode = Mode_Type.NOTHING;
+	}
+	
 	public void update() {
 		double current = pdp.getCurrent(3);
 		switch(mode) {
@@ -29,7 +33,7 @@ public class Climber {
 			}
 			else mode = Mode_Type.CLIMBING;
 			break;
-		
+			
 		case CLIMBING:
 			climbMotor.set(0.5);
 			if (current > 131.0) {
