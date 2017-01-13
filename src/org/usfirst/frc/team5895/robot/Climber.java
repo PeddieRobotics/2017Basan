@@ -1,53 +1,44 @@
 package org.usfirst.frc.team5895.robot;
-
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Climber {
-	private TalonSRX theMotor;
-	private Joystick theJoystick;
-	private enum Mode_Type {FIRSTSPIKE, CLIMBING, CHILLING}
-	private Mode_Type mode= Mode_Type.FIRSTSPIKE;
-	private PowerDistributionPanel pdp;
 	
+	PowerDistributionPanel pdp;
+	private Talon climbMotor;
+	private enum Mode_Type {WAITING, CLIMBING, NOTHING};
+	private Mode_Type mode = Mode_Type.WAITING;
+	private double climbTimeStamp = Double.MIN_VALUE;
 	
-	public Climber(){
-		theMotor = new TalonSRX(0);
-		theJoystick = new Joystick(0);
-		pdp = new PowerDistributionPanel();
+	Climber() {
+		climbMotor = new Talon(0);
 	}
 	
-	private double getThatTime(){
-		double firstSpikeTime=Timer.getFPGATimestamp();
-		return firstSpikeTime;
+	public void climb() {
+		climbTimeStamp = Timer.getFPGATimestamp();
+		mode = Mode_Type.WAITING;
 	}
 	
-	private double getCurrent(){
-		double current = pdp.getCurrent(0);
-		return current;
-	}
-	
-	public void update(){
-		switch(mode){
-		
-		case FIRSTSPIKE:
-			theMotor.set(1);
-			if(Timer.getFPGATimestamp()-getThatTime() >= 0.5){
-				mode = Mode_Type.CLIMBING;
+	public void update() {
+		double current = pdp.getCurrent(3);
+		switch(mode) {
+		case WAITING:
+			if (Timer.getFPGATimestamp() - climbTimeStamp < 0.5) {
+				climbMotor.set(0.75);
 			}
+			else mode = Mode_Type.CLIMBING;
 			break;
 		
 		case CLIMBING:
-			theMotor.set(0.5);
-			if(getCurrent()>=40 || theJoystick.getRawButton(1)){
-				mode = Mode_Type.CHILLING;
+			climbMotor.set(0.5);
+			if (current > 131.0) {
+				mode = Mode_Type.NOTHING;
 			}
 			break;
 			
-		case CHILLING:
-			theMotor.set(0);
+		case NOTHING:
+			climbMotor.set(0.0);
 			break;
 		}
 	}
