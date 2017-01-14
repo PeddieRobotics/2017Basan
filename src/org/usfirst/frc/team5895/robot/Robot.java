@@ -17,18 +17,18 @@ public class Robot extends IterativeRobot {
 	
     public void robotInit() {
     	
-    	Jleft = new Joystick(1);
-    	Jright = new Joystick(0);
+    	Jleft = new Joystick(0);
+    	Jright = new Joystick(1);
     	drivetrain = new DriveTrain();
-    	intake = new Intake();
-    	climber = new Climber();
+    	//intake = new Intake();
+    	//climber = new Climber();
     	
     	u = new Looper(10);
 
     	
     	u.add(drivetrain::update);
-    	u.add(intake::update);
-    	u.add(climber::update);
+    	//u.add(intake::update);
+    	//u.add(climber::update);
     	u.start();
     }
     
@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot {
     
     public void teleopPeriodic() {
     	double speed=Jleft.getRawAxis(1);
-    	double turn=Jright.getRawAxis(0);
+    	double turn=-1*Jright.getRawAxis(0);
     	drivetrain.arcadeDrive(speed, turn);
     }
     
