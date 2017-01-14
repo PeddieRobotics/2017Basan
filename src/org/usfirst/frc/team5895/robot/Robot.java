@@ -2,8 +2,7 @@ package org.usfirst.frc.team5895.robot;
 
 import org.usfirst.frc.team5895.robot.framework.*;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Encoder;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -12,7 +11,6 @@ public class Robot extends IterativeRobot {
 
 	Looper u;
 	Joystick Jleft, Jright;
-	Encoder encody;
 	DriveTrain drivetrain;
 	Intake intake;
 	Climber climber;
@@ -21,7 +19,6 @@ public class Robot extends IterativeRobot {
     	
     	Jleft = new Joystick(1);
     	Jright = new Joystick(0);
-    	encody = new Encoder(0,1);
     	drivetrain = new DriveTrain();
     	intake = new Intake();
     	climber = new Climber();
@@ -40,10 +37,9 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopPeriodic() {
-    	encody.setDistancePerPulse(1);
-    	double count=encody.getDistance();
-    	DriverStation.reportError("Counter: "+count, false);
-    	
+    	double speed=Jleft.getRawAxis(1);
+    	double turn=Jright.getRawAxis(0);
+    	drivetrain.arcadeDrive(speed, turn);
     }
     
     public void disabledInit() {
