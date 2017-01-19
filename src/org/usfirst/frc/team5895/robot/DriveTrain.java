@@ -11,11 +11,7 @@ public class DriveTrain {
 	private enum Mode_Type {TELEOP, AUTO};
 	private Mode_Type mode = Mode_Type.AUTO;
 	private Encoder Eleft, Eright;
-	private double dist;
-	private final double Kp;
-	private double setpoint;
-	private double error;
-	private PID PID;
+	double dist;
 	
 	public DriveTrain()
 	{
@@ -28,11 +24,7 @@ public class DriveTrain {
 		Eleft.setDistancePerPulse(4*3.14/360);
 		Eright.setDistancePerPulse(4*3.14/360);
 		
-		PID = new PID(1, 0, 0, 1);
-		
 	}
-	
-
 	
 	public double getDistance() {
 	
@@ -44,9 +36,6 @@ public class DriveTrain {
 	public void autoDrive() {
 
 		dist = getDistance();
-		
-		PID.set(72);
-		
 		mode = Mode_Type.AUTO;
 	}
 	
@@ -62,9 +51,17 @@ public class DriveTrain {
 		
 		switch(mode) {
 		case AUTO:
-			double output = PID.getOutput(dist);
-			Mleft.set(-output);
-			Mright.set(output);
+			
+			if(getDistance() - dist >= 72)
+			{
+				Mleft.set(0.0);
+				Mright.set(0.0);
+			}
+			else
+			{
+				Mleft.set(-0.35);
+				Mright.set(0.35);
+			}
 			
 			break;
 			
