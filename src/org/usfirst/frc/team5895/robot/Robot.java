@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
-    	
+    	drivetrain.autoDrive();
     }
     
     public void teleopPeriodic() {
