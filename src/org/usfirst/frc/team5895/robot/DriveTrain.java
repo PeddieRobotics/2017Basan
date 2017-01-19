@@ -11,7 +11,7 @@ public class DriveTrain {
 	private enum Mode_Type {TELEOP, AUTO};
 	private Mode_Type mode = Mode_Type.AUTO;
 	private Encoder Eleft, Eright;
-	
+	double dist;
 	
 	public DriveTrain()
 	{
@@ -21,16 +21,22 @@ public class DriveTrain {
 		Eleft = new Encoder(2,3);
 		Eright = new Encoder(0,1);
 		
+		Eleft.setDistancePerPulse(4*3.14/360);
+		Eright.setDistancePerPulse(4*3.14/360);
+		
 	}
 	
 	public double getDistance() {
-		
-		Eleft.setDistancePerPulse(1);
-		Eright.setDistancePerPulse(1);
-
+	
 		double distance = ((-1*Eleft.getDistance()) + Eright.getDistance())/2;
 		
 		return distance;
+	}
+	
+	public void autoDrive() {
+
+		dist = getDistance();
+		mode = Mode_Type.AUTO;
 	}
 	
 	public void arcadeDrive( double speed, double turn) {
@@ -45,6 +51,18 @@ public class DriveTrain {
 		
 		switch(mode) {
 		case AUTO:
+			
+			if(getDistance() - dist >= 72)
+			{
+				Mleft.set(0.0);
+				Mright.set(0.0);
+			}
+			else
+			{
+				Mleft.set(-0.35);
+				Mright.set(0.35);
+			}
+			
 			break;
 			
 		case TELEOP:
