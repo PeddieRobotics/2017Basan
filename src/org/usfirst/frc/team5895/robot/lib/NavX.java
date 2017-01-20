@@ -22,6 +22,7 @@ public class NavX {
 	 * Resets the angle of the NavX
 	 */
 	public void reset() {
+		lastRawAngle = 0;
 		offset = 0;
 		ahrs.reset();
 	}
