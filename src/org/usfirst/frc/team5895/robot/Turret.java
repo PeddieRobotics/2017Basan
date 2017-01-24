@@ -1,10 +1,13 @@
 package org.usfirst.frc.team5895.robot;
+import org.usfirst.frc.team5895.robot.framework.PID;
+
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.TalonSRX;
 
 public class Turret {
 
-	private Talon myMotor;
+	private TalonSRX myMotor;
 	private PID myPID;
 	private Encoder e;
 	private double Kp;

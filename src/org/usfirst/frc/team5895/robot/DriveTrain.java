@@ -1,5 +1,6 @@
 package org.usfirst.frc.team5895.robot;
 
+import org.usfirst.frc.team5895.robot.framework.PID;
 import org.usfirst.frc.team5895.robot.lib.NavX;
 
 import edu.wpi.first.wpilibj.DriverStation;
