@@ -14,7 +14,6 @@ public class Intake {
 
     private Talon motor;
     private double speed;
-    private Intake intake1;
     private PowerDistributionPanel pDP;
     private Solenoid myCylinder;
     private boolean isDown;
@@ -22,7 +21,6 @@ public class Intake {
 public Intake() {
     motor = new Talon(2);
     speed = 0;
-    intake1 = new Intake();
     pDP = new PowerDistributionPanel();
     myCylinder = new Solenoid(0);
     isDown = false;

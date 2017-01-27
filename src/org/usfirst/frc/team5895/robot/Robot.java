@@ -1,12 +1,10 @@
 package org.usfirst.frc.team5895.robot;
 
 import org.usfirst.frc.team5895.robot.framework.*;
-
+import org.usfirst.frc.team5895.robot.lib.GripPipeline;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-
-
 public class Robot extends IterativeRobot {
 
 	Looper u;//testing Daniel's Github
@@ -14,12 +12,14 @@ public class Robot extends IterativeRobot {
 	DriveTrain drivetrain;
 	Intake intake;
 	Climber climber;
+	Vision GRIP;
 	
     public void robotInit() {
     	
     	Jleft = new Joystick(0);
     	Jright = new Joystick(1);
     	drivetrain = new DriveTrain();
+    	GRIP= new Vision();
     	//intake = new Intake();
     	//climber = new Climber();
     	
@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
-    	
+    	GRIP.autoLock();
     }
     
     public void teleopPeriodic() {

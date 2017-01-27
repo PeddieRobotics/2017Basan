@@ -2,12 +2,11 @@ package org.usfirst.frc.team5895.robot;
 import org.usfirst.frc.team5895.robot.lib.PID;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.TalonSRX;
 
 public class Turret {
 
-	private TalonSRX myMotor;
+	/*private TalonSRX myMotor;
 	private PID myPID;
 	private Encoder e;
 	private double Kp;
@@ -15,7 +14,7 @@ public class Turret {
 	private double Kd;
 	private double dV;
 	private double degreesPerPulse;
-	/*
+	
 	public Turret() {
 		Kp=0.1;
 		Ki=0;
