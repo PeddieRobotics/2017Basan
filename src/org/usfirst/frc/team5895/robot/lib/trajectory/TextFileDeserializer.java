@@ -1,9 +1,6 @@
-package org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.io;
+package org.usfirst.frc.team5895.robot.lib.trajectory;
 
 
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.FastParser;
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.Path;
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.Trajectory;
 
 
 /**

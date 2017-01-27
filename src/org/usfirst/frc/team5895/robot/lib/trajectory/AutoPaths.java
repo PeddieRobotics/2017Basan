@@ -2,11 +2,8 @@ package org.usfirst.frc.team5895.robot.lib.trajectory;
 
 
 import edu.wpi.first.wpilibj.Timer;
-import java.util.Hashtable;
 
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.Path;
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.TextFileReader;
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.io.TextFileDeserializer;
+import java.util.Hashtable;
 
 
 

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team5895.robot.lib.trajectory.trajectory;
+package org.usfirst.frc.team5895.robot.lib.trajectory;
 
 /**
  * This class holds a bunch of static methods and variables needed for

@@ -1,6 +1,6 @@
-package org.usfirst.frc.team5895.robot.lib.trajectory.trajectory;
+package org.usfirst.frc.team5895.robot.lib.trajectory;
 
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.ChezyMath;
+import org.usfirst.frc.team5895.robot.lib.trajectory.ChezyMath;
 
 /**
  * Implementation of a Trajectory using arrays as the underlying storage

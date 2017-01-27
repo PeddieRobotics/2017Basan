@@ -1,5 +1,5 @@
 package org.usfirst.frc.team5895.robot;
-import org.usfirst.frc.team5895.robot.framework.PID;
+import org.usfirst.frc.team5895.robot.lib.PID;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
@@ -15,7 +15,7 @@ public class Turret {
 	private double Kd;
 	private double dV;
 	private double degreesPerPulse;
-	
+	/*
 	public Turret() {
 		Kp=0.1;
 		Ki=0;
@@ -45,5 +45,6 @@ public class Turret {
 	
 	public void update() {
 //		myMotor.set(myPID.getOutput(e.getDistance()));
-	}	
+	}
+	*/	
 }

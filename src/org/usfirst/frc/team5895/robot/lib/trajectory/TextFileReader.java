@@ -1,4 +1,4 @@
-package org.usfirst.frc.team5895.robot.lib.trajectory.trajectory;
+package org.usfirst.frc.team5895.robot.lib.trajectory;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

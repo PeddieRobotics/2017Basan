@@ -1,6 +1,5 @@
-package org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.io;
+package org.usfirst.frc.team5895.robot.lib.trajectory;
 
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.Path;
 
 /**
  * Interface for methods that deserializes a Path or Trajectory.

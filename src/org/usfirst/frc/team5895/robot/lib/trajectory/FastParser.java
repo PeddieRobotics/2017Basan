@@ -1,4 +1,4 @@
-package org.usfirst.frc.team5895.robot.lib.trajectory.trajectory;
+package org.usfirst.frc.team5895.robot.lib.trajectory;
 
 /**
  * Some speed-enhanced string parsing methods.

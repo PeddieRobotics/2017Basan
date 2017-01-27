@@ -1,6 +1,6 @@
-package org.usfirst.frc.team5895.robot.lib.trajectory.trajectory;
+package org.usfirst.frc.team5895.robot.lib.trajectory;
 
-import org.usfirst.frc.team5895.robot.lib.trajectory.trajectory.Trajectory.Segment;
+import org.usfirst.frc.team5895.robot.lib.trajectory.Trajectory.Segment;
 
 /**
  * Base class for an autonomous path.

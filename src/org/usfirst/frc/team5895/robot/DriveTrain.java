@@ -1,7 +1,7 @@
 package org.usfirst.frc.team5895.robot;
 
-import org.usfirst.frc.team5895.robot.framework.PID;
 import org.usfirst.frc.team5895.robot.lib.NavX;
+import org.usfirst.frc.team5895.robot.lib.PID;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
@@ -42,7 +42,6 @@ public class DriveTrain {
 	}
 	
 
-	
 	public double getDistance() {
 	
 		double distance = ((-1*Eleft.getDistance()) + Eright.getDistance())/2;
@@ -72,6 +71,12 @@ public class DriveTrain {
 	public void arcadeDrive( double speed, double turn) {
 		Lspeed = speed + turn;
 		Rspeed = -speed + turn;
+		mode = Mode_Type.TELEOP;
+	}
+	
+	public void setLeftRightPower(double l, double r) {
+		Lspeed = l;
+		Rspeed = r;
 		mode = Mode_Type.TELEOP;
 	}
 	
