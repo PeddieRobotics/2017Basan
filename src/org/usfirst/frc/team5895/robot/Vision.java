@@ -17,11 +17,12 @@ public class Vision {
 	private VisionThread visionThread;
 	private GripPipeline GRIP;
 	private double centerX = 0.0;
+	private double turn;
 	
 	
 	private final Object imgLock = new Object();
 	
-	public Vision(){
+	public void visionCamera(){
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
         
@@ -48,6 +49,14 @@ public class Vision {
 			centerX = this.centerX;
 		}
 		double turn = centerX - (IMG_WIDTH / 2);
+	}
+	
+	public double getAutoLock(){
+		return turn;
+	}
+	
+	public void update(){
+		visionCamera();
 	}
 
 }
