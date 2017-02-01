@@ -2,7 +2,9 @@ package org.usfirst.frc.team5895.robot;
 
 import org.usfirst.frc.team5895.robot.framework.*;
 import org.usfirst.frc.team5895.robot.lib.GripPipeline;
+import org.usfirst.frc.team5895.robot.lib.trajectory.TextFileReader;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 public class Robot extends IterativeRobot {
@@ -13,6 +15,7 @@ public class Robot extends IterativeRobot {
 	Intake intake;
 	Climber climber;
 	Vision GRIP;
+	TextFileReader reader;
 	
     public void robotInit() {
     	
@@ -20,6 +23,7 @@ public class Robot extends IterativeRobot {
     	Jright = new Joystick(1);
     	drivetrain = new DriveTrain();
     	GRIP= new Vision();
+    	reader = new TextFileReader("/home/lvuser/FRC-2014/paths/CenterLanePathFar");
     	//intake = new Intake();
     	//climber = new Climber();
     	
@@ -27,9 +31,12 @@ public class Robot extends IterativeRobot {
 
     	
     	u.add(drivetrain::update);
+    	u.add(GRIP::update);
     	//u.add(intake::update);
     	//u.add(climber::update);
     	u.start();
+    	
+    	DriverStation.reportError(reader.readWholeFile(), false);
     }
     
     public void autonomousInit() {
