@@ -1,6 +1,9 @@
 package org.usfirst.frc.team5895.robot.lib;
 
 import org.usfirst.frc.team5895.robot.lib.trajectory.ChezyMath;
+import org.usfirst.frc.team5895.robot.lib.trajectory.Path;
+import org.usfirst.frc.team5895.robot.lib.trajectory.TextFileDeserializer;
+import org.usfirst.frc.team5895.robot.lib.trajectory.TextFileReader;
 import org.usfirst.frc.team5895.robot.lib.trajectory.Trajectory;
 import org.usfirst.frc.team5895.robot.lib.trajectory.TrajectoryFollower;
 
@@ -16,42 +19,31 @@ public class TrajectoryDriveController {
 	  Trajectory trajectory;
 	  TrajectoryFollower followerLeft = new TrajectoryFollower("left");
 	  TrajectoryFollower followerRight = new TrajectoryFollower("right");
-	  double direction;
-	  double heading;
+	  double direction = 1.0; //seemingly useless?
+//	  double heading;
 	  double kTurn;
 
-	  public TrajectoryDriveController(double kp, double ki, double kd, double kv, double ka, double kTurn) {
+	  public TrajectoryDriveController(String file, double kp, double ki, double kd, double kv, double ka, double kTurn) {
 //  	  followerLeft.configure(1.5, 0, 0, 1.0/15.0, 1.0/34.0);
 //  	  followerRight.configure(1.5, 0, 0, 1.0/15.0, 1.0/34.0);
 //		  kTurn = -3.0/80.0;
+		  
+		  TextFileReader reader = new TextFileReader(file);
+		  TextFileDeserializer deserializer = new TextFileDeserializer();
+		  String text = reader.readWholeFile();
+		  Path p = deserializer.deserialize(text);
+		  
 		  followerLeft.configure(kp, ki, kd, kv, ka);
 		  followerRight.configure(kp, ki, kd, kv, ka);
+		  
+		  followerLeft.setTrajectory(p.getLeftWheelTrajectory());
+		  followerRight.setTrajectory(p.getRightWheelTrajectory());
+		  
 		  this.kTurn = kTurn;
 	  }
 
 	  public boolean onTarget() {
 		  return followerLeft.isFinishedTrajectory();
-	  }
-
-	  /**
-       * Should also reset drive encoders
-       * 
-       * @param leftProfile
-       * @param rightProfile
-       * @param direction
-       * @param heading
-       */
-	  public void loadProfile(Trajectory leftProfile, Trajectory rightProfile, double direction, double heading) {
-		  reset();
-		  followerLeft.setTrajectory(leftProfile);
-		  followerRight.setTrajectory(rightProfile);
-		  this.direction = direction;
-		  this.heading = heading;
-	  }
-  
-	  public void loadProfileNoReset(Trajectory leftProfile, Trajectory rightProfile) {
-		  followerLeft.setTrajectory(leftProfile);
-		  followerRight.setTrajectory(rightProfile);
 	  }
 
 	  /**
@@ -101,7 +93,7 @@ public class TrajectoryDriveController {
 			  double observedHeading = angleRads;
 	
 			  double angleDiffRads = ChezyMath.getDifferenceInAngleRadians(observedHeading, goalHeading);
-			  double angleDiff = Math.toDegrees(angleDiffRads);
+			  double angleDiff = Math.toDegrees(angleDiffRads); //why???
 	
 			  double turn = kTurn * angleDiff;
 			  

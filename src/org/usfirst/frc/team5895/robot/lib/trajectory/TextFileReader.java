@@ -22,15 +22,15 @@ public class TextFileReader {
     	file_connection_ = new FileInputStream(uri);
 
       // Make an I/O adapter sandwich to actually get some text out
-      reader_ = new BufferedReader(new InputStreamReader(file_connection_));   
-    } 
+    	reader_ = new BufferedReader(new InputStreamReader(file_connection_));   
+	  }
     
-    catch (IOException e) {
-      e.printStackTrace();
-      System.err.println("Could not open file connection!");
-      closeFile();
-    }
-  }
+	  catch (IOException e) {
+		  e.printStackTrace();
+		  System.err.println("Could not open file connection!");
+		  closeFile();
+		  }
+	  }
 
   private void closeFile() {
     try {
