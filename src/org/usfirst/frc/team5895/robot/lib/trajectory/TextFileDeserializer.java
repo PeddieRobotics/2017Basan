@@ -10,7 +10,7 @@ package org.usfirst.frc.team5895.robot.lib.trajectory;
 public class TextFileDeserializer implements IPathDeserializer {
 
   public Path deserialize(String serialized) {
-    String[] lines = serialized.split("/n");
+    String[] lines = serialized.split("\n");
     System.out.println("Parsing path string...");
     System.out.println("String has " + serialized.length() + " chars");
     
@@ -34,7 +34,7 @@ public class TextFileDeserializer implements IPathDeserializer {
       left.setSegment(i, segment);
     }
     Trajectory right = new Trajectory(num_elements);
-    for (int i = 0; i < num_elements; ++i) {
+    for (int i = num_elements+2; i < 2*num_elements+2; i++) {
       Trajectory.Segment segment = new Trajectory.Segment();
       String[] number = lines[i].split(" ");
       

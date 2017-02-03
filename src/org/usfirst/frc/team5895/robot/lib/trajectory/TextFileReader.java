@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 /**
  * Read a text file into a string.
  *
@@ -28,6 +30,7 @@ public class TextFileReader {
 	  catch (IOException e) {
 		  e.printStackTrace();
 		  System.err.println("Could not open file connection!");
+		  DriverStation.reportError("Could not open file connection!", false);
 		  closeFile();
 		  }
 	  }
