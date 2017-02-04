@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 public class Robot extends IterativeRobot {
 
-	Looper u;//testing Daniel's Github
+	Looper loop;
 	Joystick Jleft, Jright;
 	DriveTrain drivetrain;
 	Intake intake;
@@ -27,13 +27,13 @@ public class Robot extends IterativeRobot {
     	//intake = new Intake();
     	//climber = new Climber();
     	
-    	u = new Looper(10);
+    	loop = new Looper(10);
 
     	
-    	u.add(drivetrain::update);
+    	loop.add(drivetrain::update);
     	//u.add(intake::update);
     	//u.add(climber::update);
-    	u.start();
+    	loop.start();
     	
     	DriverStation.reportError(reader.readWholeFile(), false);
     }
