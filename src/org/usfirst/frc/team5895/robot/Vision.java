@@ -2,7 +2,7 @@ package org.usfirst.frc.team5895.robot;
 
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
-import org.usfirst.frc.team5895.robot.lib.GripPipeline;
+import org.usfirst.frc.team5895.robot.lib.ReflectiveTapePipeline;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -15,7 +15,7 @@ public class Vision {
 	private static final int IMG_HEIGHT = 240;
 	
 	private VisionThread visionThread;
-	private GripPipeline GRIP;
+	private ReflectiveTapePipeline GRIP;
 	private double centerX = 0.0;
 	private double turn;
 	
@@ -27,7 +27,7 @@ public class Vision {
         camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
         
         
-        visionThread = new VisionThread(camera, new GripPipeline(), GripPipelineListener ->  {
+        visionThread = new VisionThread(camera, new ReflectiveTapePipeline(), GripPipelineListener ->  {
             if (!GripPipelineListener.filterContoursOutput().isEmpty()) {
                 Rect r = Imgproc.boundingRect(GRIP.filterContoursOutput().get(0));
                 synchronized (imgLock) {
@@ -37,26 +37,13 @@ public class Vision {
         });
         visionThread.start();
         
-        
-        visionThread = new VisionThread(camera, new GripPipeline(), null);
             
         //this should get everything
 	}
 	
-	public void autoLock(){
-		double centerX;
-		synchronized (imgLock) {
-			centerX = this.centerX;
-		}
-		double turn = centerX - (IMG_WIDTH / 2);
-	}
-	
-	public double getAutoLock(){
-		return turn;
-	}
-	
-	public void update(){
-		visionCamera();
+	public double autoLock(){
+		double centerX=GRIP.getCenter();
+		return centerX;
 	}
 
 }

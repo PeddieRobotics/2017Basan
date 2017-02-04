@@ -1,7 +1,7 @@
 package org.usfirst.frc.team5895.robot;
 
 import org.usfirst.frc.team5895.robot.framework.*;
-import org.usfirst.frc.team5895.robot.lib.GripPipeline;
+import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
 import org.usfirst.frc.team5895.robot.lib.trajectory.TextFileReader;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -31,7 +31,6 @@ public class Robot extends IterativeRobot {
 
     	
     	u.add(drivetrain::update);
-    	u.add(GRIP::update);
     	//u.add(intake::update);
     	//u.add(climber::update);
     	u.start();
@@ -40,10 +39,10 @@ public class Robot extends IterativeRobot {
     }
     
     public void autonomousInit() {
-    	GRIP.autoLock();
     }
     
     public void teleopPeriodic() {
+    	DriverStation.reportError("CetnerX = "+GRIP.autoLock(), false);
     	double speed=Jleft.getRawAxis(1);
     	double turn=-1*Jright.getRawAxis(0);
     	drivetrain.arcadeDrive(speed, turn);
