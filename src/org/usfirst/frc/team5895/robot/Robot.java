@@ -15,7 +15,6 @@ public class Robot extends IterativeRobot {
 	Intake intake;
 	Climber climber;
 	Vision GRIP;
-	TextFileReader reader;
 	
     public void robotInit() {
     	
@@ -23,7 +22,6 @@ public class Robot extends IterativeRobot {
     	Jright = new Joystick(1);
     	drivetrain = new DriveTrain();
     	GRIP= new Vision();
-    	reader = new TextFileReader("/home/lvuser/FRC-2014/paths/CenterLanePathFar");
     	//intake = new Intake();
     	//climber = new Climber();
     	
@@ -35,7 +33,6 @@ public class Robot extends IterativeRobot {
     	//u.add(climber::update);
     	u.start();
     	
-    	DriverStation.reportError(reader.readWholeFile(), false);
     }
     
     public void autonomousInit() {
@@ -51,8 +48,4 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {
     
     }  
-    
-    public void update() {
-    	
-    }
 }

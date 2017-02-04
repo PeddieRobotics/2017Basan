@@ -14,16 +14,9 @@ public class Intake {
 
     private Talon motor;
     private double speed;
-    private PowerDistributionPanel pDP;
     private Solenoid myCylinder;
     private boolean isDown;
 
-public Intake() {
-    motor = new Talon(2);
-    speed = 0;
-    pDP = new PowerDistributionPanel();
-    myCylinder = new Solenoid(0);
-    isDown = false;
 }
 
    //Make an intake subsystem that has a motor and a solenoid.
