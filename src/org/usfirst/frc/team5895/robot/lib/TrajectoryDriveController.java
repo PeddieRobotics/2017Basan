@@ -15,7 +15,6 @@ import org.usfirst.frc.team5895.robot.lib.trajectory.TrajectoryFollower;
  */
 public class TrajectoryDriveController {
 	
-	  private boolean enabled = false;
 	  Trajectory trajectory;
 	  TrajectoryFollower followerLeft = new TrajectoryFollower("left");
 	  TrajectoryFollower followerRight = new TrajectoryFollower("right");
@@ -52,7 +51,6 @@ public class TrajectoryDriveController {
 	  public void reset() {
 		  followerLeft.reset();
 		  followerRight.reset();
-		  // drivebase.resetEncoders();
 	  }
   
 	  public int getFollowerCurrentSegment() {
@@ -72,12 +70,6 @@ public class TrajectoryDriveController {
 	   */
 	  public double[] getOutput(double leftEncDist, double rightEncDist, double angleRads) {
 		  double[] output = new double[2];
-		  if (!enabled) {
-			  output[0] = 0;
-			  output[1] = 0;
-			  return output;
-		  }
-		  
 		  if (onTarget()) {
 			  output[0] = 0;
 			  output[1] = 0;
@@ -102,18 +94,6 @@ public class TrajectoryDriveController {
 			  return output;
 	      
 	    }
-	  }
-
-	  public void enable() {
-	    enabled = true;
-	  }
-	  
-	  public void disable() {
-	    enabled = false;
-	  }
-
-	  public boolean enabled() {
-	    return enabled;
 	  }
   
 	  public void setTrajectory(Trajectory t) {
