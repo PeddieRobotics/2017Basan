@@ -43,16 +43,16 @@ public void down() {
 }
 
 public void update() {
-    controlCurrent();
+   //controlCurrent(); don't need this for Intake
    motor.set(speed);
    if (myCylinder.get() != isDown)
        myCylinder.set(isDown);
-   
 }
-public void controlCurrent(){
+
+/*public void controlCurrent(){
     double limit = 5.0;
     if (pDP.getCurrent(3)>=limit){
         speed=0;
     }
-}
+}*/
 }
