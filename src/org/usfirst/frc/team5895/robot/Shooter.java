@@ -20,17 +20,17 @@ public class Shooter {
 	 
 	public Shooter()
 	{
-		m1 = new Talon(0); //using PID
-		m2 = new Talon(1); //hopper to the shooter ?
+		m1 = new Talon(0); 
+		m2 = new Talon(1); 
 		
+		PID = new PID(Kp, 0, 0, 0);
 		Counter = new Counter(0);
+		Counter.setDistancePerPulse(1);
+	
 	}
 	
 	public void shoot(){
 		speed = 0.6;
-		
-		if(m2.getSpeed() > 1)
-			stopShoot();
 
 	}
 	
@@ -39,8 +39,13 @@ public class Shooter {
 		
 	}
 	
+	public void setSpeed(double setpoint) {
+		PID.set(setpoint/60);
+		
+	}
+	
 	public void update() {
-		PID.set(10);
+		
 		m1.set(PID.getOutput(Counter.getRate()));
 		m2.set(speed);
 	}
