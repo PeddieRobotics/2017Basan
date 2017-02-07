@@ -8,7 +8,7 @@ public class GearReceiver {
 	private boolean isDown;
 
 	public GearReceiver() {
-		myCylinder = new Solenoid(GEAR_SELENOID);
+		myCylinder = new Solenoid(ElectricalLayout.GEAR_SELENOID);
 		isDown = false;
 
 	}
