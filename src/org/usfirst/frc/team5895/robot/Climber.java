@@ -12,7 +12,7 @@ public class Climber {
 	private double climbTimeStamp = Double.MIN_VALUE;
 
 	public Climber() {
-		climbMotor = new Talon(ElectricalLayout.CLIMBER_MOTOR);
+		climbMotor = new Talon(CLIMBER_MOTOR);
 	}
 
 	public void climb() {

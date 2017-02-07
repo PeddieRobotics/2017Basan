@@ -13,7 +13,7 @@ public class Intake {
 	public Intake() {
 	    motor = new Talon(2);
 	    speed = 0;
-	    myCylinder = new Solenoid(ElectricalLayout.INTAKE_SOLENOID);
+	    myCylinder = new Solenoid(INTAKE_SOLENOID);
 	    isDown = false;
 	}
 

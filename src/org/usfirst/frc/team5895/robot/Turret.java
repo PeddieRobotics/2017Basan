@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Turret {
-
+	
 	NetworkTable table;
 	Talon myMotor;
 	UsbCamera camera;
@@ -18,30 +18,30 @@ public class Turret {
 	private PID myPID;
 	private double aCenterX;
 	double[] defaultValue;
-
+	
 	public Turret(){
 	defaultValue = new double[0];
-	myMotor = new Talon(ElectricalLayout.TURRET_MOTOR);
+	myMotor = new Talon(4);
 	myPID = new PID(0.012, 0.000003, 0.0000001, 1);
 	myPID.set(40);
-
+	
 	camera = CameraServer.getInstance().startAutomaticCapture();
 	camera.setExposureManual(0);
 	CameraServer.getInstance().startAutomaticCapture();
-
+	
 	table = NetworkTable.getTable("GRIP/myContoursReport");
-
+	
 	}
-
+	
 	public void findCenterX(){
 	double[] centerXs = table.getNumberArray("centerY", defaultValue);
 	for(double centerX : centerXs){
 		DriverStation.reportError("CenterX:" + centerX, false);
-		aCenterX = centerX ;
+		aCenterX = centerX ;	
 		}
 	}
-
-
+	
+	
 	public void turnTo(){
 	myMotor.set(-myPID.getOutput(aCenterX));
 	if(table.getNumberArray("centerY", defaultValue).equals(null)){
