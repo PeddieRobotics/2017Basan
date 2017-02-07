@@ -8,8 +8,8 @@ import org.usfirst.frc.team5895.robot.lib.PID;
 
 public class Shooter {
 
-	private Talon m1;
-	private Talon m2;
+	private Talon motor1;
+	private Talon motor2;
 	private double speed;
 	
 	PID PID;
@@ -20,8 +20,8 @@ public class Shooter {
 	 
 	public Shooter()
 	{
-		m1 = new Talon(0); 
-		m2 = new Talon(1); 
+		motor1 = new Talon(0); 
+		motor2 = new Talon(1); 
 		
 		PID = new PID(Kp, 0, 0, 0);
 		Counter = new Counter(0);
@@ -39,15 +39,23 @@ public class Shooter {
 		
 	}
 	
+	public double getSpeedMotor1() {
+		double m1speed = (motor1.getSpeed())/60;
+		return m1speed;	
+	}
+	
+	public double getSpeedMotor2() {
+		double m2speed = (motor2.getSpeed())/60;
+		return m2speed;	
+	}
+	
 	public void setSpeed(double setpoint) {
 		PID.set(setpoint/60);
-		
 	}
 	
 	public void update() {
-		
-		m1.set(PID.getOutput(Counter.getRate()));
-		m2.set(speed);
+		motor1.set(PID.getOutput(Counter.getRate()));
+		motor2.set(speed);
 	}
 	
 }

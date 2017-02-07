@@ -11,7 +11,7 @@ public class Climber {
 	private Mode_Type mode = Mode_Type.WAITING;
 	private double climbTimeStamp = Double.MIN_VALUE;
 	
-	Climber() {
+	public Climber() {
 		climbMotor = new Talon(0);
 	}
 	
