@@ -24,7 +24,7 @@ public class DriveTrain {
 		Mleft = new Talon(ElectricalLayout.DRIVE_LEFTMOTOR);
 		Mright = new Talon(ElectricalLayout.DRIVE_RIGHTMOTOR);
 		
-		Eleft = new Encoder(3,2, false, Encoder.EncodingType.k4X);
+		Eleft = new Encoder(2, 3, true, Encoder.EncodingType.k4X);
 		Eright = new Encoder(0,1, false, Encoder.EncodingType.k4X);
 		
 		Eleft.setDistancePerPulse(4/12.0*3.14/360);
@@ -37,7 +37,7 @@ public class DriveTrain {
 
 	public double getDistance() {
 	
-		double distance = ((-1*Eleft.getDistance()) + Eright.getDistance())/2;
+		double distance = (Eleft.getDistance() + Eright.getDistance())/2;
 		
 		return distance;
 	}
