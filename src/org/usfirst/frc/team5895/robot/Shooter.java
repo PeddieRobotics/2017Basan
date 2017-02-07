@@ -11,7 +11,7 @@ public class Shooter {
 	private Talon flywheelMotor;
 	private Talon conveyorMotor;
 	private double speed;
-	
+
 	PID PID;
 	Counter Counter;
 
@@ -20,11 +20,11 @@ public class Shooter {
 
 	public Shooter()
 	{
-		flywheelMotor = new Talon(FLYWHEEL_MOTOR);
-		conveyorMotor = new Talon(CONVEYOR_MOTOR);
+		flywheelMotor = new Talon(ElectricalLayout.FLYWHEEL_MOTOR);
+		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
 
 		PID = new PID(Kp, 0, 0, 0);
-		Counter = new Counter(0);
+		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
 		Counter.setDistancePerPulse(1);
 
 	}
