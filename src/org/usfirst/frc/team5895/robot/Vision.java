@@ -1,49 +1,55 @@
 package org.usfirst.frc.team5895.robot;
 
-import org.opencv.core.Rect;
+import java.util.ArrayList;
+
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.usfirst.frc.team5895.robot.lib.ReflectiveTapePipeline;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.vision.VisionThread;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Vision {
 	
-	private static final int IMG_WIDTH = 320;
-	private static final int IMG_HEIGHT = 240;
+	ReflectiveTapePipeline p;
+	CvSink cvSink;
+	CvSource outputStream;
+	Mat mat;
 	
-	private VisionThread visionThread;
-	private ReflectiveTapePipeline GRIP;
-	private double centerX = 0.0;
-	private double turn;
-	
-	
-	private final Object imgLock = new Object();
-	
-	public void visionCamera(){
+	public Vision() {
+		p = new ReflectiveTapePipeline();
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
-        
-        
-        visionThread = new VisionThread(camera, new ReflectiveTapePipeline(), GripPipelineListener ->  {
-            if (!GripPipelineListener.filterContoursOutput().isEmpty()) {
-                Rect r = Imgproc.boundingRect(GRIP.filterContoursOutput().get(0));
-                synchronized (imgLock) {
-                    centerX = r.x + (r.width / 2);
-                }
-            }
-        });
-        visionThread.start();
-        
-            
-        //this should get everything
+		// Set the resolution
+		camera.setResolution(640, 480);
+		camera.setExposureManual(0);
+		
+		cvSink = CameraServer.getInstance().getVideo();
+		outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
+		mat = new Mat();
 	}
 	
-	public double autoLock(){
-		double centerX=GRIP.getCenter();
-		return centerX;
+	public void update(){
+		
+		if (cvSink.grabFrame(mat) == 0) {
+			// Send the output the error.
+			outputStream.notifyError(cvSink.getError());
+			// skip the rest of the current iteration
+		} else {
+			//double time = Timer.getFPGATimestamp();
+			p.process(mat);
+			//DriverStation.reportError(""+(Timer.getFPGATimestamp()-time),false);
+					
+			ArrayList<MatOfPoint> mop = p.filterContoursOutput();
+			Imgproc.fillPoly(mat, mop, new Scalar(0, 0, 255));
+			
+			outputStream.putFrame(mat);
+		}
 	}
 
 }
