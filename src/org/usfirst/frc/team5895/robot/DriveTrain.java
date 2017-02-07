@@ -32,18 +32,19 @@ public class DriveTrain {
 		Eleft = new Encoder(2,3);
 		Eright = new Encoder(0,1);
 		
-		Eleft.setDistancePerPulse(-1* 4*3.14/360);
+		Eleft.setDistancePerPulse(4*3.14/360);
 		Eright.setDistancePerPulse(4*3.14/360);
 		
 		PIDStraight = new PID(Kpstraight, Ki, Kd, 1);
 		PIDTurning= new PID(Kpturn, 0, 0, 1);
+		
 		
 	}
 	
 
 	public double getDistance() {
 	
-		double distance = ((Eleft.getDistance()) + Eright.getDistance())/2;
+		double distance = ((-1*Eleft.getDistance()) + Eright.getDistance())/2;
 		
 		return distance;
 	}
