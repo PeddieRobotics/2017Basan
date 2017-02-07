@@ -1,49 +1,51 @@
 package org.usfirst.frc.team5895.robot;
 import org.usfirst.frc.team5895.robot.lib.PID;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Turret {
-
-	/*private TalonSRX myMotor;
+	
+	NetworkTable table;
+	Talon myMotor;
+	UsbCamera camera;
+	double setpoint;
 	private PID myPID;
-	private Encoder e;
-	private double Kp;
-	private double Ki;
-	private double Kd;
-	private double dV;
-	private double degreesPerPulse;
+	private double aCenterX;
+	double[] defaultValue;
 	
-	public Turret() {
-		Kp=0.1;
-		Ki=0;
-		Kd=0;
-		dV=1/100;
-		degreesPerPulse=0;
-		myMotor = new TalonSRX(ElectricalLayout.TURRET_MOTOR);
-		myPID = new PID(Kp, Ki, Kd, dV);
-		e = new Encoder(ElectricalLayout.TURRET_ENCODER,ElectricalLayout.TURRET_ENCODER2);
-		e.setDistancePerPulse(degreesPerPulse);
+	public Turret(){
+	defaultValue = new double[0];
+	myMotor = new Talon(4);
+	myPID = new PID(0.012, 0.000003, 0.0000001, 1);
+	myPID.set(40);
+	
+	camera = CameraServer.getInstance().startAutomaticCapture();
+	camera.setExposureManual(0);
+	CameraServer.getInstance().startAutomaticCapture();
+	
+	table = NetworkTable.getTable("GRIP/myContoursReport");
+	
 	}
 	
-	public void set(double angle) {
-		myPID.set(angle);
-	}
-		
-	public double getAngle() {
-		return e.getDistance();
-	}
-	
-	public boolean atAngle(){
-		if(Math.abs(e.getDistance()-myPID.getSetpoint())<0.25){
-			return true;
-		} else
-			return false;
+	public void findCenterX(){
+	double[] centerXs = table.getNumberArray("centerY", defaultValue);
+	for(double centerX : centerXs){
+		DriverStation.reportError("CenterX:" + centerX, false);
+		aCenterX = centerX ;	
+		}
 	}
 	
-	public void update() {
-//		myMotor.set(myPID.getOutput(e.getDistance()));
+	
+	public void turnTo(){
+	myMotor.set(-myPID.getOutput(aCenterX));
+	if(table.getNumberArray("centerY", defaultValue).equals(null)){
+		myMotor.set(0);
+		}
 	}
-	*/	
 }
