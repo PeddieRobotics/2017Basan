@@ -21,69 +21,69 @@ public class DriveTrain {
 	private final double Kd=0.0001;
 	private PID PIDStraight;
 	private PID PIDTurning;
-	
+
 	public DriveTrain()
 	{
 		NavX=new NavX();
-		
-		Mleft = new Talon(1);
-		Mright = new Talon(0);
-		
-		Eleft = new Encoder(2,3);
-		Eright = new Encoder(0,1);
-		
+
+		Mleft = new Talon(DRIVE_LEFTMOTOR);
+		Mright = new Talon(DRIVE_RIGHTMOTOR);
+
+		Eleft = new Encoder(LEFTDRIVE_ENCODER,LEFTDRIVE_ENCODER2);
+		Eright = new Encoder(RIGHTDRIVE_ENCODER,RIGHTDRIVE_ENCODER2);
+
 		Eleft.setDistancePerPulse(-1* 4*3.14/360);
 		Eright.setDistancePerPulse(4*3.14/360);
-		
+
 		PIDStraight = new PID(Kpstraight, Ki, Kd, 1);
 		PIDTurning= new PID(Kpturn, 0, 0, 1);
-		
+
 	}
-	
+
 
 	public double getDistance() {
-	
+
 		double distance = ((Eleft.getDistance()) + Eright.getDistance())/2;
-		
+
 		return distance;
 	}
-	
+
 	public double getAngle(){
 		double angle = NavX.getAngle();
-		
+
 		return angle;
 	}
-	
+
 	public void resetEncodersAndNavX(){
 		Eleft.reset();
 		Eright.reset();
 		NavX.reset();
 	}
-	
-	public void autoDrive() {		
+
+	public void autoDrive() {
 		PIDStraight.set(72);
 		PIDTurning.set(0);
-		
+
 		mode = Mode_Type.AUTO;
 	}
-	
+
 	public void arcadeDrive( double speed, double turn) {
 		Lspeed = speed + turn;
 		Rspeed = -speed + turn;
 		mode = Mode_Type.TELEOP;
 	}
-	
+
 	public void setLeftRightPower(double l, double r) {
 		Lspeed = l;
 		Rspeed = r;
 		mode = Mode_Type.TELEOP;
 	}
-	
+
 	public void update()
 	{
 		DriverStation.reportError("distance = " + getDistance()+"\n", false);
 		//DriverStation.reportError("angle = " + getAngle()+"\n", false);
-		
+
 		switch(mode) {
 		case AUTO:
 			double output = PIDStraight.getOutput(getDistance());
@@ -97,14 +97,14 @@ public class DriveTrain {
 			Mleft.set(-output+spinningOutput);
 			Mright.set(output+spinningOutput);
 			break;
-			
+
 		case TELEOP:
 			Mleft.set(Lspeed);
 			Mright.set(Rspeed);
-			
+
 			break;
-		
+
 	}
-	
+
 }
 }
