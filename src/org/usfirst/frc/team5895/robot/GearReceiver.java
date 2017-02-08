@@ -13,10 +13,18 @@ public class GearReceiver {
 
 	}
 
+	/**
+	 * sets the gear receiver up in the position of holding the gear 
+	 * (has the gear)
+	 */
 	public void up() {
 		isDown = false;
 	}
 
+	/**
+	 * sets the gear receiver down in the position to receive the gear 
+	 * (no gear)
+	 */
 	public void down() {
 		isDown = true;
 
