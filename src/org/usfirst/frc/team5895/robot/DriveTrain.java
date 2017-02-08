@@ -33,7 +33,10 @@ public class DriveTrain {
 		c = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
 
 	}
-
+/**
+ * 
+ * Returns distance (double)
+ */
 
 	public double getDistance() {
 
@@ -41,41 +44,58 @@ public class DriveTrain {
 
 		return distance;
 	}
-
+/**
+ * 
+ * Returns speed (double)
+ */
 	public double getSpeed() {
 		return ((-1*Eleft.getRate()) + Eright.getRate())/2;
 	}
-
+/**
+ * 
+ * Returns angle (double)
+ */
 	public double getAngle(){
 		double angle = NavX.getAngle();
 
 		return angle;
 	}
-
+/**
+ * 
+ * Resets encoders and NavX
+ */
 	public void resetEncodersAndNavX(){
 		Eleft.reset();
 		Eright.reset();
 		NavX.reset();
 	}
-
+/**
+ * Set to auto driving
+ */
 	public void autoDrive() {
 		resetEncodersAndNavX();
 		c.reset();
 		mode = Mode_Type.AUTO;
 	}
-
+/**
+ * Two-controller driving
+ */
 	public void arcadeDrive( double speed, double turn) {
 		Lspeed = speed + turn;
 		Rspeed = -speed + turn;
 		mode = Mode_Type.TELEOP;
 	}
-
+/**
+ * Sets speed of both controllers
+ */
 	public void setLeftRightPower(double l, double r) {
 		Lspeed = l;
 		Rspeed = r;
 		mode = Mode_Type.TELEOP;
 	}
-
+/**
+ * Updates driving mode to either teleop or auto
+ */
 	public void update()
 	{
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
