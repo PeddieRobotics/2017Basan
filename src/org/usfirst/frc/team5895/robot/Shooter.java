@@ -47,7 +47,7 @@ public class Shooter {
 	
 	/**
 	 * return the speed of the fly wheel in RPM
-	 * @return
+	 * @return the speed, in RPM, of the fly wheel
 	 */
 	public double getSpeedMotor1() {
 		double flywheelSpeed = (flywheelMotor.getSpeed())/60;
@@ -56,7 +56,7 @@ public class Shooter {
 	
 	/**
 	 * return the speed of the conveyor in RPM
-	 * @return
+	 * @return the speed, in RPM, of the conveyor
 	 */
 	public double getSpeedMotor2() {
 		double conveyorSpeed = (conveyorMotor.getSpeed())/60;
@@ -65,7 +65,7 @@ public class Shooter {
 
 	/**
 	 * sets the setpoint for the PID used for the fly wheel (in RPM)
-	 * @param setpoint
+	 * @param setpoint angular speed set in RPM
 	 */
 	public void setSpeed(double setpoint) {
 		PID.set(setpoint/60);
