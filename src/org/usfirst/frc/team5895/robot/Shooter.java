@@ -28,27 +28,45 @@ public class Shooter {
 		Counter.setDistancePerPulse(1);
 
 	}
-
+	
+	/**
+	 * shoots the ball
+	 */
 	public void shoot(){
 		speed = 0.6;
 
 	}
-
+	
+	/**
+	 * stop shooting the ball
+	 */
 	public void stopShoot() {
 		speed = 0;
 
 	}
-
+	
+	/**
+	 * return the speed of the fly wheel in RPM
+	 * @return
+	 */
 	public double getSpeedMotor1() {
 		double flywheelSpeed = (flywheelMotor.getSpeed())/60;
 		return flywheelSpeed;
 	}
-
+	
+	/**
+	 * return the speed of the conveyor in RPM
+	 * @return
+	 */
 	public double getSpeedMotor2() {
 		double conveyorSpeed = (conveyorMotor.getSpeed())/60;
 		return conveyorSpeed;
 	}
 
+	/**
+	 * sets the setpoint for the PID used for the fly wheel (in RPM)
+	 * @param setpoint
+	 */
 	public void setSpeed(double setpoint) {
 		PID.set(setpoint/60);
 	}
