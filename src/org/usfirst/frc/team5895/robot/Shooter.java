@@ -1,8 +1,6 @@
 package org.usfirst.frc.team5895.robot;
 
 import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Talon;
 import org.usfirst.frc.team5895.robot.lib.PID;
 
@@ -49,19 +47,11 @@ public class Shooter {
 	 * return the speed of the fly wheel in RPM
 	 * @return the speed, in RPM, of the fly wheel
 	 */
-	public double getSpeedMotor1() {
-		double flywheelSpeed = (flywheelMotor.getSpeed())/60;
+	public double getSpeedFlywheelMotor() {
+		double flywheelSpeed = Counter.getRate()/60;
 		return flywheelSpeed;
 	}
 	
-	/**
-	 * return the speed of the conveyor in RPM
-	 * @return the speed, in RPM, of the conveyor
-	 */
-	public double getSpeedMotor2() {
-		double conveyorSpeed = (conveyorMotor.getSpeed())/60;
-		return conveyorSpeed;
-	}
 
 	/**
 	 * sets the setpoint for the PID used for the fly wheel (in RPM)
