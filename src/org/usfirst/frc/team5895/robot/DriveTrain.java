@@ -24,7 +24,7 @@ public class DriveTrain {
 		Mleft = new Talon(ElectricalLayout.DRIVE_LEFTMOTOR);
 		Mright = new Talon(ElectricalLayout.DRIVE_RIGHTMOTOR);
 
-		Eleft = new Encoder(ElectricalLayout.DRIVE_LEFTENCODER2,ElectricalLayout.DRIVE_LEFTENCODER, false, Encoder.EncodingType.k4X);
+		Eleft = new Encoder(ElectricalLayout.DRIVE_LEFTENCODER2,ElectricalLayout.DRIVE_LEFTENCODER, true, Encoder.EncodingType.k4X);
 		Eright = new Encoder(ElectricalLayout.DRIVE_RIGHTENCODER,ElectricalLayout.DRIVE_RIGHTENCODER2, false, Encoder.EncodingType.k4X);
 
 		Eleft.setDistancePerPulse(4/12.0*3.14/360);
@@ -33,69 +33,81 @@ public class DriveTrain {
 		c = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
 
 	}
-/**
- * 
- * Returns distance (double)
- */
 
+	/**
+	 * Returns the average distance the drivetrain has driven
+	 * 
+	 * @return The distance in feet
+	 */
 	public double getDistance() {
 
-		double distance = ((-1*Eleft.getDistance()) + Eright.getDistance())/2;
+		double distance = (Eleft.getDistance() + Eright.getDistance())/2;
 
 		return distance;
 	}
-/**
- * 
- * Returns speed (double)
- */
+
+	/**
+	 * Returns the speed of the drivetrain
+	 * 
+	 * @return The speed in feet per second
+	 */
 	public double getSpeed() {
-		return ((-1*Eleft.getRate()) + Eright.getRate())/2;
+		return (Eleft.getRate() + Eright.getRate())/2;
 	}
-/**
- * 
- * Returns angle (double)
- */
+
+	/**
+	 * Returns the angle of the robot
+	 * 
+	 * @return The angle of the robot in degrees
+	 */
 	public double getAngle(){
 		double angle = NavX.getAngle();
 
 		return angle;
 	}
-/**
- * 
- * Resets encoders and NavX
- */
+	
+	/**
+	 * Resets encoders and NavX
+	 */
 	public void resetEncodersAndNavX(){
 		Eleft.reset();
 		Eright.reset();
 		NavX.reset();
 	}
-/**
- * Set to auto driving
- */
+	
+	/**
+	 * Follows a path autonomously
+	 */
 	public void autoDrive() {
 		resetEncodersAndNavX();
 		c.reset();
 		mode = Mode_Type.AUTO;
 	}
-/**
- * Two-controller driving
- */
+	
+	/**
+	 * Two-controller driving
+	 * 
+	 * @param speed The forward/backwards motion
+	 * @param turn The left/right turning motion
+	 */
 	public void arcadeDrive( double speed, double turn) {
 		Lspeed = speed + turn;
 		Rspeed = -speed + turn;
 		mode = Mode_Type.TELEOP;
 	}
-/**
- * Sets speed of both controllers
- */
+	
+	/**
+	 * Sets speed of both sides
+	 * 
+	 * @param l The speed of the left side
+	 * @param r The spped of the right side
+	 */
 	public void setLeftRightPower(double l, double r) {
 		Lspeed = l;
 		Rspeed = r;
 		mode = Mode_Type.TELEOP;
 	}
-/**
- * Updates driving mode to either teleop or auto
- */
+	
 	public void update()
 	{
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
@@ -119,8 +131,6 @@ public class DriveTrain {
 			Mright.set(Rspeed);
 
 			break;
-
+		}
 	}
-
-}
 }

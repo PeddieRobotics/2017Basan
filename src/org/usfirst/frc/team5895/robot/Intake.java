@@ -16,16 +16,18 @@ public class Intake {
 	    myCylinder = new Solenoid(ElectricalLayout.INTAKE_SOLENOID);
 	    isDown = false;
 	}
-/**
- * Stop intake from taking balls
- */
+	
+	/**
+	 * Lift intake up and stop taking balls
+	 */
 	public void up() {
 	   isDown = false;
 	   speed = 0.0;
 	}
-/**
- * Start intake to take balls
- */
+	
+	/**
+	 * Puts the intake down and start taking balls
+	 */
 	public void down() {
 	   isDown = true;
 	   speed = 0.5;

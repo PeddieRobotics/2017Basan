@@ -14,16 +14,18 @@ public class Climber {
 	public Climber() {
 		climbMotor = new Talon(ElectricalLayout.CLIMBER_MOTOR);
 	}
-/**
- * Prepare the robot to climb
- */
+	
+	/**
+	 * Start climbing
+	 */
 	public void climb() {
 		climbTimeStamp = Timer.getFPGATimestamp();
 		mode = Mode_Type.WAITING;
 	}
-/**
- * Terminate climbing
- */
+	
+	/**
+	 * Terminate climbing
+	 */
 	public void stopClimbing(){
 		mode = Mode_Type.NOTHING;
 	}

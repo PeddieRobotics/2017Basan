@@ -14,27 +14,22 @@ public class GearReceiver {
 	}
 
 	/**
-	 * sets the gear receiver up in the position of holding the gear 
-	 * (has the gear)
+	 * Sets the gear receiver up
 	 */
 	public void up() {
 		isDown = false;
 	}
 
 	/**
-	 * sets the gear receiver down in the position to receive the gear 
-	 * (no gear)
+	 * Sets the gear receiver down
 	 */
 	public void down() {
 		isDown = true;
-
 	}
 
 	public void update() {
-
 		if(myCylinder.get() != isDown)
 			myCylinder.set(isDown);
-
 	}
 
 }

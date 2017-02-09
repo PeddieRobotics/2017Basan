@@ -12,22 +12,22 @@ public class Robot extends IterativeRobot {
 	Looper loop, loop_vision;
 	Joystick Jleft, Jright;
 	DriveTrain drivetrain;
-  Vision vision;
+	Vision vision;
 
     public void robotInit() {
 
     	Jleft = new Joystick(0);
     	Jright = new Joystick(1);
     	drivetrain = new DriveTrain();
-      vision = new Vision();
+    	vision = new Vision();
 
     	loop = new Looper(10);
     	loop.add(drivetrain::update);
     	loop.start();
 
-      loop_vision = new Looper(250);
-      loop_vision.add(vision::update);
-      loop_vision.start();
+	    loop_vision = new Looper(250);
+	    loop_vision.add(vision::update);
+	    loop_vision.start();
     }
 
     public void autonomousInit() {
