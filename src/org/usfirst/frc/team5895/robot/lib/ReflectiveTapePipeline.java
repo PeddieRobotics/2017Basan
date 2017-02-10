@@ -292,5 +292,8 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 			double centerY = m01/m00;
 			centerOutput = new Point(centerX, centerY);
 		}
+		else{
+			centerOutput=null;
+		}
 	}
 }
