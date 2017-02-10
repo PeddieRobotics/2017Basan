@@ -24,6 +24,7 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 	private Mat cvThresholdOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
+	private Point centerOutput;
 
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -76,6 +77,9 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 		double filterContoursMaxRatio = 1000.0;
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 
+		//Step Find Center
+		setCenter(filterContoursOutput, centerOutput);
+
 		
 	}
 
@@ -127,6 +131,11 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 		return filterContoursOutput;
 	}
 
+	
+	public Point centerPoints(){
+		return centerOutput;
+	}
+	
 
 	/**
 	 * Extracts given channel from an image.
@@ -229,6 +238,33 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 			final double ratio = bb.width / (double)bb.height;
 			if (ratio < minRatio || ratio > maxRatio) continue;
 			output.add(contour);
+		}
+	}
+	
+	private void setCenter(List <MatOfPoint> filterContoursOutput, Point centerOutput){
+		//Thoughts: need to get the value of the contour with the maximum area so this function is going to have to perform 2 tasks
+		//The second task is easy since I already wrote it
+		if(filterContoursOutput.size()>0){
+			double maxArea=0;
+			int biggestContourNumber=0;
+			for (int i=0; i<filterContoursOutput.size(); i++){
+				double area=Imgproc.contourArea(filterContoursOutput.get(i));
+				if(maxArea<area){
+					maxArea=area;
+					biggestContourNumber=i;
+				}
+			}
+			Moments mu = new Moments();
+			mu=Imgproc.moments(filterContoursOutput.get(biggestContourNumber));
+			double m10 = mu.m10;
+			double m00 = mu.m00;
+			double m01 = mu.m01;
+			double centerX = m10/m00;
+			double centerY = m01/m00;
+			centerOutput = new Point(centerX, centerY);
+		}
+		else {
+			centerOutput=null;
 		}
 	}
 }
