@@ -67,9 +67,9 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 		double filterContoursMinArea = 550.0;
 		double filterContoursMinPerimeter = 0.0;
 		double filterContoursMinWidth = 0.0;
-		double filterContoursMaxWidth = 1000.0;
+		double filterContoursMaxWidth = 200.0; //previously 1000
 		double filterContoursMinHeight = 0.0;
-		double filterContoursMaxHeight = 1000.0;
+		double filterContoursMaxHeight = 200.0; //previously 1000
 		double[] filterContoursSolidity = {0, 100};
 		double filterContoursMaxVertices = 1000000.0;
 		double filterContoursMinVertices = 0.0;
@@ -78,7 +78,7 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 		filterContours(filterContoursContours, filterContoursMinArea, filterContoursMinPerimeter, filterContoursMinWidth, filterContoursMaxWidth, filterContoursMinHeight, filterContoursMaxHeight, filterContoursSolidity, filterContoursMaxVertices, filterContoursMinVertices, filterContoursMinRatio, filterContoursMaxRatio, filterContoursOutput);
 
 		//Step Find Center
-		setCenter(filterContoursOutput, centerOutput);
+		centerOutput = setCenter(filterContoursOutput);
 
 		
 	}
@@ -241,7 +241,7 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 		}
 	}
 	
-	private void setCenter(List <MatOfPoint> filterContoursOutput, Point centerOutput){
+	private Point setCenter(List <MatOfPoint> filterContoursOutput){
 		//Thoughts: need to get the value of the contour with the maximum area so this function is going to have to perform 2 tasks
 		//The second task is easy since I already wrote it
 		if(filterContoursOutput.size()>0){
@@ -261,10 +261,10 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 			double m01 = mu.m01;
 			double centerX = m10/m00;
 			double centerY = m01/m00;
-			centerOutput = new Point(centerX, centerY);
+			return new Point(centerX, centerY);
 		}
 		else {
-			centerOutput=null;
+			return null;
 		}
 	}
 }
