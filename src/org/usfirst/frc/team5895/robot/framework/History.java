@@ -1,7 +1,6 @@
-package org.usfirst.frc.team5895.robot.lib;
+package org.usfirst.frc.team5895.robot.framework;
 
-import org.usfirst.frc.team5895.robot.framework.Gettable;
-import org.usfirst.frc.team5895.robot.framework.Looper;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class History {
 
@@ -61,12 +60,17 @@ public class History {
 			int upperPeriodsAgo = lowerPeriodsAgo + 1;
 			
 			//linear interpolation
-			double lowerWeight = (periodsAgo - lowerPeriodsAgo)/p;
-			double upperWeight = (upperPeriodsAgo - periodsAgo)/p;
+			double lowerWeight = 1-(periodsAgo - lowerPeriodsAgo);
+			double upperWeight = 1-(upperPeriodsAgo - periodsAgo);
+
+			int lowerIndex = (index-lowerPeriodsAgo)%vals.length;
+			if (lowerIndex < 0) lowerIndex += vals.length;
+			double lowerVal = vals[lowerIndex];
 			
-			double lowerVal = vals[(index-lowerPeriodsAgo)%vals.length];
-			double upperVal = vals[(index-upperPeriodsAgo)%vals.length];
-			
+			int upperIndex = (index-upperPeriodsAgo)%vals.length;
+			if (upperIndex < 0) upperIndex += vals.length;
+			double upperVal = vals[upperIndex];
+
 			return lowerWeight*lowerVal + upperWeight*upperVal;
 		}
 	}
