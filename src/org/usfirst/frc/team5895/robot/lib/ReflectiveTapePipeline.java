@@ -132,7 +132,7 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 	}
 
 	
-	public Point centerPoints(){
+	public Point centerPoint(){
 		return centerOutput;
 	}
 	

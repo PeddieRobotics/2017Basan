@@ -41,12 +41,12 @@ public class Vision {
 			outputStream.notifyError(cvSink.getError());
 			// skip the rest of the current iteration
 		} else {
-			//double time = Timer.getFPGATimestamp();
 			p.process(mat);
-			//DriverStation.reportError(""+(Timer.getFPGATimestamp()-time),false);
 					
 			ArrayList<MatOfPoint> mop = p.filterContoursOutput();
 			Imgproc.fillPoly(mat, mop, new Scalar(0, 0, 255));
+			if (p.centerPoint() != null)
+				Imgproc.circle(mat, p.centerPoint(), 5, new Scalar(128, 0, 128), 3);
 			
 			outputStream.putFrame(mat);
 		}
