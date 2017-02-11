@@ -3,6 +3,7 @@ import org.usfirst.frc.team5895.robot.lib.PID;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
@@ -14,6 +15,8 @@ public class Turret {
 	private Talon turret_motor;
 	private PID PID;
 	private Encoder turret_encoder;
+	private DigitalInput limitSwitchLeft;
+	private DigitalInput limitSwitchRight;
 	
 	public Turret(){
 	
@@ -23,6 +26,9 @@ public class Turret {
 
 	turret_encoder = new Encoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2);
 	turret_encoder.setDistancePerPulse(1);
+	
+	limitSwitchLeft = new DigitalInput(ElectricalLayout.LIMIT_SWITCHLEFT);
+	limitSwitchRight = new DigitalInput(ElectricalLayout.LIMIT_SWITCHRIGHT);
 
 	}
 
@@ -31,8 +37,19 @@ public class Turret {
 	
 	}
 	
+	
 	public void update() {
-		turret_motor.set(PID.getOutput(turret_encoder.getDistance()));
+		
+		double output = PID.getOutput(turret_encoder.getDistance());
+		
+		if(limitSwitchLeft.get() && output > -0.25) {
+			output = 0;
+		}
+		if(limitSwitchRight.get() && output < 0.25) {
+			output = 0;
+		}
+		
+		turret_motor.set(output);
 		
 	}
 }
