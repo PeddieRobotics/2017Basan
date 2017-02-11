@@ -47,7 +47,7 @@ public class Shooter {
 	 * return the speed of the fly wheel in RPM
 	 * @return the speed, in RPM, of the fly wheel
 	 */
-	public double getSpeedFlywheelMotor() {
+	public double getSpeed() {
 		double flywheelSpeed = Counter.getRate()/60;
 		return flywheelSpeed;
 	}
@@ -65,5 +65,17 @@ public class Shooter {
 		flywheelMotor.set(PID.getOutput(Counter.getRate()));
 		conveyorMotor.set(speed);
 	}
-
+	
+	public boolean atSpeed()
+	{
+		if( getSpeed() < PID.getSetpoint() + 20 && getSpeed() > PID.getSetpoint() - 20 )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
+
