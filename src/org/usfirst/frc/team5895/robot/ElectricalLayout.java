@@ -24,8 +24,8 @@ public class ElectricalLayout {
     public static final int DRIVE_RIGHTENCODER2 = 3;
     public static final int FLYWHEEL_COUNTER = 4;
     public static final int INTAKE_SENSOR = 5;
-    public static final int TURRET_LEFTENCODER = 6;
-    public static final int TURRET_RIGHTENCODER = 7;
+    public static final int TURRET_ENCODER = 6;
+    public static final int TURRET_ENCODER2 = 7;
     public static final int HOPPER_SENSOR = 8;
 
 }

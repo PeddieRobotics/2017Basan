@@ -21,7 +21,7 @@ public class Turret {
 	
 	PID = new PID(0.012, 0.000003, 0.0000001, 1);
 
-	turret_encoder = new Encoder(1, 2);
+	turret_encoder = new Encoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2);
 	turret_encoder.setDistancePerPulse(1);
 
 	}
@@ -32,7 +32,7 @@ public class Turret {
 	}
 	
 	public void update() {
-		turret_motor.set(PID.getOutput(turret_encoder.getRate()));
+		turret_motor.set(PID.getOutput(turret_encoder.getDistance()));
 		
 	}
 }
