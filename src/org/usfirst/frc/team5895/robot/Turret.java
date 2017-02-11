@@ -11,41 +11,28 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Turret {
 
-	NetworkTable table;
-	Talon myMotor;
-	UsbCamera camera;
-	double setpoint;
-	private PID myPID;
-	private double aCenterX;
-	double[] defaultValue;
-
+	private Talon turret_motor;
+	private PID PID;
+	private Encoder turret_encoder;
+	
 	public Turret(){
-	defaultValue = new double[0];
-	myMotor = new Talon(ElectricalLayout.TURRET_MOTOR);
-	myPID = new PID(0.012, 0.000003, 0.0000001, 1);
-	myPID.set(40);
+	
+	turret_motor = new Talon(ElectricalLayout.TURRET_MOTOR);
+	
+	PID = new PID(0.012, 0.000003, 0.0000001, 1);
 
-	camera = CameraServer.getInstance().startAutomaticCapture();
-	camera.setExposureManual(0);
-	CameraServer.getInstance().startAutomaticCapture();
-
-	table = NetworkTable.getTable("GRIP/myContoursReport");
+	turret_encoder = new Encoder(1, 2);
+	turret_encoder.setDistancePerPulse(1);
 
 	}
 
-	public void findCenterX(){
-	double[] centerXs = table.getNumberArray("centerY", defaultValue);
-	for(double centerX : centerXs){
-		DriverStation.reportError("CenterX:" + centerX, false);
-		aCenterX = centerX ;
-		}
+	public void turnTo(double angle){
+		PID.set(angle);
+	
 	}
-
-
-	public void turnTo(){
-	myMotor.set(-myPID.getOutput(aCenterX));
-	if(table.getNumberArray("centerY", defaultValue).equals(null)){
-		myMotor.set(0);
-		}
+	
+	public void update() {
+		turret_motor.set(PID.getOutput(turret_encoder.getRate()));
+		
 	}
 }
