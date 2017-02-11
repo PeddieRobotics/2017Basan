@@ -11,11 +11,12 @@ public class DriveTrain {
 	private Talon Mleft;
 	private Talon Mright;
 	double Lspeed, Rspeed;
-	private enum Mode_Type {TELEOP, AUTO};
+	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
-	private TrajectoryDriveController c;
+	private TrajectoryDriveController c_red;
+	private TrajectoryDriveController c_blue;
 
 	public DriveTrain()
 	{
@@ -30,7 +31,8 @@ public class DriveTrain {
 		Eleft.setDistancePerPulse(4/12.0*3.14/360);
 		Eright.setDistancePerPulse(4/12.0*3.14/360);
 
-		c = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
+		c_red = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
+		c_blue = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
 
 	}
 
@@ -76,12 +78,21 @@ public class DriveTrain {
 	}
 	
 	/**
-	 * Follows a path autonomously
+	 * Follows a path autonomously (red alliance)
 	 */
-	public void autoDrive() {
+	public void auto_redDrive() {
 		resetEncodersAndNavX();
-		c.reset();
-		mode = Mode_Type.AUTO;
+		c_red.reset();
+		mode = Mode_Type.AUTO_RED;
+	}
+	
+	/**
+	 * Follows a path autonomously (blue alliance)
+	 */
+	public void auto_blueDrive() {
+		resetEncodersAndNavX();
+		c_blue.reset();
+		mode = Mode_Type.AUTO_BLUE;
 	}
 	
 	/**
@@ -100,7 +111,7 @@ public class DriveTrain {
 	 * Sets speed of both sides
 	 * 
 	 * @param l The speed of the left side
-	 * @param r The spped of the right side
+	 * @param r The speed of the right side
 	 */
 	public void setLeftRightPower(double l, double r) {
 		Lspeed = l;
@@ -113,17 +124,30 @@ public class DriveTrain {
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
 
 		switch(mode) {
-		case AUTO:
+		case AUTO_RED:
 
-			double[] m = new double[2];
+			double[] m_red = new double[2];
 
-			m = c.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+			m_red = c_red.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
 
 			DriverStation.reportError("the distance is" + getDistance(), false);
 
-			Mleft.set(m[0]);
-			Mright.set(-m[1]);
+			Mleft.set(m_red[0]);
+			Mright.set(-m_red[1]);
 			break;
+		
+		case AUTO_BLUE:
+			
+			double[] m_blue = new double[2];
+
+			m_blue = c_blue.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+
+			DriverStation.reportError("the distance is" + getDistance(), false);
+
+			Mleft.set(m_blue[0]);
+			Mright.set(-m_blue[1]);
+			break;
+		
 
 		case TELEOP:
 
