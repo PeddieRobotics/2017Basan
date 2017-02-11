@@ -36,16 +36,23 @@ public class Turret {
 		PID.set(angle);
 	
 	}
-	
-	
+		
 	public void update() {
 		
 		double output = PID.getOutput(turret_encoder.getDistance());
 		
-		if(limitSwitchLeft.get() && output > -0.25) {
+		if (output > 0.25) {
+			output = 0.25;
+		}
+		
+		if (output < -0.25) {
+			output = -0.25;
+		}
+
+		if(limitSwitchLeft.get() && output > 0) {
 			output = 0;
 		}
-		if(limitSwitchRight.get() && output < 0.25) {
+		if(limitSwitchRight.get() && output < 0) {
 			output = 0;
 		}
 		
