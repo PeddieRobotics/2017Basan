@@ -29,4 +29,6 @@ public class ElectricalLayout {
 	public static final int HOPPER_SENSOR = 8;
 	public static final int LIMIT_SWITCHLEFT = 9;
 	public static final int LIMIT_SWITCHRIGHT = 10;
+	
+	public static final int CLIMBER_PDB_PORT = 0;
 }

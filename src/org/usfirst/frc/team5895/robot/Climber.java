@@ -31,7 +31,7 @@ public class Climber {
 	}
 
 	public void update() {
-		double current = pdp.getCurrent(3);
+		double current = pdp.getCurrent(ElectricalLayout.CLIMBER_PDB_PORT);
 		switch(mode) {
 		case WAITING:
 			if (Timer.getFPGATimestamp() - climbTimeStamp < 0.5) {
