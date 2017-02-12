@@ -1,6 +1,6 @@
 package org.usfirst.frc.team5895.robot.framework;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 
 public class History {
 
@@ -9,6 +9,7 @@ public class History {
 	private long period;
 	private long timeToRemember;
 	private int index = 0;
+	private double lastRecordTime = 0;
 	
 
 	/**
@@ -33,6 +34,7 @@ public class History {
 	}
 	
 	private void remember() {
+		lastRecordTime = Timer.getFPGATimestamp();
 		vals[index] = g.get();
 		index++;
 		if (index >= vals.length)
@@ -45,13 +47,30 @@ public class History {
 	 * @param timeAgo How long from present value is from, in ms
 	 * @return The value at that time, based on linear interpolation of data points
 	 */
-	public double getValAt(long timeAgo) {
-		if (timeAgo > timeToRemember)
+	public double getValAt(long timeAgo) {		
+		if (timeAgo > timeToRemember || timeAgo < 0)
 			return 0;
+		else if (timeAgo < period) {
+			double curVal = g.get();
+			double lastRecordVal = vals[index];
+			
+			double curTime = Timer.getFPGATimestamp();
+			double timeToLastRecord = (curTime-lastRecordTime)*1000.0;
+			
+			//linear interpolation
+			double truePeriodsAgo = ((double) timeAgo)/timeToLastRecord;
+			double curWeight = 1-truePeriodsAgo;
+			double recordWeight = truePeriodsAgo;
+			
+			return curVal*curWeight + lastRecordVal*recordWeight;
+		}
 		else {
 			
+			double curTime = Timer.getFPGATimestamp();
+			double timeToLastRecord = (curTime-lastRecordTime)*1000.0;
+			
 			//true periodsAgo
-			double t = (double) timeAgo;
+			double t = timeAgo - timeToLastRecord;
 			double p = (double) period;
 			double periodsAgo = t/p;
 			
