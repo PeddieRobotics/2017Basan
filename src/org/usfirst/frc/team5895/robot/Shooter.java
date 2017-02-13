@@ -60,6 +60,10 @@ public class Shooter {
 	public void setSpeed(double setpoint) {
 		PID.set(setpoint/60);
 	}
+	
+	public void setConveyorSpeed(double s){
+		speed = s;
+	}
 
 	public void update() {
 		flywheelMotor.set(PID.getOutput(Counter.getRate()));
