@@ -40,6 +40,12 @@ public class Turret {
 	
 	}
 	
+	public boolean atAngle() {
+		if(getAngle() < PID.getSetpoint()+ 0.25 && getAngle() > PID.getSetpoint() - 0.025) {
+			return true;
+		} else return false;
+	}
+	
 	public double getAngle() {
 		return turret_encoder.getDistance();
 	}
