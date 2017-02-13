@@ -38,7 +38,14 @@ public class Robot extends IterativeRobot {
     	
     	if (routine.contains("spin")) {
     		SpinInCirclesShootingWildly.run(drivetrain, shooter, turret);
-    	} else {
+    	}
+    	if(routine.contains("blue")) {
+    		BlueAuto.run(drivetrain, shooter, turret);
+    	}
+    	if(routine.contains("red")) {
+    		RedAuto.run(drivetrain, shooter, turret);
+    	}
+    	else {
     		DoNothing.run();
     	}
     }
