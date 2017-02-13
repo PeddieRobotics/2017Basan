@@ -24,5 +24,10 @@ public class BetterEncoder extends Encoder {
 	public double getDistance() {
 		return offset + super.getDistance();
 	}
+	
+	public void reset() {
+		offset = 0;
+		super.reset();
+	}
 
 }
