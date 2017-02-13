@@ -17,6 +17,7 @@ public class DriveTrain {
 	private NavX NavX;
 	private TrajectoryDriveController c_red;
 	private TrajectoryDriveController c_blue;
+	private boolean reverseFrontBack = false;
 
 	public DriveTrain()
 	{
@@ -119,6 +120,15 @@ public class DriveTrain {
 		mode = Mode_Type.TELEOP;
 	}
 	
+	public void setGearFront() {
+		reverseFrontBack = true;
+		
+	}
+	
+	public void setIntakeFront() {
+		reverseFrontBack = false;
+	}
+	
 	public void update()
 	{
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
@@ -151,8 +161,14 @@ public class DriveTrain {
 
 		case TELEOP:
 
+			if(reverseFrontBack) {
+			Mleft.set(-Lspeed);
+			Mright.set(-Rspeed);
+			}
+			else {
 			Mleft.set(Lspeed);
 			Mright.set(Rspeed);
+			}
 
 			break;
 		}
