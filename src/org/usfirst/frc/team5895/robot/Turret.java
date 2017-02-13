@@ -21,6 +21,10 @@ public class Turret {
 	private DigitalInput limitSwitchRight;
 	double output;
 	
+	/**
+	 * Creates a Turret Object and sets initial values
+	 * 
+	 */
 	public Turret(){
 	
 	turret_motor = new Talon(ElectricalLayout.TURRET_MOTOR);
@@ -35,25 +39,50 @@ public class Turret {
 
 	}
 
+	/**
+	 * Sets the turret's PID to turn to a desired angle
+	 * 
+	 * @param angle Angle that the turret should be set to
+	 */
 	public void turnTo(double angle){
 		PID.set(angle);
 	
 	}
 	
+	/**
+	 * Returns whether the turret's angle is within the correct range or not
+	 * 
+	 * @return If turret is within angle range or not
+	 */
 	public boolean atAngle() {
 		if(getAngle() < PID.getSetpoint()+ 0.25 && getAngle() > PID.getSetpoint() - 0.025) {
 			return true;
 		} else return false;
 	}
 	
+	/**
+	 * Returns the angle of the turret
+	 * 
+	 * @return Angle of turret
+	 */
 	public double getAngle() {
 		return turret_encoder.getDistance();
 	}
+	
+	/**
+	 * Returns how fast the turret is going
+	 * 
+	 * @return Output of turret speed
+	 */
 	
 	public double getOutput() {
 		return output;
 	}
 		
+	/**
+	 * Regulates the desired speed of the turret and updates it constantly
+	 * 
+	 */
 	public void update() {
 		
 		output = PID.getOutput(turret_encoder.getDistance());
