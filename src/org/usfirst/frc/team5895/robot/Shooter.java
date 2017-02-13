@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5895.robot;
 
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
 import org.usfirst.frc.team5895.robot.lib.PID;
 
@@ -8,6 +9,7 @@ public class Shooter {
 
 	private Talon flywheelMotor;
 	private Talon conveyorMotor;
+	private Solenoid hood;
 	private double speed;
 
 	PID PID;
@@ -20,6 +22,7 @@ public class Shooter {
 	{
 		flywheelMotor = new Talon(ElectricalLayout.FLYWHEEL_MOTOR);
 		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
+		hood = new Solenoid(ElectricalLayout.FLYWHEEL_SOLENOID);
 
 		PID = new PID(Kp, 0, 0, 0);
 		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
@@ -41,6 +44,20 @@ public class Shooter {
 	public void stopShoot() {
 		speed = 0;
 
+	}
+	
+	/**
+	 * hood is on the big angle
+	 */
+	public void hoodUp(){
+		hood.set(true); 
+	}
+	
+	/**
+	 * hood is on the small angle
+	 */
+	public void hoodDown(){
+		hood.set(false);
 	}
 	
 	/**

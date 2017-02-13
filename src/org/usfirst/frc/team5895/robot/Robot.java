@@ -111,9 +111,9 @@ public class Robot extends IterativeRobot {
 	//hood is up or down
 	void HoodState(){
 		if(Jright.getRisingEdge(2)){
-			//hood is up
+			shooter.hoodUp();
 		}else if(Jright.getRisingEdge(3)){
-			//hood is down
+			shooter.hoodDown();
 		}
 	}
 	
