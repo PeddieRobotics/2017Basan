@@ -87,17 +87,12 @@ public class Robot extends IterativeRobot {
 		}
 	//if we are shooting or not
 	void Shooting(){
-		boolean isShooting = false;
-
 		if(Jright.getRisingEdge(0)){
-			isShooting = true;
+			shooter.shoot();
 		}else if(Jright.getFallingEdge(0)){
-			isShooting = false;
+			shooter.stopShoot();
 		}
 
-		while(isShooting){
-			shooter.shoot();
-		}
 	}
 	//what direction the robot is taking
 	void FrontSide(){
