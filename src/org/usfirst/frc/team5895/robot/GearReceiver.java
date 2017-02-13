@@ -5,31 +5,31 @@ import edu.wpi.first.wpilibj.Solenoid;
 public class GearReceiver {
 
 	private Solenoid myCylinder;
-	private boolean isDown;
+	private boolean isClosed;
 
 	public GearReceiver() {
 		myCylinder = new Solenoid(ElectricalLayout.GEAR_SOLENOID);
-		isDown = false;
+		isClosed = false;
 
 	}
 
 	/**
-	 * Sets the gear receiver up
+	 * Closes the gear receiver
 	 */
-	public void up() {
-		isDown = false;
+	public void close() {
+		isClosed = false;
 	}
 
 	/**
-	 * Sets the gear receiver down
+	 * Opens the gear receiver
 	 */
-	public void down() {
-		isDown = true;
+	public void open() {
+		isClosed = true;
 	}
 
 	public void update() {
-		if(myCylinder.get() != isDown)
-			myCylinder.set(isDown);
+		if(myCylinder.get() != isClosed)
+			myCylinder.set(isClosed);
 	}
 
 }
