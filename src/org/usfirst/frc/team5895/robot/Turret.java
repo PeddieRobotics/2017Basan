@@ -19,6 +19,7 @@ public class Turret {
 	private BetterEncoder turret_encoder;
 	private DigitalInput limitSwitchLeft;
 	private DigitalInput limitSwitchRight;
+	double output;
 	
 	public Turret(){
 	
@@ -27,7 +28,7 @@ public class Turret {
 	PID = new PID(0.012, 0.000003, 0.0000001, 1);
 
 	turret_encoder = new BetterEncoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2,  false, Encoder.EncodingType.k4X);
-	turret_encoder.setDistancePerPulse(1);
+	turret_encoder.setDistancePerPulse(1/13);
 	
 	limitSwitchLeft = new DigitalInput(ElectricalLayout.LIMIT_SWITCHLEFT);
 	limitSwitchRight = new DigitalInput(ElectricalLayout.LIMIT_SWITCHRIGHT);
@@ -38,10 +39,18 @@ public class Turret {
 		PID.set(angle);
 	
 	}
+	
+	public double getAngle() {
+		return turret_encoder.getDistance();
+	}
+	
+	public double getOutput() {
+		return output;
+	}
 		
 	public void update() {
 		
-		double output = PID.getOutput(turret_encoder.getDistance());
+		output = PID.getOutput(turret_encoder.getDistance());
 		
 		if (output > 0.25) {
 			output = 0.25;
