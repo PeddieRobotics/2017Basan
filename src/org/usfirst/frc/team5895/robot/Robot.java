@@ -67,8 +67,12 @@ public class Robot extends IterativeRobot {
 		
 		//if we are shooting or not
 		if(Jright.getRisingEdge(0)){
+			shooter.hoodUp();
 			shooter.shoot();
-		}else if(Jright.getFallingEdge(0)){
+		}else if(Jright.getRisingEdge(1)){
+			shooter.hoodDown();
+			shooter.shoot();
+		}else if(Jright.getFallingEdge(0) || Jright.getFallingEdge(1)){
 			shooter.stopShoot();
 		}
 		
@@ -90,11 +94,6 @@ public class Robot extends IterativeRobot {
 		//Set the flywheel to a certain speed
 		if(Jsecond.getRisingEdge(0)){
 			shooter.setSpeed(.3); //random value can be changed
-		}
-		
-		//Elevator Override
-		if(Jsecond.getRisingEdge(1)){
-			shooter.setConveyorSpeed(.6);
 		}
 		
 		//Climber State
