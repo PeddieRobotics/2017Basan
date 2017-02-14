@@ -3,23 +3,20 @@ package org.usfirst.frc.team5895.robot;
 import org.usfirst.frc.team5895.robot.auto.*;
 import org.usfirst.frc.team5895.robot.framework.*;
 import org.usfirst.frc.team5895.robot.lib.BetterJoystick;
-import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
-import org.usfirst.frc.team5895.robot.lib.trajectory.TextFileReader;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
-	Looper loop;
+	Looper loop, loopVision;
 	BetterJoystick Jleft, Jright, Jsecond;
 	DriveTrain drivetrain;
 	Shooter shooter;
 	Turret turret;
-	Vision vision;
 	GearReceiver gear;
 	Climber climber;
+	DSVision vision;
 
     public void robotInit() {
 
@@ -28,12 +25,16 @@ public class Robot extends IterativeRobot {
     	drivetrain = new DriveTrain();
     	shooter = new Shooter();
     	turret = new Turret();
-    	vision = new Vision();
 		gear = new GearReceiver();
 		climber = new Climber();
+		vision = new DSVision();
 
     	loop = new Looper(10);
     	loop.add(drivetrain::update);
+    	loop.start();
+    	
+    	loopVision = new Looper(100);
+    	loopVision.add(vision::update);
     	loop.start();
 
     }
@@ -41,9 +42,6 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	String routine = SmartDashboard.getString("DB/String 0", "nothing");
 
-    	if (routine.contains("spin")) {
-    		SpinInCirclesShootingWildly.run(drivetrain, shooter, turret);
-    	}
     	if(routine.contains("blue")) {
     		BlueAuto.run(drivetrain, shooter, turret);
     	}
@@ -73,6 +71,10 @@ public class Robot extends IterativeRobot {
     public void disabledInit() {
     	drivetrain.arcadeDrive(0, 0);
     	shooter.setSpeed(0);
+    	shooter.stopShoot();
+    	climber.stopClimbing();
+    	turret.turnTo(turret.getAngle());
+    	gear.close();
     }
     
     //From here on this is the joysticks controls of the main driver

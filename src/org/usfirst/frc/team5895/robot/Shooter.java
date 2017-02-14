@@ -81,11 +81,6 @@ public class Shooter {
 	public void setConveyorSpeed(double s){
 		speed = s;
 	}
-
-	public void update() {
-		flywheelMotor.set(PID.getOutput(Counter.getRate()));
-		conveyorMotor.set(speed);
-	}
 	
 	public boolean atSpeed()
 	{
@@ -97,6 +92,11 @@ public class Shooter {
 		{
 			return false;
 		}
+	}
+	
+	public void update() {
+		flywheelMotor.set(PID.getOutput(Counter.getRate()));
+		conveyorMotor.set(speed);
 	}
 }
 

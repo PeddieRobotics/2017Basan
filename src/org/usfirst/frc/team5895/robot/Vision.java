@@ -103,9 +103,5 @@ public class Vision {
 	public double getDist() {
 		return dist;
 	}
-	
-	public void update(){
-		//intentionally blank
-	}
 
 }
