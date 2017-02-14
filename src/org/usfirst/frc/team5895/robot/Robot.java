@@ -56,16 +56,53 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	drivetrain.arcadeDrive(Jleft.getRawAxis(1), Jright.getRawAxis(0));
 		
-    	//Main driver's controls
-    	GearState();
-		Shooting();
-		FrontSide();
-		HoodState();
+        //From here on this is the joysticks controls of the main driver
+        //Open or close the gear intake
+		if(Jleft.getRisingEdge(0)){
+			gear.open();
+		}
+		else if(Jleft.getRisingEdge(1)){
+			gear.close();
+		}
 		
-		//Second driver's controls
-		FlywheelOverride();
-		ElevatorOverride();
-		ClimberState();
+		//if we are shooting or not
+		if(Jright.getRisingEdge(0)){
+			shooter.shoot();
+		}else if(Jright.getFallingEdge(0)){
+			shooter.stopShoot();
+		}
+		
+		//what direction the robot is taking
+		if(Jleft.getRisingEdge(2)){
+			//front side is the intake
+		}else if(Jleft.getRisingEdge(3)){
+			//front side is the gear intake
+		}
+		
+		//hood is up or down
+		if(Jright.getRisingEdge(2)){
+			shooter.hoodUp();
+		}else if(Jright.getRisingEdge(3)){
+			shooter.hoodDown();
+		}
+		
+		//From here the code is for the second driver
+		//Set the flywheel to a certain speed
+		if(Jsecond.getRisingEdge(0)){
+			shooter.setSpeed(.3); //random value can be changed
+		}
+		
+		//Elevator Override
+		if(Jsecond.getRisingEdge(1)){
+			shooter.setConveyorSpeed(.6);
+		}
+		
+		//Climber State
+		if(Jsecond.getRisingEdge(4)){
+			climber.climb();
+		}else if (Jsecond.getRisingEdge(5)){
+			climber.stopClimbing();
+		}
     }
 
     public void disabledInit() {
@@ -76,63 +113,4 @@ public class Robot extends IterativeRobot {
     	turret.turnTo(turret.getAngle());
     	gear.close();
     }
-    
-    //From here on this is the joysticks controls of the main driver
-    //Open or close the gear intake
-	void GearState(){
-			if(Jleft.getRisingEdge(0)){
-				gear.open();
-			}
-			else if(Jleft.getRisingEdge(1)){
-				gear.close();
-			}
-		}
-	//if we are shooting or not
-	void Shooting(){
-		if(Jright.getRisingEdge(0)){
-			shooter.shoot();
-		}else if(Jright.getFallingEdge(0)){
-			shooter.stopShoot();
-		}
-
-	}
-	//what direction the robot is taking
-	void FrontSide(){
-		if(Jleft.getRisingEdge(2)){
-			//front side is the intake
-		}else if(Jleft.getRisingEdge(3)){
-			//front side is the gear intake
-		}
-	}
-	
-	//hood is up or down
-	void HoodState(){
-		if(Jright.getRisingEdge(2)){
-			shooter.hoodUp();
-		}else if(Jright.getRisingEdge(3)){
-			shooter.hoodDown();
-		}
-	}
-	
-	//From here the code is for the second driver
-	//Set the flywheel to a certain speed
-	void FlywheelOverride(){
-		if(Jsecond.getRisingEdge(0)){
-			shooter.setSpeed(.3); //random value can be changed
-		}
-	}
-	
-	void ElevatorOverride(){
-		if(Jsecond.getRisingEdge(1)){
-			shooter.setConveyorSpeed(.6);
-		}
-	}
-	
-	void ClimberState(){
-		if(Jsecond.getRisingEdge(4)){
-			climber.climb();
-		}else if (Jsecond.getRisingEdge(5)){
-			climber.stopClimbing();
-		}
-	}
 }
