@@ -11,6 +11,7 @@ public class Shooter {
 	private Talon conveyorMotor;
 	private Solenoid hood;
 	private double speed;
+	boolean hoodPosition;
 
 	PID PID;
 	Counter Counter;
@@ -27,7 +28,7 @@ public class Shooter {
 		PID = new PID(Kp, 0, 0, 0);
 		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
 		Counter.setDistancePerPulse(1);
-
+		
 	}
 	
 	/**
@@ -45,19 +46,26 @@ public class Shooter {
 		speed = 0;
 
 	}
+	/**
+	 * conveyor goes in reverse
+	 */
+	
+	public void reverse() {
+		speed = -0.6;
+	}
 	
 	/**
 	 * hood is on the big angle
 	 */
 	public void hoodUp(){
-		hood.set(true); 
+		hoodPosition = true; 
 	}
 	
 	/**
 	 * hood is on the small angle
 	 */
 	public void hoodDown(){
-		hood.set(false);
+		hoodPosition = false;
 	}
 	
 	/**
@@ -78,25 +86,21 @@ public class Shooter {
 		PID.set(setpoint/60);
 	}
 	
-	public void setConveyorSpeed(double s){
-		speed = s;
-	}
+	/**
+	 * tells whether flywheel is within 20 rpm of the setpoint
+	 * @return whether it's close or not
+	 */
 	
 	public boolean atSpeed()
 	{
-		if( getSpeed() < PID.getSetpoint() + 20 && getSpeed() > PID.getSetpoint() - 20 )
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return ( getSpeed() < PID.getSetpoint() + 20 && getSpeed() > PID.getSetpoint() - 20 );
+	
 	}
 	
 	public void update() {
 		flywheelMotor.set(PID.getOutput(Counter.getRate()));
 		conveyorMotor.set(speed);
+		hood.set(hoodPosition);
 	}
 }
 
