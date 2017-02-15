@@ -9,9 +9,7 @@ public class Shooter {
 
 	private Talon flywheelMotor;
 	private Talon conveyorMotor;
-	private Solenoid hood;
 	private double speed;
-	boolean hoodPosition;
 
 	PID PID;
 	Counter Counter;
@@ -23,7 +21,6 @@ public class Shooter {
 	{
 		flywheelMotor = new Talon(ElectricalLayout.FLYWHEEL_MOTOR);
 		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
-		hood = new Solenoid(ElectricalLayout.FLYWHEEL_SOLENOID);
 
 		PID = new PID(Kp, 0, 0, 0);
 		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
@@ -54,19 +51,6 @@ public class Shooter {
 		speed = -0.6;
 	}
 	
-	/**
-	 * hood is on the big angle
-	 */
-	public void hoodUp(){
-		hoodPosition = true; 
-	}
-	
-	/**
-	 * hood is on the small angle
-	 */
-	public void hoodDown(){
-		hoodPosition = false;
-	}
 	
 	/**
 	 * return the speed of the fly wheel in RPM
@@ -100,7 +84,6 @@ public class Shooter {
 	public void update() {
 		flywheelMotor.set(PID.getOutput(Counter.getRate()));
 		conveyorMotor.set(speed);
-		hood.set(hoodPosition);
 	}
 }
 
