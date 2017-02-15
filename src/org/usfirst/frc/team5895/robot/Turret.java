@@ -29,10 +29,10 @@ public class Turret {
 	
 	turret_motor = new Talon(ElectricalLayout.TURRET_MOTOR);
 	
-	PID = new PID(0.012, 0.000003, 0.0000001, 1);
+	PID = new PID(0.012, 0.00003, 0.0000001, 1);
 
 	turret_encoder = new BetterEncoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2,  false, Encoder.EncodingType.k4X);
-	turret_encoder.setDistancePerPulse(1/13);
+	turret_encoder.setDistancePerPulse(1.0/13);
 	
 	limitSwitchLeft = new DigitalInput(ElectricalLayout.LIMIT_SWITCHLEFT);
 	limitSwitchRight = new DigitalInput(ElectricalLayout.LIMIT_SWITCHRIGHT);
@@ -45,7 +45,7 @@ public class Turret {
 	 * @param angle Angle that the turret should be set to
 	 */
 	public void turnTo(double angle){
-		PID.set(angle);
+		PID.set(-angle);
 	
 	}
 	
@@ -66,7 +66,7 @@ public class Turret {
 	 * @return Angle of turret
 	 */
 	public double getAngle() {
-		return turret_encoder.getDistance();
+		return -turret_encoder.getDistance();
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class Turret {
 		if (output < -0.25) {
 			output = -0.25;
 		}
-
+/*
 		if(limitSwitchLeft.get() && output > 0) {
 			output = 0;
 			turret_encoder.setTo(-70); //check this value
@@ -103,7 +103,7 @@ public class Turret {
 			output = 0;
 			turret_encoder.setTo(70); //check this value
 		}
-		
+*/		
 		turret_motor.set(output);
 		
 	}
