@@ -52,7 +52,7 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 		
 		// Step CV_Threshold0:
 		Mat cvThresholdSrc = cvSubtractOutput;
-		double cvThresholdThresh = 100.0;
+		double cvThresholdThresh = 50.0;
 		double cvThresholdMaxval = 255.0;
 		int cvThresholdType = Imgproc.THRESH_BINARY;
 		cvThreshold(cvThresholdSrc, cvThresholdThresh, cvThresholdMaxval, cvThresholdType, cvThresholdOutput);
@@ -69,7 +69,7 @@ public class ReflectiveTapePipeline implements VisionPipeline {
 		double filterContoursMinWidth = 0.0;
 		double filterContoursMaxWidth = 200.0; //previously 1000
 		double filterContoursMinHeight = 0.0;
-		double filterContoursMaxHeight = 200.0; //previously 1000
+		double filterContoursMaxHeight = 50.0; //previously 1000
 		double[] filterContoursSolidity = {0, 100};
 		double filterContoursMaxVertices = 1000000.0;
 		double filterContoursMinVertices = 0.0;

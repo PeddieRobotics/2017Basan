@@ -29,7 +29,6 @@ public class Vision {
 	private CvSource outputStream;
 	private Mat mat;
 	
-	private boolean done = false;
 	private double xAngle = 0.0;
 	private double dist = 0.0;
 	
@@ -45,46 +44,7 @@ public class Vision {
 		outputStream = CameraServer.getInstance().putVideo("VisionTarget", W, H);
 		mat = new Mat();
 	}
-	
-	public void process() {
-		done = false;
-		Thread thread = new Thread(new Runnable() {
 
-		    @Override
-		    public void run() {
-		    	if (cvSink.grabFrame(mat) == 0) {
-					// Send the output the error.
-					outputStream.notifyError(cvSink.getError());
-					// skip the rest of the current iteration
-				} else {
-					p.process(mat);
-					
-					ArrayList<MatOfPoint> mop = p.filterContoursOutput();
-					Imgproc.fillPoly(mat, mop, new Scalar(177, 112, 9));
-					Point c = p.centerPoint();
-					if (c != null) {
-						Imgproc.circle(mat, c, 4, new Scalar(104, 208, 232), 3);
-						xAngle = ((c.x-(W/2))/W)*W_FOV;
-				        double yDegreeError = CAM_ANGLE-((c.y-(H/2))/H)*H_FOV;;
-				        dist = H_TO_TARGET/Math.tan(yDegreeError*3.14159/180);				
-					}
-				
-					outputStream.putFrame(mat);
-				}
-				done = true;
-		    }
-		});
-		thread.start();
-	}
-	
-	/**
-	 * Returns if processing is done or not
-	 * 
-	 * @return True if processing is done, false otherwise
-	 */
-	public boolean isDone() {
-		return done;
-	}
 	
 	/**
 	 * The horizontal angle to the target
@@ -103,5 +63,26 @@ public class Vision {
 	public double getDist() {
 		return dist;
 	}
-
+	
+	public void update() {
+    	if (cvSink.grabFrame(mat) == 0) {
+			// Send the output the error.
+			outputStream.notifyError(cvSink.getError());
+			// skip the rest of the current iteration
+		} else {
+			p.process(mat);
+			
+			ArrayList<MatOfPoint> mop = p.filterContoursOutput();
+			Imgproc.fillPoly(mat, mop, new Scalar(177, 112, 9));
+			Point c = p.centerPoint();
+			if (c != null) {
+				Imgproc.circle(mat, c, 4, new Scalar(104, 208, 232), 3);
+				xAngle = ((c.x-(W/2))/W)*W_FOV;
+		        double yDegreeError = CAM_ANGLE-((c.y-(H/2))/H)*H_FOV;;
+		        dist = H_TO_TARGET/Math.tan(yDegreeError*3.14159/180);				
+			}
+		
+			outputStream.putFrame(mat);
+		}
+	}
 }

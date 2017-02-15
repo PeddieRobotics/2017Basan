@@ -16,7 +16,7 @@ public class Robot extends IterativeRobot {
 	Turret turret;
 	GearReceiver gear;
 	Climber climber;
-	DSVision vision;
+	Vision vision;
 
     public void robotInit() {
 
@@ -27,15 +27,15 @@ public class Robot extends IterativeRobot {
     	turret = new Turret();
 		gear = new GearReceiver();
 		climber = new Climber();
-		vision = new DSVision();
+		vision = new Vision();
 
     	loop = new Looper(10);
     	loop.add(drivetrain::update);
     	loop.start();
     	
-    	loopVision = new Looper(100);
+    	loopVision = new Looper(200);
     	loopVision.add(vision::update);
-    	loop.start();
+    	loopVision.start();
 
     }
 
@@ -67,10 +67,8 @@ public class Robot extends IterativeRobot {
 		
 		//if we are shooting or not
 		if(Jright.getRisingEdge(0)){
-			shooter.hoodUp();
 			shooter.shoot();
 		}else if(Jright.getRisingEdge(1)){
-			shooter.hoodDown();
 			shooter.shoot();
 		}else if(Jright.getFallingEdge(0) || Jright.getFallingEdge(1)){
 			shooter.stopShoot();
@@ -81,13 +79,6 @@ public class Robot extends IterativeRobot {
 			//front side is the intake
 		}else if(Jleft.getRisingEdge(3)){
 			//front side is the gear intake
-		}
-		
-		//hood is up or down
-		if(Jright.getRisingEdge(2)){
-			shooter.hoodUp();
-		}else if(Jright.getRisingEdge(3)){
-			shooter.hoodDown();
 		}
 		
 		//From here the code is for the second driver
