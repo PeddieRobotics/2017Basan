@@ -31,7 +31,7 @@ public class Turret {
 	
 	PID = new PID(0.012, 0.00003, 0.0000001, 1);
 
-	turret_encoder = new BetterEncoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2,  false, Encoder.EncodingType.k4X);
+	turret_encoder = new BetterEncoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2,  true, Encoder.EncodingType.k4X);
 	turret_encoder.setDistancePerPulse(1.0/13);
 	
 	limitSwitchLeft = new DigitalInput(ElectricalLayout.LIMIT_SWITCHLEFT);
@@ -45,7 +45,7 @@ public class Turret {
 	 * @param angle Angle that the turret should be set to
 	 */
 	public void turnTo(double angle){
-		PID.set(-angle);
+		PID.set(angle);
 	
 	}
 	
@@ -55,9 +55,7 @@ public class Turret {
 	 * @return If turret is within angle range or not
 	 */
 	public boolean atAngle() {
-		if(getAngle() < PID.getSetpoint()+ 0.25 && getAngle() > PID.getSetpoint() - 0.025) {
-			return true;
-		} else return false;
+		return ((getAngle() < PID.getSetpoint()+ 0.25) && (getAngle() > PID.getSetpoint() - 0.25));
 	}
 	
 	/**
@@ -66,18 +64,9 @@ public class Turret {
 	 * @return Angle of turret
 	 */
 	public double getAngle() {
-		return -turret_encoder.getDistance();
+		return turret_encoder.getDistance();
 	}
 	
-	/**
-	 * Returns how fast the turret is going
-	 * 
-	 * @return Output of turret speed
-	 */
-	
-	public double getOutput() {
-		return output;
-	}
 		
 	/**
 	 * Regulates the desired speed of the turret and updates it constantly
