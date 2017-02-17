@@ -45,6 +45,15 @@ public class Turret {
 	 * @param angle Angle that the turret should be set to
 	 */
 	public void turnTo(double angle){
+		
+		if (angle > 90) {
+			angle = 90;
+		}
+		
+		if (angle < -90) {
+			angle = -90;
+		}
+		
 		PID.set(angle);
 	
 	}
