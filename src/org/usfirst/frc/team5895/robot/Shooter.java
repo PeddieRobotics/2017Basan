@@ -11,7 +11,6 @@ public class Shooter {
 	private Talon conveyorMotor;
 	private Solenoid hood;
 	private double speed;
-	boolean hoodPosition;
 
 	PID PID;
 	Counter Counter;
@@ -35,7 +34,7 @@ public class Shooter {
 	}
 	
 	/**
-	 * shoots the ball
+	 * Shoot continously
 	 */
 	public void shoot(){
 		speed = 0.6;
@@ -43,14 +42,14 @@ public class Shooter {
 	}
 	
 	/**
-	 * stop shooting the ball
+	 * Stop shooting
 	 */
 	public void stopShoot() {
 		speed = 0;
 
 	}
 	/**
-	 * conveyor goes in reverse
+	 * Conveyor goes in reverse
 	 */
 	
 	public void reverse() {
@@ -58,22 +57,8 @@ public class Shooter {
 	}
 	
 	/**
-	 * hood is on the big angle
-	 */
-	public void hoodUp(){
-		hoodPosition = true; 
-	}
-	
-	/**
-	 * hood is on the small angle
-	 */
-	public void hoodDown(){
-		hoodPosition = false;
-	}
-	
-	/**
-	 * return the speed of the fly wheel in RPM
-	 * @return the speed, in RPM, of the fly wheel
+	 * Return the speed of the fly wheel in RPM
+	 * @return The speed, in RPM, of the fly wheel
 	 */
 	public double getSpeed() {
 		double flywheelSpeed = Counter.getRate()*60;
@@ -82,16 +67,16 @@ public class Shooter {
 	
 
 	/**
-	 * sets the setpoint for the PID used for the fly wheel (in RPM)
-	 * @param setpoint angular speed set in RPM
+	 * Sets the target RPM of the flywheel
+	 * @param Aetpoint angular speed set in RPM
 	 */
 	public void setSpeed(double setpoint) {
 		PID.set(setpoint/60);
 	}
 	
 	/**
-	 * tells whether flywheel is within 20 rpm of the setpoint
-	 * @return whether it's close or not
+	 * tTells whether flywheel speed is close to the setpoint
+	 * @return Whether it's close or not
 	 */
 	
 	public boolean atSpeed()
@@ -103,7 +88,6 @@ public class Shooter {
 	public void update() {
 		flywheelMotor.set(PID.getOutput(Counter.getRate()));
 		conveyorMotor.set(speed);
-		hood.set(hoodPosition);
 	}
 }
 

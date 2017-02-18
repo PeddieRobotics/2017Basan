@@ -32,9 +32,12 @@ public class DriveTrain {
 		Eleft.setDistancePerPulse(4/12.0*3.14/360);
 		Eright.setDistancePerPulse(4/12.0*3.14/360);
 
-		c_red = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
-		c_blue = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
-
+		try {
+			c_red = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
+			c_blue = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
+		} catch (Exception e){
+			DriverStation.reportError("Auto files not on robot!", false);
+		}
 	}
 
 	/**

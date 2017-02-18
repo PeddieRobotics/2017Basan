@@ -11,7 +11,7 @@ public class Intake {
     private boolean isDown;
 
 	public Intake() {
-	    motor = new Talon(2);
+	    motor = new Talon(ElectricalLayout.INTAKE_MOTOR);
 	    speed = 0;
 	    myCylinder = new Solenoid(ElectricalLayout.INTAKE_SOLENOID);
 	    isDown = false;
@@ -30,7 +30,7 @@ public class Intake {
 	 */
 	public void down() {
 	   isDown = true;
-	   speed = 0.5;
+	   speed = -1.0;
 	}
 
 	public void update() {

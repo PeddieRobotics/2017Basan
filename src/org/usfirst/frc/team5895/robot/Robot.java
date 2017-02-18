@@ -66,25 +66,10 @@ public class Robot extends IterativeRobot {
 		}
 		
 		//if we are shooting or not
-		if(Jright.getRisingEdge(0)){
+		if(Jright.getRisingEdge(1)){
 			shooter.shoot();
-		}else if(Jright.getRisingEdge(1)){
-			shooter.shoot();
-		}else if(Jright.getFallingEdge(0) || Jright.getFallingEdge(1)){
+		}else if(Jright.getFallingEdge(1)){
 			shooter.stopShoot();
-		}
-		
-		//what direction the robot is taking
-		if(Jleft.getRisingEdge(2)){
-			//front side is the intake
-		}else if(Jleft.getRisingEdge(3)){
-			//front side is the gear intake
-		}
-		
-		//From here the code is for the second driver
-		//Set the flywheel to a certain speed
-		if(Jsecond.getRisingEdge(0)){
-			shooter.setSpeed(.3); //random value can be changed
 		}
 		
 		//Climber State
@@ -95,7 +80,7 @@ public class Robot extends IterativeRobot {
 		}
     }
 
-    public void disabledInit() {
+    public void teleopInit() {
     	drivetrain.arcadeDrive(0, 0);
     	shooter.setSpeed(0);
     	shooter.stopShoot();

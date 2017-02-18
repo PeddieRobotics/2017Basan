@@ -17,11 +17,11 @@ import edu.wpi.first.wpilibj.CameraServer;
 public class Vision {
 	
 	private static final int W = 640;
-	private static final int H = 480;
+	private static final int H = 360;
 	private static final double W_FOV = 70.42;
 	private static final double H_FOV = 43.30;
 	private static final double H_TO_TARGET = 5.3333;
-	private static final double CAM_ANGLE = 0; //NEED TO SET THIS
+	private static final double CAM_ANGLE = 35; //NEED TO SET THIS
 	
 	private UsbCamera camera;
 	private ReflectiveTapePipeline p;
