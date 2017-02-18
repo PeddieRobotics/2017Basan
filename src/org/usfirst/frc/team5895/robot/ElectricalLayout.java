@@ -31,4 +31,5 @@ public class ElectricalLayout {
 	public static final int LIMIT_SWITCHRIGHT = 10;
 	
 	public static final int CLIMBER_PDB_PORT = 0;
+	public static final int CONVEYOR_PDB_PORT = 1;
 }
