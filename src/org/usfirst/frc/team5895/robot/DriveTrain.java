@@ -26,15 +26,15 @@ public class DriveTrain {
 		Mleft = new Talon(ElectricalLayout.DRIVE_LEFTMOTOR);
 		Mright = new Talon(ElectricalLayout.DRIVE_RIGHTMOTOR);
 
-		Eleft = new Encoder(ElectricalLayout.DRIVE_LEFTENCODER2,ElectricalLayout.DRIVE_LEFTENCODER, true, Encoder.EncodingType.k4X);
+		Eleft = new Encoder(ElectricalLayout.DRIVE_LEFTENCODER,ElectricalLayout.DRIVE_LEFTENCODER2, true, Encoder.EncodingType.k4X);
 		Eright = new Encoder(ElectricalLayout.DRIVE_RIGHTENCODER,ElectricalLayout.DRIVE_RIGHTENCODER2, false, Encoder.EncodingType.k4X);
 
 		Eleft.setDistancePerPulse(4/12.0*3.14/360);
 		Eright.setDistancePerPulse(4/12.0*3.14/360);
 
 		try {
-			c_red = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
-			c_blue = new TrajectoryDriveController("/home/lvuser/Turn.txt", 0, 0, 0, 1.0/14.6, 1.0/45.0, -0.02);
+			c_red = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.02);
+			c_blue = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.02);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -145,8 +145,8 @@ public class DriveTrain {
 
 			DriverStation.reportError("the distance is" + getDistance(), false);
 
-			Mleft.set(m_red[0]);
-			Mright.set(-m_red[1]);
+			Mleft.set(-m_red[0]);
+			Mright.set(m_red[1]);
 			break;
 		
 		case AUTO_BLUE:
@@ -157,8 +157,8 @@ public class DriveTrain {
 
 			DriverStation.reportError("the distance is" + getDistance(), false);
 
-			Mleft.set(m_blue[0]);
-			Mright.set(-m_blue[1]);
+			Mleft.set(-m_blue[0]);
+			Mright.set(m_blue[1]);
 			break;
 		
 
