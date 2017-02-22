@@ -46,8 +46,8 @@ public class DriveTrain {
 		Eright.setDistancePerPulse(4/12.0*3.14/360);
 
 		try {
-			c_red = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.02);
-			c_blue = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.02);
+			c_red = new TrajectoryDriveController("/home/lvuser/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.008);
+			c_blue = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.008);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -169,9 +169,9 @@ public class DriveTrain {
 
 			double[] m_red = new double[2];
 
-			m_red = c_red.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+			m_red = c_red.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
 
-			DriverStation.reportError("the distance is" + getDistance(), false);
+			//DriverStation.reportError("the angle is" + getAngle(), false);
 
 			Mleft.set(-m_red[0]);
 			Mright.set(m_red[1]);
@@ -183,7 +183,7 @@ public class DriveTrain {
 
 			m_blue = c_blue.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
 
-			DriverStation.reportError("the distance is" + getDistance(), false);
+			DriverStation.reportError("the angle is" + getAngle(), false);
 
 			Mleft.set(-m_blue[0]);
 			Mright.set(m_blue[1]);
