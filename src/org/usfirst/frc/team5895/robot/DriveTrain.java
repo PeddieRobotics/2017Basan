@@ -11,7 +11,7 @@ public class DriveTrain {
 	private Talon Mleft;
 	private Talon Mright;
 	double Lspeed, Rspeed;
-	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE};
+	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, TURN_AROUND};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
@@ -173,6 +173,9 @@ public class DriveTrain {
 			Mright.set(Rspeed);
 			}
 
+			break;
+			
+		case TURN_AROUND:
 			break;
 		}
 	}
