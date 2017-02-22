@@ -160,6 +160,32 @@ public class DriveTrain {
 		reverseFrontBack = false;
 	}
 	
+	/**
+	 * Checks if we are within 1% of the distance we wanted
+	 * @param distance
+	 * @return
+	 */
+	public boolean atDistance(double distance){
+		if(distance <= 1.01*getDistance() && distance >= .99*getDistance()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	/**
+	 * Checks if we are within 1% of the angle we wanted
+	 * @param angle
+	 * @return
+	 */
+	public boolean atAngle(double angle){
+		if(angle <= 1.01*getAngle() && angle >= .99*getAngle()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	public void update()
 	{
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
@@ -211,6 +237,11 @@ public class DriveTrain {
 			
 			break;
 		case TURN_TO:
+			
+			double turnOutput = turnPID.getOutput(getAngle());
+			Mleft.set(turnOutput);
+			Mright.set(turnOutput);
+			DriverStation.reportError("Angle is " + getAngle(), false);
 			break;
 		}
 	}
