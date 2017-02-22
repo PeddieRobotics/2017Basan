@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5895.robot;
 
 import org.usfirst.frc.team5895.robot.lib.NavX;
+import org.usfirst.frc.team5895.robot.lib.PID;
 import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -11,14 +12,26 @@ public class DriveTrain {
 	private Talon Mleft;
 	private Talon Mright;
 	double Lspeed, Rspeed;
-	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, TURN_AROUND};
+	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, TURN_TO, DRIVE_TO};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
 	private TrajectoryDriveController c_red;
 	private TrajectoryDriveController c_blue;
 	private boolean reverseFrontBack = false;
-
+	
+	private PID distancePID;
+	private double distance_kP = 0.02;
+	private double distance_kI = 0;
+	private double distance_kD = 0;
+	private double distance_dV = 1;
+	
+	private PID turnPID;
+	private double turn_kP = 0;
+	private double turn_kI = 0;
+	private double turn_kD = 0;
+	private double turn_dV = 0;
+	
 	public DriveTrain()
 	{
 		NavX=new NavX();
@@ -98,7 +111,22 @@ public class DriveTrain {
 		c_blue.reset();
 		mode = Mode_Type.AUTO_BLUE;
 	}
-	
+	/**
+	 * drives to a certain distance
+	 * @param distance The distance to go
+	 */
+	public void driveTo(double distance) {
+		distancePID.set(distance);
+		mode = Mode_Type.DRIVE_TO;
+	}
+	/**
+	 * turns to an angle
+	 * @param angle The desired angle
+	 */
+	public void turnTo(double angle) {
+		turnPID.set(angle);
+		mode = Mode_Type.TURN_TO;
+	}
 	/**
 	 * Two-controller driving
 	 * 
@@ -174,8 +202,15 @@ public class DriveTrain {
 			}
 
 			break;
+		case DRIVE_TO:
 			
-		case TURN_AROUND:
+			double distanceOutput = distancePID.getOutput(getDistance());
+			Mleft.set(distanceOutput);
+			Mright.set(distanceOutput);
+			DriverStation.reportError("Distance is" + getDistance(), false);
+			
+			break;
+		case TURN_TO:
 			break;
 		}
 	}
