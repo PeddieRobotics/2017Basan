@@ -27,7 +27,7 @@ public class Shooter {
 		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
 		hood = new Solenoid(ElectricalLayout.FLYWHEEL_SOLENOID);
 
-		PID = new PID(Kp, Ki, Kd, dV);
+		PID = new PID(Kp, Ki, Kd, dV, false);
 		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
 		Counter.setDistancePerPulse(1);
 		
