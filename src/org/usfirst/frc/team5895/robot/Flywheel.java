@@ -13,7 +13,7 @@ public class Flywheel {
 	PID PID;
 	Counter Counter;
 
-	double Kp = 0.2;
+	double Kp = 0.24;
 	double Ki = 0.00001;
 	double Kd = 0.00000005;
 	double dV = 1;
@@ -30,7 +30,7 @@ public class Flywheel {
 	}
 	
 	/**
-	 * Shoot continously
+	 * Shoot continuously
 	 */
 	public void shoot(){
 		speed = 0.6;
@@ -57,14 +57,14 @@ public class Flywheel {
 
 	/**
 	 * Sets the target RPM of the flywheel
-	 * @param Aetpoint angular speed set in RPM
+	 * @param Setpoint angular speed set in RPM
 	 */
 	public void setSpeed(double setpoint) {
 		PID.set(setpoint/60);
 	}
 	
 	/**
-	 * tTells whether flywheel speed is close to the setpoint
+	 * Tells whether flywheel speed is close to the setpoint
 	 * @return Whether it's close or not
 	 */
 	

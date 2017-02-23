@@ -15,7 +15,7 @@ public class Shooter {
 	PID PID;
 	Counter Counter;
 
-	double Kp = 0.2;
+	double Kp = 0.24;
 	double Ki = 0.00001;
 	double Kd = 0.00000005;
 	double dV = 1;
@@ -75,7 +75,7 @@ public class Shooter {
 	}
 	
 	/**
-	 * tTells whether flywheel speed is close to the setpoint
+	 * Tells whether flywheel speed is close to the setpoint
 	 * @return Whether it's close or not
 	 */
 	
