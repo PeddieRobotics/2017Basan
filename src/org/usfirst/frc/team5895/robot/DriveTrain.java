@@ -19,6 +19,7 @@ public class DriveTrain {
 	private TrajectoryDriveController c_red;
 	private TrajectoryDriveController c_blue;
 	private boolean reverseFrontBack = false;
+	private TrajectoryDriveController path;
 	
 	private PID distancePID;
 	private double distance_kP = 0.02;
@@ -180,6 +181,14 @@ public class DriveTrain {
 	 */
 	public boolean atAngle(){
 		if(getAngle() <= 1.01*turnPID.getSetpoint() && getAngle() >= .99*turnPID.getSetpoint()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public boolean trajectoryFinished(){
+		if(path.onTarget()){
 			return true;
 		}else{
 			return false;

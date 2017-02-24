@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
 import org.usfirst.frc.team5895.robot.lib.PID;
+import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
 
 public class Shooter {
 
@@ -38,7 +39,6 @@ public class Shooter {
 	 */
 	public void shoot(){
 		speed = 0.6;
-
 	}
 	
 	/**
@@ -46,12 +46,11 @@ public class Shooter {
 	 */
 	public void stopShoot() {
 		speed = 0;
-
 	}
+	
 	/**
 	 * Conveyor goes in reverse
 	 */
-	
 	public void reverse() {
 		speed = -0.6;
 	}
@@ -81,8 +80,7 @@ public class Shooter {
 	
 	public boolean atSpeed()
 	{
-		return ( getSpeed() < PID.getSetpoint() + 20 && getSpeed() > PID.getSetpoint() - 20 );
-	
+		return ( getSpeed() < PID.getSetpoint() + 20 && getSpeed() > PID.getSetpoint() - 20 );	
 	}
 	
 	public void update() {
