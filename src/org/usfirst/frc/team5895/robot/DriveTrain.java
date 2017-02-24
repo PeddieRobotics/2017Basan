@@ -165,8 +165,8 @@ public class DriveTrain {
 	 * @param distance
 	 * @return
 	 */
-	public boolean atDistance(double distance){
-		if(distance <= 1.01*getDistance() && distance >= .99*getDistance()){
+	public boolean atDistance(){
+		if(getDistance() <= 1.01*distancePID.getSetpoint() && getDistance() >= .99*distancePID.getSetpoint()){
 			return true;
 		}else{
 			return false;
@@ -178,8 +178,8 @@ public class DriveTrain {
 	 * @param angle
 	 * @return
 	 */
-	public boolean atAngle(double angle){
-		if(angle <= 1.01*getAngle() && angle >= .99*getAngle()){
+	public boolean atAngle(){
+		if(getAngle() <= 1.01*turnPID.getSetpoint() && getAngle() >= .99*turnPID.getSetpoint()){
 			return true;
 		}else{
 			return false;
