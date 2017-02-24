@@ -187,13 +187,6 @@ public class DriveTrain {
 		}
 	}
 	
-	public boolean trajectoryFinished(){
-		if(path.onTarget()){
-			return true;
-		}else{
-			return false;
-		}
-	}
 	
 	public void update()
 	{
@@ -210,6 +203,10 @@ public class DriveTrain {
 
 			Mleft.set(-m_red[0]);
 			Mright.set(m_red[1]);
+			
+			if(path.onTarget()){
+				mode = Mode_Type.TELEOP;
+			}
 			break;
 		
 		case AUTO_BLUE:
@@ -222,6 +219,10 @@ public class DriveTrain {
 
 			Mleft.set(-m_blue[0]);
 			Mright.set(m_blue[1]);
+			
+			if(path.onTarget()){
+				mode = Mode_Type.TELEOP;
+			}
 			break;
 		
 
