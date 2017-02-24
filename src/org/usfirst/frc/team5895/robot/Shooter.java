@@ -17,7 +17,7 @@ public class Shooter {
 	Counter Counter;
 
 	double Kp = 0.24;
-	double Ki = 0.00001;
+	double Ki = 0.000018;
 	double Kd = 0.00000005;
 	double dV = 1;
 
