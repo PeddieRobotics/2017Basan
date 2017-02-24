@@ -19,7 +19,6 @@ public class DriveTrain {
 	private TrajectoryDriveController c_red;
 	private TrajectoryDriveController c_blue;
 	private boolean reverseFrontBack = false;
-	private TrajectoryDriveController path;
 	
 	private PID distancePID;
 	private double distance_kP = 0.02;
@@ -36,7 +35,7 @@ public class DriveTrain {
 	public DriveTrain()
 	{
 		NavX=new NavX();
-
+		
 		Mleft = new Talon(ElectricalLayout.DRIVE_LEFTMOTOR);
 		Mright = new Talon(ElectricalLayout.DRIVE_RIGHTMOTOR);
 
@@ -112,6 +111,15 @@ public class DriveTrain {
 		c_blue.reset();
 		mode = Mode_Type.AUTO_BLUE;
 	}
+	
+	public boolean trajectoryFinished(){
+		if(c_blue.onTarget() || c_red.onTarget()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	/**
 	 * drives to a certain distance
 	 * @param distance The distance to go
@@ -203,10 +211,6 @@ public class DriveTrain {
 
 			Mleft.set(-m_red[0]);
 			Mright.set(m_red[1]);
-			
-			if(path.onTarget()){
-				mode = Mode_Type.TELEOP;
-			}
 			break;
 		
 		case AUTO_BLUE:
@@ -219,10 +223,6 @@ public class DriveTrain {
 
 			Mleft.set(-m_blue[0]);
 			Mright.set(m_blue[1]);
-			
-			if(path.onTarget()){
-				mode = Mode_Type.TELEOP;
-			}
 			break;
 		
 
