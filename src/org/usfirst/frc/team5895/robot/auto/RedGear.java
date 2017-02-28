@@ -6,7 +6,7 @@ import org.usfirst.frc.team5895.robot.framework.Waiter;
 
 public class RedGear {
 	
-	public static void run(DriveTrain drivetrain, GearReceiver gear) {
+	public static void run(DriveTrain drivetrain, GearReceiver gear, String place) {
 		
 		//Gear side is front
 		drivetrain.driveTo(-125);
