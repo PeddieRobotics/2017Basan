@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Turret {
 
-	private Talon turret_motor;
+	private Talon turret_motor; //left is positive
 	private PID PID;
-	private BetterEncoder turret_encoder;
+	private Encoder turret_encoder;
 	private DigitalInput limitSwitchLeft;
 	private DigitalInput limitSwitchRight;
 	double output;
@@ -31,7 +31,7 @@ public class Turret {
 	
 	PID = new PID(0.012, 0.00003, 0.0000001, 1);
 
-	turret_encoder = new BetterEncoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2,  true, Encoder.EncodingType.k4X);
+	turret_encoder = new Encoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2,  true, Encoder.EncodingType.k4X);
 	turret_encoder.setDistancePerPulse(1.0/13);
 	
 	limitSwitchLeft = new DigitalInput(ElectricalLayout.LIMIT_SWITCHLEFT);
@@ -92,16 +92,15 @@ public class Turret {
 		if (output < -0.25) {
 			output = -0.25;
 		}
-/*
+
+		/*
 		if(limitSwitchLeft.get() && output > 0) {
 			output = 0;
-			turret_encoder.setTo(-70); //check this value
 		}
 		if(limitSwitchRight.get() && output < 0) {
 			output = 0;
-			turret_encoder.setTo(70); //check this value
-		}
-*/		
+		}	
+		*/
 		turret_motor.set(output);
 		
 	}
