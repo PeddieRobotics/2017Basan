@@ -20,6 +20,7 @@ public class Robot extends IterativeRobot {
 	Climber climber;
 	Vision vision;
 	Intake tornado;
+	LookupTable table;
 
 	public void robotInit() {
 
@@ -44,6 +45,14 @@ public class Robot extends IterativeRobot {
 		loopVision.add(this::Follow);
 		loopVision.start();
 
+    	double[] RPM = {3000, 3100, 3125, 3125, 3190, 3225, 3250, 3275, 3300, 3325, 3375, 3400, 3425, 3465, 3500};
+    	double[] dist = {7.6, 8.25, 9, 9.5, 10, 10.5, 10.8, 11, 11.3, 11.5, 12, 12.5, 13, 13.5, 14};
+    	try {
+			table = new LookupTable(dist, RPM);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void autonomousInit() {
@@ -108,6 +117,15 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
+		drivetrain.arcadeDrive(0, 0);
+		shooter.setSpeed(0);
+		shooter.stopShoot();
+		climber.stopClimbing();
+		turret.turnTo(turret.getAngle());
+		gear.close();
+	}
+	
+	public void disabledInit() {
 		drivetrain.arcadeDrive(0, 0);
 		shooter.setSpeed(0);
 		shooter.stopShoot();
