@@ -87,7 +87,7 @@ public class Shooter {
 	}
 	
 	public void update() {
-		flywheelMotor.set(1);
+		flywheelMotor.set(speed);
 		conveyorMotor.set(speed);
 	}
 }
