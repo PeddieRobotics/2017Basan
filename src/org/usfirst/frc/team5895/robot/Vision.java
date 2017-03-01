@@ -13,6 +13,7 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class Vision {
 	
@@ -70,6 +71,7 @@ public class Vision {
 			outputStream.notifyError(cvSink.getError());
 			// skip the rest of the current iteration
 		} else {
+			
 			p.process(mat);
 			
 			ArrayList<MatOfPoint> mop = p.filterContoursOutput();
