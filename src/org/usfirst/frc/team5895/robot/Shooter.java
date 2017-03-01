@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5895.robot;
 
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
 import org.usfirst.frc.team5895.robot.lib.PID;
@@ -13,6 +14,7 @@ public class Shooter {
 	private Solenoid hood;
 	private double speed;
 
+	PowerDistributionPanel pdp;
 	PID PID;
 	Counter Counter;
 
@@ -23,6 +25,7 @@ public class Shooter {
 
 	public Shooter()
 	{
+		pdp = new PowerDistributionPanel();
 		flywheelMotor = new Talon(ElectricalLayout.FLYWHEEL_MOTOR);
 		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
 		hood = new Solenoid(ElectricalLayout.FLYWHEEL_SOLENOID);
@@ -84,7 +87,7 @@ public class Shooter {
 	}
 	
 	public void update() {
-		flywheelMotor.set(PID.getOutput(10));
+		flywheelMotor.set(1);
 		conveyorMotor.set(speed);
 	}
 }

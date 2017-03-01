@@ -6,6 +6,8 @@ import org.usfirst.frc.team5895.robot.lib.BetterJoystick;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
 
@@ -74,6 +76,7 @@ public class Robot extends IterativeRobot {
 
 	public void teleopPeriodic() {
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), Jright.getRawAxis(0));
+		
 		
 		//From here on this is the joysticks controls of the main driver
 		//Open or close the gear intake
