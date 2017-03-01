@@ -30,7 +30,7 @@ public class Intake {
 	 */
 	public void down() {
 	   isDown = true;
-	   speed = -1.0;
+	   speed = 1.0;
 	}
 
 	public void update() {

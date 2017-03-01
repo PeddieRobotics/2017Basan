@@ -67,7 +67,7 @@ public class Shooter {
 
 	/**
 	 * Sets the target RPM of the flywheel
-	 * @param Aetpoint angular speed set in RPM
+	 * @param Setpoint angular speed set in RPM
 	 */
 	public void setSpeed(double setpoint) {
 		PID.set(setpoint/60);

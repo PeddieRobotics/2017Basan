@@ -8,6 +8,8 @@ public class RedGear {
 	
 	public static void run(DriveTrain drivetrain, GearReceiver gear, String place) {
 		
+		switch(place){
+			case "left":
 		//Gear side is front
 		drivetrain.driveTo(-125);
 		Waiter.waitFor(drivetrain::atDistance, 5000.0);
@@ -15,7 +17,16 @@ public class RedGear {
 		Waiter.waitFor(drivetrain::atAngle, 5000);
 		gear.open();
 		drivetrain.driveTo(-10);
-		
+		break;
+			case "middle":
+				//something something
+				break;
+			
+			case "right":
+				//filler
+				break;
+		}
 	}
+
 
 }

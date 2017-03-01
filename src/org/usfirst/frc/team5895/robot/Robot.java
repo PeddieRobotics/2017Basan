@@ -17,6 +17,7 @@ public class Robot extends IterativeRobot {
 	GearReceiver gear;
 	Climber climber;
 	Vision vision;
+	Intake tornado;
 
 	public void robotInit() {
 
@@ -28,9 +29,12 @@ public class Robot extends IterativeRobot {
 		gear = new GearReceiver();
 		climber = new Climber();
 		vision = new Vision();
+		tornado = new Intake(); //The intake function now is used for the tornado thing to push the balls
 
 		loop = new Looper(10);
-		loop.add(drivetrain::update);
+		//loop.add(drivetrain::update);
+		loop.add(tornado::update);
+		loop.add(shooter::update);
 		loop.start();
 
 		loopVision = new Looper(200);
@@ -70,7 +74,7 @@ public class Robot extends IterativeRobot {
 
 	public void teleopPeriodic() {
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), Jright.getRawAxis(0));
-
+		
 		//From here on this is the joysticks controls of the main driver
 		//Open or close the gear intake
 		if(Jleft.getRisingEdge(0)){
@@ -83,16 +87,21 @@ public class Robot extends IterativeRobot {
 		//if we are shooting or not
 		if(Jright.getRisingEdge(1)){
 			shooter.shoot();
+			DriverStation.reportError(""+shooter.getSpeed(), false);
+			shooter.setSpeed(360);
+			tornado.down();
 		}else if(Jright.getFallingEdge(1)){
 			shooter.stopShoot();
+			shooter.setSpeed(0);
+			tornado.up();
 		}
 
 		//Climber State
-		if(Jsecond.getRisingEdge(4)){
+		/*if(Jsecond.getRisingEdge(4)){
 			climber.climb();
 		}else if (Jsecond.getRisingEdge(5)){
 			climber.stopClimbing();
-		}
+		}*/
 	}
 
 	public void teleopInit() {
