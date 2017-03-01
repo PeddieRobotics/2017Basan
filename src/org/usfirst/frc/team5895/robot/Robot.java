@@ -88,7 +88,7 @@ public class Robot extends IterativeRobot {
 		if(Jright.getRisingEdge(1)){
 			shooter.shoot();
 			DriverStation.reportError(""+shooter.getSpeed(), false);
-			shooter.setSpeed(360);
+			
 			tornado.down();
 		}else if(Jright.getFallingEdge(1)){
 			shooter.stopShoot();

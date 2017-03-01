@@ -21,7 +21,6 @@ public class Shooter {
 	double Kd = 0.00000005;
 	double dV = 1;
 
-
 	public Shooter()
 	{
 		flywheelMotor = new Talon(ElectricalLayout.FLYWHEEL_MOTOR);
@@ -39,6 +38,7 @@ public class Shooter {
 	 */
 	public void shoot(){
 		speed = 0.6;
+		
 	}
 	
 	/**
@@ -84,7 +84,7 @@ public class Shooter {
 	}
 	
 	public void update() {
-		flywheelMotor.set(PID.getOutput(Counter.getRate()));
+		flywheelMotor.set(PID.getOutput(10));
 		conveyorMotor.set(speed);
 	}
 }
