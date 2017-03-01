@@ -13,6 +13,7 @@ public class Shooter {
 	private Talon conveyorMotor;
 	private Solenoid hood;
 	private double speed;
+	private double flyspeed;
 
 	PowerDistributionPanel pdp;
 	PID PID;
@@ -73,7 +74,8 @@ public class Shooter {
 	 * @param Setpoint angular speed set in RPM
 	 */
 	public void setSpeed(double setpoint) {
-		PID.set(setpoint/60);
+	//	PID.set(setpoint/60);
+		flyspeed = 0.6;
 	}
 	
 	/**
@@ -87,7 +89,8 @@ public class Shooter {
 	}
 	
 	public void update() {
-		flywheelMotor.set(speed);
+		flywheelMotor.set(PID.getOutput(Counter.getRate()));
+		//flywheelMotor.set(-flyspeed);
 		conveyorMotor.set(speed);
 	}
 }

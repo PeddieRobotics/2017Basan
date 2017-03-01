@@ -7,7 +7,7 @@ public class Climber {
 
 	PowerDistributionPanel pdp;
 	private Talon climbMotor;
-	private enum Mode_Type {WAITING, CLIMBING, NOTHING};
+	private enum Mode_Type {WAITING, CLIMBING, NOTHING, STANDING};
 	private Mode_Type mode = Mode_Type.WAITING;
 	private double climbTimeStamp = Double.MIN_VALUE;
 
@@ -42,13 +42,17 @@ public class Climber {
 
 		case CLIMBING:
 			climbMotor.set(0.5);
-			if (current > 131.0) {
-				mode = Mode_Type.NOTHING;
+			if (current > 30) {
+				mode = Mode_Type.STANDING;
 			}
 			break;
 
 		case NOTHING:
 			climbMotor.set(0.0);
+			break;
+			
+		case STANDING:
+			climbMotor.set(0.25);
 			break;
 		}
 	}

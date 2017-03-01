@@ -36,11 +36,12 @@ public class Robot extends IterativeRobot {
 		loop = new Looper(10);
 		//loop.add(drivetrain::update);
 		loop.add(tornado::update);
-		loop.add(shooter::update);
+		//loop.add(shooter::update);
 		loop.start();
 
 		loopVision = new Looper(200);
 		loopVision.add(vision::update);
+		loopVision.add(this::Follow);
 		loopVision.start();
 
 	}
@@ -91,7 +92,6 @@ public class Robot extends IterativeRobot {
 		if(Jright.getRisingEdge(1)){
 			shooter.shoot();
 			DriverStation.reportError(""+shooter.getSpeed(), false);
-			
 			tornado.down();
 		}else if(Jright.getFallingEdge(1)){
 			shooter.stopShoot();
@@ -114,5 +114,9 @@ public class Robot extends IterativeRobot {
 		climber.stopClimbing();
 		turret.turnTo(turret.getAngle());
 		gear.close();
+	}
+	
+	public void Follow(){
+		turret.turnTo(turret.getAngle()-vision.getX());
 	}
 }
