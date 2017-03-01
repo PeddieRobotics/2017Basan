@@ -2,7 +2,6 @@ package org.usfirst.frc.team5895.robot;
 
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
 import org.usfirst.frc.team5895.robot.lib.PID;
 import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
@@ -11,9 +10,8 @@ public class Shooter {
 
 	private Talon flywheelMotor;
 	private Talon conveyorMotor;
-	private Solenoid hood;
 	private double speed;
-	private double flyspeed;
+	private boolean noSpeed;
 
 	PowerDistributionPanel pdp;
 	PID PID;
@@ -29,12 +27,12 @@ public class Shooter {
 		pdp = new PowerDistributionPanel();
 		flywheelMotor = new Talon(ElectricalLayout.FLYWHEEL_MOTOR);
 		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
-		hood = new Solenoid(ElectricalLayout.FLYWHEEL_SOLENOID);
 
 		PID = new PID(Kp, Ki, Kd, dV, false);
 		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
 		Counter.setDistancePerPulse(1);
 		
+		noSpeed = false;
 	}
 	
 	/**
@@ -74,8 +72,10 @@ public class Shooter {
 	 * @param Setpoint angular speed set in RPM
 	 */
 	public void setSpeed(double setpoint) {
-	//	PID.set(setpoint/60);
-		flyspeed = 0.6;
+		if(setpoint == 0) {
+			noSpeed = true;
+		} else noSpeed = false;
+		PID.set(setpoint/60);
 	}
 	
 	/**
@@ -89,7 +89,10 @@ public class Shooter {
 	}
 	
 	public void update() {
-		flywheelMotor.set(PID.getOutput(Counter.getRate()));
+		if(noSpeed == true) {
+			flywheelMotor.set(0);
+		} else
+		flywheelMotor.set(-PID.getOutput(Counter.getRate()));
 		//flywheelMotor.set(-flyspeed);
 		conveyorMotor.set(speed);
 	}
