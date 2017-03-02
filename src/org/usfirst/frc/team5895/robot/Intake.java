@@ -5,14 +5,10 @@ import edu.wpi.first.wpilibj.Talon;
 
 public class Intake {
 
-    private Talon motor;
-    private double speed;
     private Solenoid myCylinder;
     private boolean isDown;
 
 	public Intake() {
-	    motor = new Talon(ElectricalLayout.INTAKE_MOTOR);
-	    speed = 0;
 	    myCylinder = new Solenoid(ElectricalLayout.INTAKE_SOLENOID);
 	    isDown = false;
 	}
@@ -22,7 +18,6 @@ public class Intake {
 	 */
 	public void up() {
 	   isDown = false;
-	   speed = 0.0;
 	}
 	
 	/**
@@ -30,12 +25,10 @@ public class Intake {
 	 */
 	public void down() {
 	   isDown = true;
-	   speed = 1.0;
 	}
 
 	public void update() {
 	   //controlCurrent(); don't need this for Intake
-	   motor.set(speed);
 	   if (myCylinder.get() != isDown)
 	       myCylinder.set(isDown);
 	}

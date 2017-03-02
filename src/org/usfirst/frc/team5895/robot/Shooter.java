@@ -10,7 +10,9 @@ public class Shooter {
 
 	private Talon flywheelMotor;
 	private Talon conveyorMotor;
-	private double speed;
+	private Talon tornadoMotor;
+	private double conveyorSpeed;
+	private double tornadoSpeed;
 	private boolean noSpeed;
 
 	PowerDistributionPanel pdp;
@@ -27,6 +29,7 @@ public class Shooter {
 		pdp = new PowerDistributionPanel();
 		flywheelMotor = new Talon(ElectricalLayout.FLYWHEEL_MOTOR);
 		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
+		tornadoMotor = new Talon(ElectricalLayout.TORNADO_MOTOR);
 
 		PID = new PID(Kp, Ki, Kd, dV, false);
 		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
@@ -39,7 +42,8 @@ public class Shooter {
 	 * Shoot continously
 	 */
 	public void shoot(){
-		speed = 0.6;
+		conveyorSpeed = 1;
+		tornadoSpeed = 1;
 		
 	}
 	
@@ -47,14 +51,16 @@ public class Shooter {
 	 * Stop shooting
 	 */
 	public void stopShoot() {
-		speed = 0;
+		conveyorSpeed = 0;
+		tornadoSpeed = 0;
 	}
 	
 	/**
 	 * Conveyor goes in reverse
 	 */
 	public void reverse() {
-		speed = -0.6;
+		conveyorSpeed = -1;
+		tornadoSpeed = -1;
 	}
 	
 	/**
@@ -93,8 +99,8 @@ public class Shooter {
 			flywheelMotor.set(0);
 		} else
 		flywheelMotor.set(-PID.getOutput(Counter.getRate()));
-		//flywheelMotor.set(-flyspeed);
-		conveyorMotor.set(speed);
+		conveyorMotor.set(conveyorSpeed);
+		tornadoMotor.set(tornadoSpeed);
 	}
 }
 

@@ -19,7 +19,7 @@ public class Robot extends IterativeRobot {
 	GearReceiver gear;
 	Climber climber;
 	Vision vision;
-	Intake tornado;
+	Intake intake;
 	LookupTable table;
 
 	public void robotInit() {
@@ -32,12 +32,15 @@ public class Robot extends IterativeRobot {
 		gear = new GearReceiver();
 		climber = new Climber();
 		vision = new Vision();
-		tornado = new Intake(); //The intake function now is used for the tornado thing to push the balls
-
+		intake = new Intake(); 
+		
 		loop = new Looper(10);
-		//loop.add(drivetrain::update);
-		loop.add(tornado::update);
-		//loop.add(shooter::update);
+		loop.add(drivetrain::update);
+		loop.add(intake::update);
+		loop.add(shooter::update);
+		loop.add(gear::update);
+		loop.add(turret::update);
+		loop.add(climber::update);
 		loop.start();
 
 		loopVision = new Looper(200);
@@ -90,11 +93,9 @@ public class Robot extends IterativeRobot {
 		if(Jright.getRisingEdge(1)){
 			shooter.shoot();
 			DriverStation.reportError(""+shooter.getSpeed(), false);
-			tornado.down();
 		}else if(Jright.getFallingEdge(1)){
 			shooter.stopShoot();
 			shooter.setSpeed(0);
-			tornado.up();
 		}
 
 		//Climber State

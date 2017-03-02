@@ -7,7 +7,7 @@ public class ElectricalLayout {
 	public static final int DRIVE_RIGHTMOTOR = 1;
 	public static final int FLYWHEEL_MOTOR = 2;
 	public static final int CONVEYOR_MOTOR = 3;
-	public static final int INTAKE_MOTOR = 4;
+	public static final int TORNADO_MOTOR = 4;
 	public static final int TURRET_MOTOR = 5;
 	public static final int CLIMBER_MOTOR = 6;
 
@@ -29,5 +29,5 @@ public class ElectricalLayout {
 	public static final int LIMIT_SWITCHLEFT = 8;
 	public static final int LIMIT_SWITCHRIGHT = 9;
 	
-	public static final int CLIMBER_PDB_PORT = 0;
+	public static final int CLIMBER_PDB_PORT = 6;
 }
