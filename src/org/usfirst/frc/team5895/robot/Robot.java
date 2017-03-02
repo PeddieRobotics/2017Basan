@@ -44,8 +44,7 @@ public class Robot extends IterativeRobot {
 		loop.start();
 
 		loopVision = new Looper(200);
-		loopVision.add(vision::update);
-		loopVision.add(this::Follow);
+		loopVision.add(this::follow);
 		loopVision.start();
 
     	double[] RPM = {3000, 3100, 3125, 3125, 3190, 3225, 3250, 3275, 3300, 3325, 3375, 3400, 3425, 3465, 3500};
@@ -91,7 +90,10 @@ public class Robot extends IterativeRobot {
 
 		//if we are shooting or not
 		if(Jright.getRisingEdge(1)){
+			shooter.setSpeed(table.get(vision.getDist()));
+			if(shooter.atSpeed()) {
 			shooter.shoot();
+			}
 			DriverStation.reportError(""+shooter.getSpeed(), false);
 		}else if(Jright.getFallingEdge(1)){
 			shooter.stopShoot();
@@ -124,7 +126,9 @@ public class Robot extends IterativeRobot {
 		gear.close();
 	}
 	
-	public void Follow(){
-		turret.turnTo(turret.getAngle()-vision.getX());
+	public void follow(){
+		if( shooter.getSpeed() < 200) { 
+			vision.update();
+			 turret.turnTo(turret.getAngle() + vision.getX()); }
 	}
 }
