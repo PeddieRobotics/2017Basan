@@ -59,25 +59,14 @@ public class Robot extends IterativeRobot {
 		String routine = SmartDashboard.getString("DB/String 0", "nothing");
 		String gameplan = SmartDashboard.getString("DB/String 1", "nothing");
 		String place=SmartDashboard.getString("DB/String 2", "nothing");
+		
+		drivetrain.setAutoGameplan(gameplan, place);
 
 		if(routine.contains("blue")) {
-			if(gameplan.contains("balls")){
-				BlueAuto.run(drivetrain, shooter, turret);
-			}
-			else if(gameplan.contains("gear")){
-				BlueGear.run(drivetrain, gear, place);
-			}
-			else{
-				DoNothing.run();
-			}
+			drivetrain.auto_blueDrive();
 		}
-		if(routine.contains("red")) {
-			if(gameplan.contains("balls")){
-				RedAuto.run(drivetrain, shooter, turret);
-			}
-			else if(gameplan.contains("gear")){
-				RedGear.run(drivetrain, gear, place);
-			}
+		else if(routine.contains("red")) {
+			drivetrain.auto_redDrive();
 		}
 		else {
 			DoNothing.run();
