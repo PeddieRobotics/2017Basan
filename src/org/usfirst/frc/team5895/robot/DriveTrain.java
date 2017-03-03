@@ -265,6 +265,21 @@ public class DriveTrain {
 			Mright.set(m_blue[1]);
 			break;
 		
+		case AUTO_BLUE_GEAR:
+			
+			double[] g_blue = new double[2];
+			
+			switch(place){
+			case "left":
+				g_blue = cBLeft.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			case "middle":
+				g_blue = cMid.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			case "right":
+				g_blue = cBRight.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			}
 		case AUTO_RED_GEAR:
 			
 			double[] g_red = new double[2];
@@ -280,6 +295,9 @@ public class DriveTrain {
 				g_red = cRRight.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
 				break;
 			}
+			
+			Mleft.set(g_red[0]);
+			Mright.set(g_red[1]);
 			break;
 
 		case TELEOP:
