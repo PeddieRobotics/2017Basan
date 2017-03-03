@@ -12,6 +12,7 @@ public class BlueGear {
 		drivetrain.auto_gears_blueDrive();
 		Waiter.waitFor(drivetrain::trajectoryFinished,5000);
 		gear.open();
+		Waiter.waitFor(100);
 		drivetrain.driveTo(-10);
 	}
 }

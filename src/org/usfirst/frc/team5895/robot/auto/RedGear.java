@@ -11,6 +11,7 @@ public class RedGear {
 		drivetrain.auto_gears_redDrive();
 		Waiter.waitFor(drivetrain::trajectoryFinished,5000);
 		gear.open();
+		Waiter.waitFor(100);
 		drivetrain.driveTo(-10);
 	}
 }
