@@ -12,13 +12,20 @@ public class DriveTrain {
 	private Talon Mleft;
 	private Talon Mright;
 	double Lspeed, Rspeed;
-	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, TURN_TO, DRIVE_TO};
+	private enum Mode_Type {TELEOP, AUTO_RED_BALLS, AUTO_BLUE_BALLS, AUTO_RED_GEAR, AUTO_BLUE_GEAR, TURN_TO, DRIVE_TO};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
 	private TrajectoryDriveController c_balls_red;
 	private TrajectoryDriveController c_balls_blue;
+	private TrajectoryDriveController cRLeft;
+	private TrajectoryDriveController cMid;
+	private TrajectoryDriveController cRRight;
+	private TrajectoryDriveController cBLeft;
+	private TrajectoryDriveController cBRight;
 	private boolean reverseFrontBack = false;
+	
+	private String place;
 	
 	private PID distancePID;
 	private double distance_kP = 0.02;
@@ -48,6 +55,11 @@ public class DriveTrain {
 		try {
 			c_balls_red = new TrajectoryDriveController("/home/lvuser/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_balls_blue = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.008);
+			cRLeft = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/RedLeft.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			cMid = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/middlePath.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			cRRight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/RedRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			cBLeft = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/BlueLeft.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			cBRight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/BlueRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -97,19 +109,49 @@ public class DriveTrain {
 	/**
 	 * Follows a path autonomously (red alliance)
 	 */
-	public void auto_red_ballsDrive() {
+	public void auto_balls_redDrive() {
 		resetEncodersAndNavX();
 		c_balls_red.reset();
-		mode = Mode_Type.AUTO_RED;
+		mode = Mode_Type.AUTO_RED_BALLS;
 	}
 	
 	/**
 	 * Follows a path autonomously (blue alliance)
 	 */
+	
+	public void resetGearSplinesRed(){
+		cRLeft.reset();
+		cMid.reset();
+		cRRight.reset();
+	}
+	
+	
+	public void resetGearSplinesBlue(){
+		cBLeft.reset();
+		cMid.reset();
+		cRRight.reset();
+	}
+	
 	public void auto_balls_blueDrive() {
 		resetEncodersAndNavX();
 		c_balls_blue.reset();
-		mode = Mode_Type.AUTO_BLUE;
+		mode = Mode_Type.AUTO_BLUE_BALLS;
+	}
+	
+	public void auto_gears_redDrive(){
+		resetEncodersAndNavX();
+		resetGearSplinesRed();
+		mode = Mode_Type.AUTO_RED_GEAR;
+	}
+	
+	public void auto_gears_blueDrive(){
+		resetEncodersAndNavX();
+		resetGearSplinesBlue();
+		mode = Mode_Type.AUTO_BLUE_GEAR;
+	}
+	
+	public void setSide(String side){
+		place=side;
 	}
 	
 	public boolean trajectoryFinished(){
@@ -201,19 +243,17 @@ public class DriveTrain {
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
 
 		switch(mode) {
-		case AUTO_RED:
+		case AUTO_RED_BALLS:
 
 			double[] m_red = new double[2];
-
 			m_red = c_balls_red.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
-
 			//DriverStation.reportError("the angle is" + getAngle(), false);
 
 			Mleft.set(-m_red[0]);
 			Mright.set(m_red[1]);
 			break;
 		
-		case AUTO_BLUE:
+		case AUTO_BLUE_BALLS:
 			
 			double[] m_blue = new double[2];
 
@@ -225,6 +265,22 @@ public class DriveTrain {
 			Mright.set(m_blue[1]);
 			break;
 		
+		case AUTO_RED_GEAR:
+			
+			double[] g_red = new double[2];
+			
+			switch(place){
+			case "left":
+				g_red = cRLeft.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			case "middle":
+				g_red = cMid.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			case "right":
+				g_red = cRRight.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			}
+			break;
 
 		case TELEOP:
 

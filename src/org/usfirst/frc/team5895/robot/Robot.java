@@ -60,13 +60,15 @@ public class Robot extends IterativeRobot {
 		String routine = SmartDashboard.getString("DB/String 0", "nothing");
 		String gameplan = SmartDashboard.getString("DB/String 1", "nothing");
 		String place=SmartDashboard.getString("DB/String 2", "nothing");
+		
+		drivetrain.setSide(place);
 
 		if(routine.contains("blue")) {
 			if(gameplan.contains("balls")){
 				BlueAuto.run(drivetrain, shooter, turret, table, vision);
 			}
 			else if(gameplan.contains("gear")){
-				BlueGear.run(drivetrain, gear, place);
+				BlueGear.run(drivetrain, gear);
 			}
 			else{
 				DoNothing.run();
@@ -74,10 +76,10 @@ public class Robot extends IterativeRobot {
 		}
 		if(routine.contains("red")) {
 			if(gameplan.contains("balls")){
-				RedAuto.run(drivetrain, shooter, turret);
+				RedAuto.run(drivetrain, shooter, turret, table, vision);
 			}
 			else if(gameplan.contains("gear")){
-				RedGear.run(drivetrain, gear, place);
+				RedGear.run(drivetrain, gear);
 			}
 		}
 		else {
