@@ -19,8 +19,9 @@ public class Robot extends IterativeRobot {
 	GearReceiver gear;
 	Climber climber;
 	Vision vision;
-	Intake intake;
 	LookupTable table;
+	boolean shooting = false;
+	boolean autoAim = false;
 
 	public void robotInit() {
 
@@ -32,11 +33,9 @@ public class Robot extends IterativeRobot {
 		gear = new GearReceiver();
 		climber = new Climber();
 		vision = new Vision();
-		intake = new Intake(); 
 		
 		loop = new Looper(10);
 		loop.add(drivetrain::update);
-		loop.add(intake::update);
 		loop.add(shooter::update);
 		loop.add(gear::update);
 		loop.add(turret::update);
@@ -45,7 +44,7 @@ public class Robot extends IterativeRobot {
 
 		loopVision = new Looper(200);
 		loopVision.add(this::follow);
-		loopVision.start();
+		//start loop on first call to teleop
 
     	double[] RPM = {3000, 3100, 3125, 3125, 3190, 3225, 3250, 3275, 3300, 3325, 3375, 3400, 3425, 3465, 3500};
     	double[] dist = {7.6, 8.25, 9, 9.5, 10, 10.5, 10.8, 11, 11.3, 11.5, 12, 12.5, 13, 13.5, 14};
@@ -89,16 +88,21 @@ public class Robot extends IterativeRobot {
 		}
 
 		//if we are shooting or not
-		if(Jright.getRisingEdge(1)){
+		if(Jright.getRisingEdge(1)) {
 			shooter.setSpeed(table.get(vision.getDist()));
-			if(shooter.atSpeed()) {
-			shooter.shoot();
-			}
-			DriverStation.reportError(""+shooter.getSpeed(), false);
-		}else if(Jright.getFallingEdge(1)){
-			shooter.stopShoot();
+			shooting = true;
+			DriverStation.reportError(""+shooter.getSpeed(), false); //this is only called once, why is it here???
+		} else if(Jright.getFallingEdge(1)) {
+			shooting = false;
 			shooter.setSpeed(0);
 		}
+		
+		if(shooting && shooter.atSpeed()) {
+			shooter.shoot();
+		} else {
+			shooter.stopShoot();
+		}
+		
 
 		//Climber State
 		/*if(Jsecond.getRisingEdge(4)){
@@ -109,12 +113,18 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
+		if (autoAim == false) {
+			loopVision.start();
+			autoAim = true;
+		} 
+		
 		drivetrain.arcadeDrive(0, 0);
 		shooter.setSpeed(0);
 		shooter.stopShoot();
 		climber.stopClimbing();
 		turret.turnTo(turret.getAngle());
 		gear.close();
+		shooting = false;
 	}
 	
 	public void disabledInit() {
@@ -124,11 +134,13 @@ public class Robot extends IterativeRobot {
 		climber.stopClimbing();
 		turret.turnTo(turret.getAngle());
 		gear.close();
+		shooting = false;
 	}
 	
 	public void follow(){
-		if( shooter.getSpeed() < 200) { 
+		if(shooter.getSpeed() < 200) { 
 			vision.update();
-			 turret.turnTo(turret.getAngle() + vision.getX()); }
+			 turret.turnTo(turret.getAngle() + vision.getX());
+		}
 	}
 }
