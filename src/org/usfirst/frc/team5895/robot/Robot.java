@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
 
 		if(routine.contains("blue")) {
 			if(gameplan.contains("balls")){
-				BlueAuto.run(drivetrain, shooter, turret);
+				BlueAuto.run(drivetrain, shooter, turret, table, vision);
 			}
 			else if(gameplan.contains("gear")){
 				BlueGear.run(drivetrain, gear, place);

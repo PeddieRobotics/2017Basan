@@ -16,8 +16,8 @@ public class DriveTrain {
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
-	private TrajectoryDriveController c_red;
-	private TrajectoryDriveController c_blue;
+	private TrajectoryDriveController c_balls_red;
+	private TrajectoryDriveController c_balls_blue;
 	private boolean reverseFrontBack = false;
 	
 	private PID distancePID;
@@ -46,8 +46,8 @@ public class DriveTrain {
 		Eright.setDistancePerPulse(4/12.0*3.14/360);
 
 		try {
-			c_red = new TrajectoryDriveController("/home/lvuser/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blue = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.008);
+			c_balls_red = new TrajectoryDriveController("/home/lvuser/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_balls_blue = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.008);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -97,23 +97,23 @@ public class DriveTrain {
 	/**
 	 * Follows a path autonomously (red alliance)
 	 */
-	public void auto_redDrive() {
+	public void auto_red_ballsDrive() {
 		resetEncodersAndNavX();
-		c_red.reset();
+		c_balls_red.reset();
 		mode = Mode_Type.AUTO_RED;
 	}
 	
 	/**
 	 * Follows a path autonomously (blue alliance)
 	 */
-	public void auto_blueDrive() {
+	public void auto_balls_blueDrive() {
 		resetEncodersAndNavX();
-		c_blue.reset();
+		c_balls_blue.reset();
 		mode = Mode_Type.AUTO_BLUE;
 	}
 	
 	public boolean trajectoryFinished(){
-		if(c_blue.onTarget() || c_red.onTarget()){
+		if(c_balls_blue.onTarget() || c_balls_red.onTarget()){
 			return true;
 		}else{
 			return false;
@@ -205,7 +205,7 @@ public class DriveTrain {
 
 			double[] m_red = new double[2];
 
-			m_red = c_red.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
+			m_red = c_balls_red.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
 
 			//DriverStation.reportError("the angle is" + getAngle(), false);
 
@@ -217,7 +217,7 @@ public class DriveTrain {
 			
 			double[] m_blue = new double[2];
 
-			m_blue = c_blue.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+			m_blue = c_balls_blue.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
 
 			DriverStation.reportError("the angle is" + getAngle(), false);
 
