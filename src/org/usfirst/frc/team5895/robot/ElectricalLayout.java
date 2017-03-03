@@ -23,11 +23,10 @@ public class ElectricalLayout {
 	public static final int DRIVE_RIGHTENCODER = 2;
 	public static final int DRIVE_RIGHTENCODER2 = 3;
 	public static final int FLYWHEEL_COUNTER = 4;
-	public static final int HOPPER_SENSOR = 5;
-	public static final int TURRET_ENCODER = 6;
-	public static final int TURRET_ENCODER2 = 7;
-	public static final int LIMIT_SWITCHLEFT = 8;
-	public static final int LIMIT_SWITCHRIGHT = 9;
+	public static final int TURRET_ENCODER = 5;
+	public static final int TURRET_ENCODER2 = 6;
+	public static final int LIMIT_SWITCHLEFT = 7;
+	public static final int LIMIT_SWITCHRIGHT = 8;
 	
 	public static final int CLIMBER_PDB_PORT = 6;
 }
