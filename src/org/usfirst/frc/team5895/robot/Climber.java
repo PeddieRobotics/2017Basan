@@ -41,8 +41,8 @@ public class Climber {
 			break;
 
 		case CLIMBING:
-			climbMotor.set(0.5);
-			if (current > 30) {
+			climbMotor.set(0.75);
+			if (current > 40) {
 				mode = Mode_Type.STANDING;
 			}
 			break;
