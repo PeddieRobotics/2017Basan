@@ -1,6 +1,5 @@
 package org.usfirst.frc.team5895.robot;
 
-import org.usfirst.frc.team5895.robot.auto.AutoInGeneral;
 import org.usfirst.frc.team5895.robot.lib.NavX;
 import org.usfirst.frc.team5895.robot.lib.PID;
 import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
@@ -10,11 +9,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 
 public class DriveTrain {
-	private DriveTrain drive;
-	private GearReceiver gear;
-	private Shooter shooty;
-	private AutoInGeneral auto;
-	private Turret turrty;
 	private Talon Mleft;
 	private Talon Mright;
 	double Lspeed, Rspeed;
@@ -22,17 +16,9 @@ public class DriveTrain {
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
-	private TrajectoryDriveController c_redShoot;
-	private TrajectoryDriveController c_blueShoot;
-	private TrajectoryDriveController cRLeft;
-	private TrajectoryDriveController cMid;
-	private TrajectoryDriveController cRRight;
-	private TrajectoryDriveController cBLeft;
-	private TrajectoryDriveController cBRight;
+	private TrajectoryDriveController c_red;
+	private TrajectoryDriveController c_blue;
 	private boolean reverseFrontBack = false;
-	
-	private String gameplan;
-	private String gearSide;
 	
 	private PID distancePID;
 	private double distance_kP = 0.02;
@@ -60,13 +46,8 @@ public class DriveTrain {
 		Eright.setDistancePerPulse(4/12.0*3.14/360);
 
 		try {
-			c_redShoot = new TrajectoryDriveController("/home/lvuser/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blueShoot = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.008);
-			cRLeft = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/RedLeft.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			cMid = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/middlePath.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			cRRight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/RedRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			cBLeft = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/BlueLeft.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			cBRight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/BlueRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red = new TrajectoryDriveController("/home/lvuser/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.008);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -113,16 +94,12 @@ public class DriveTrain {
 		NavX.reset();
 	}
 	
-	
 	/**
 	 * Follows a path autonomously (red alliance)
 	 */
 	public void auto_redDrive() {
 		resetEncodersAndNavX();
-		c_redShoot.reset();
-		cRLeft.reset();
-		cMid.reset();
-		cRRight.reset();
+		c_red.reset();
 		mode = Mode_Type.AUTO_RED;
 	}
 	
@@ -131,15 +108,12 @@ public class DriveTrain {
 	 */
 	public void auto_blueDrive() {
 		resetEncodersAndNavX();
-		c_blueShoot.reset();
-		cBLeft.reset();
-		cMid.reset();
-		cBRight.reset();
+		c_blue.reset();
 		mode = Mode_Type.AUTO_BLUE;
 	}
 	
 	public boolean trajectoryFinished(){
-		if(c_blueShoot.onTarget() || c_redShoot.onTarget()|| cRLeft.onTarget() || cMid.onTarget() || cRRight.onTarget() || cBLeft.onTarget() || cBRight.onTarget()){
+		if(c_blue.onTarget() || c_red.onTarget()){
 			return true;
 		}else{
 			return false;
@@ -222,60 +196,33 @@ public class DriveTrain {
 	}
 	
 	
-	public void setAutoGameplan(String strats, String place){
-		gameplan=strats;
-		gearSide=place;
-	}
-	
 	public void update()
 	{
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
 
 		switch(mode) {
 		case AUTO_RED:
-			double[] redSetters= new double[2];
-			if(gameplan.contains("gear")){
-				switch(gearSide){
-				case "left":
-					redSetters=auto.run(drive, gear, cRLeft, Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-					break;
-				case "middle":
-					redSetters=auto.run(drive, gear, cMid, Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-					break;
-				case "right":
-					redSetters=auto.run(drive, gear, cRRight, Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-					break;
-				}
-			}
-			else if(gameplan.contains("balls")){
-				redSetters=auto.run(drive, gear, c_redShoot, Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-			}
-			
-			Mleft.set(-redSetters[0]);
-			Mright.set(redSetters[1]);
+
+			double[] m_red = new double[2];
+
+			m_red = c_red.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
+
+			//DriverStation.reportError("the angle is" + getAngle(), false);
+
+			Mleft.set(-m_red[0]);
+			Mright.set(m_red[1]);
 			break;
 		
 		case AUTO_BLUE:
-			double[] blueSetters= new double[2];
-			if(gameplan.contains("gear")){
-				switch(gearSide){
-				case "left":
-					blueSetters=auto.run(drive, gear, cBLeft, Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-					break;
-				case "middle":
-					blueSetters=auto.run(drive, gear, cMid, Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-					break;
-				case "right":
-					blueSetters=auto.run(drive, gear, cBRight, Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-					break;
-				}
-			}
-			else if(gameplan.contains("balls")){
-				blueSetters=auto.run(drive, gear, c_blueShoot, Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-			}
 			
-			Mleft.set(-blueSetters[0]);
-			Mright.set(blueSetters[1]);
+			double[] m_blue = new double[2];
+
+			m_blue = c_blue.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+
+			DriverStation.reportError("the angle is" + getAngle(), false);
+
+			Mleft.set(-m_blue[0]);
+			Mright.set(m_blue[1]);
 			break;
 		
 
