@@ -29,7 +29,7 @@ public class Turret {
 	
 	turret_motor = new Talon(ElectricalLayout.TURRET_MOTOR);
 	
-	PID = new PID(0.012, 0.00003, 0.0000001, 1);
+	PID = new PID(0.012, 0.00003, 0.0000001, false);
 
 	turret_encoder = new Encoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2,  true, Encoder.EncodingType.k4X);
 	turret_encoder.setDistancePerPulse(1.0/13);

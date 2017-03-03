@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class PID{
 	
 	private final boolean RESET_ZERO_CROSS;
+	private final boolean RESET_I;
 
 	private final double Kp;
 	private final double Ki;
@@ -28,8 +29,9 @@ public class PID{
 	 * @param dV The maximum amount the voltage can change per ms
 	 * @param reset_zero_cross If true, resets the integral term whenever the error crosses zero
 	 * @param capI The limit on how high the integral term can grow to
+	 * @param resetI To reset I on setpoint change or not
 	 */
-	public PID(double Kp, double Ki, double Kd, double dV, boolean reset_zero_cross, double capI) {
+	public PID(double Kp, double Ki, double Kd, double dV, boolean reset_zero_cross, double capI, boolean resetI) {
 		this.Kp = Kp;
 		this.Ki = Ki;
 		this.Kd = Kd;
@@ -42,6 +44,19 @@ public class PID{
 		lastError = 0;
 		lastSetpoint = 0;
 		lastOutput = 0;
+		RESET_I = resetI;
+	}
+	
+	/**
+	 * Initializes a new PID controller
+	 * 
+	 * @param Kp The proportional gain
+	 * @param Ki The integral gain
+	 * @param Kd The derivative gain
+	 * @param resetI To reset I on setpoint change or not
+	 */
+	public PID(double Kp, double Ki, double Kd, boolean resetI) {
+		this(Kp, Ki, Kd, 1, true, Double.MAX_VALUE, true);
 	}
 	
 	/**
@@ -53,7 +68,7 @@ public class PID{
 	 * @param dV The maximum amount the voltage can change per ms
 	 */
 	public PID(double Kp, double Ki, double Kd, double dV) {
-		this(Kp, Ki, Kd, dV, true, Double.MAX_VALUE);
+		this(Kp, Ki, Kd, dV, true, Double.MAX_VALUE, true);
 	}
 	
 	/**
@@ -66,7 +81,7 @@ public class PID{
 	 * @param capI The limit on how high the integral term can grow to
 	 */
 	public PID(double Kp, double Ki, double Kd, double dV, double capI) {
-		this(Kp, Ki, Kd, dV, true, capI);
+		this(Kp, Ki, Kd, dV, true, capI, true);
 	}
 	
 	/**
@@ -79,7 +94,7 @@ public class PID{
 	 * @param reset_zero_cross If true, resets the integral term whenever the error crosses zero
 	 */
 	public PID(double Kp, double Ki, double Kd, double dV, boolean reset_zero_cross) {
-		this(Kp, Ki, Kd, dV, reset_zero_cross, Double.MAX_VALUE);
+		this(Kp, Ki, Kd, dV, reset_zero_cross, Double.MAX_VALUE, true);
 	}
 	
 	/**
@@ -118,7 +133,7 @@ public class PID{
 		double error = setpoint - proccessVar;
 		
 		//did the setpoint change?
-		if (setpoint != lastSetpoint) {
+		if (RESET_I && (setpoint != lastSetpoint)) {
 			errorSum = 0;
 			lastError = error;
 			lastTime = Timer.getFPGATimestamp() * 1000;
