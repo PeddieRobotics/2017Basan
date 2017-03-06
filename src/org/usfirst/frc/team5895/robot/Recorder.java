@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 
 public class Recorder {	
-	private DriveTrain drive;
+	private Climber drive;
 	
 	private boolean recordFile;
 	private Formatter f;
@@ -22,7 +22,7 @@ public class Recorder {
 	 * @param fy the flywheel 
 	 * @param in the intake
 	 */
-	public Recorder(DriveTrain d){
+	public Recorder(Climber d){
 		this.drive = d;
 		recordFile = false;
 	}
@@ -36,7 +36,7 @@ public class Recorder {
     	try {
     		if (recordFile==false) {
     			f= new Formatter("/home/lvuser/logs/" + filename);
-    			f.format("Time,DriveDistance,DriveSpeed\r\n");
+    			f.format("Time,Current\r\n");
     			recordFile=true;
     		}
     	} catch (FileNotFoundException e) {
@@ -65,10 +65,9 @@ public class Recorder {
      */
     public void record() {
     	if (recordFile==true) {
-    		f.format("%f,%f,%f\r\n",
+    		f.format("%f,%f\r\n",
     				Timer.getFPGATimestamp(),
-    				drive.getDistance(),
-    				drive.getSpeed());
+    				drive.getCurret());
     	}
     }
     

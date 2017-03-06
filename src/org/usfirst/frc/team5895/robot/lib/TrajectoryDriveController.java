@@ -7,6 +7,8 @@ import org.usfirst.frc.team5895.robot.lib.trajectory.TextFileReader;
 import org.usfirst.frc.team5895.robot.lib.trajectory.Trajectory;
 import org.usfirst.frc.team5895.robot.lib.trajectory.TrajectoryFollower;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 
 /**
  * TrajectoryDriveController.java
@@ -83,7 +85,7 @@ public class TrajectoryDriveController {
 	
 			  double angleDiffRads = ChezyMath.getDifferenceInAngleRadians(observedHeading, goalHeading);
 			  double angleDiff = Math.toDegrees(angleDiffRads); //why???
-	
+			  
 			  double turn = kTurn * angleDiff;
 			  
 			  output[0] = speedLeft + turn;

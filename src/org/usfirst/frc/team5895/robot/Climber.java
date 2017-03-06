@@ -8,11 +8,12 @@ public class Climber {
 	PowerDistributionPanel pdp;
 	private Talon climbMotor;
 	private enum Mode_Type {WAITING, CLIMBING, NOTHING, STANDING};
-	private Mode_Type mode = Mode_Type.WAITING;
+	private Mode_Type mode = Mode_Type.NOTHING;
 	private double climbTimeStamp = Double.MIN_VALUE;
 
 	public Climber() {
 		climbMotor = new Talon(ElectricalLayout.CLIMBER_MOTOR);
+		pdp = new PowerDistributionPanel();
 	}
 	
 	/**
@@ -29,20 +30,28 @@ public class Climber {
 	public void stopClimbing(){
 		mode = Mode_Type.NOTHING;
 	}
+	
+	public void standing() {
+		mode = Mode_Type.STANDING;
+	}
+	
+	public double getCurret() {
+		return pdp.getCurrent(ElectricalLayout.CLIMBER_PDB_PORT);
+	}
 
 	public void update() {
 		double current = pdp.getCurrent(ElectricalLayout.CLIMBER_PDB_PORT);
 		switch(mode) {
 		case WAITING:
-			if (Timer.getFPGATimestamp() - climbTimeStamp < 0.5) {
-				climbMotor.set(0.75);
+			if (Timer.getFPGATimestamp() - climbTimeStamp < 1) {
+				climbMotor.set(1);
 			}
 			else mode = Mode_Type.CLIMBING;
 			break;
 
 		case CLIMBING:
-			climbMotor.set(0.75);
-			if (current > 40) {
+			climbMotor.set(1);
+			if (current > 80) {
 				mode = Mode_Type.STANDING;
 			}
 			break;

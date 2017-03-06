@@ -12,9 +12,9 @@ public class ElectricalLayout {
 	public static final int CLIMBER_MOTOR = 6;
 
 	//Solenoids
-	public static final int INTAKE_SOLENOID = 0;
-	public static final int FLYWHEEL_SOLENOID = 1; //Shooter Hood
-	public static final int GEAR_SOLENOID = 2;
+	public static final int INTAKE_SOLENOID = 1;
+	public static final int FLYWHEEL_SOLENOID = 2; //Shooter Hood
+	public static final int GEAR_SOLENOID = 0;
 	public static final int SPARE = 3;
 
 	//Digital Inputs
@@ -28,5 +28,5 @@ public class ElectricalLayout {
 	public static final int LIMIT_SWITCHLEFT = 7;
 	public static final int LIMIT_SWITCHRIGHT = 8;
 	
-	public static final int CLIMBER_PDB_PORT = 6;
+	public static final int CLIMBER_PDB_PORT = 0;
 }

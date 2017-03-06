@@ -1,7 +1,6 @@
 package org.usfirst.frc.team5895.robot;
 
 import org.usfirst.frc.team5895.robot.lib.NavX;
-import org.usfirst.frc.team5895.robot.lib.PID;
 import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -12,37 +11,18 @@ public class DriveTrain {
 	private Talon Mleft;
 	private Talon Mright;
 	double Lspeed, Rspeed;
-	private enum Mode_Type {TELEOP, AUTO_RED_BALLS, AUTO_BLUE_BALLS, AUTO_RED_GEAR, AUTO_BLUE_GEAR, TURN_TO, DRIVE_TO};
+	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
-	private TrajectoryDriveController c_balls_red;
-	private TrajectoryDriveController c_balls_blue;
-	private TrajectoryDriveController cRLeft;
-	private TrajectoryDriveController cMid;
-	private TrajectoryDriveController cRRight;
-	private TrajectoryDriveController cBLeft;
-	private TrajectoryDriveController cBRight;
+	private TrajectoryDriveController c_red;
+	private TrajectoryDriveController c_blue;
 	private boolean reverseFrontBack = false;
-	
-	private String place;
-	
-	private PID distancePID;
-	private double distance_kP = 0.02;
-	private double distance_kI = 0;
-	private double distance_kD = 0;
-	private double distance_dV = 1;
-	
-	private PID turnPID;
-	private double turn_kP = 0;
-	private double turn_kI = 0;
-	private double turn_kD = 0;
-	private double turn_dV = 0;
-	
+
 	public DriveTrain()
 	{
 		NavX=new NavX();
-		
+
 		Mleft = new Talon(ElectricalLayout.DRIVE_LEFTMOTOR);
 		Mright = new Talon(ElectricalLayout.DRIVE_RIGHTMOTOR);
 
@@ -53,13 +33,8 @@ public class DriveTrain {
 		Eright.setDistancePerPulse(4/12.0*3.14/360);
 
 		try {
-			c_balls_red = new TrajectoryDriveController("/home/lvuser/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_balls_blue = new TrajectoryDriveController("/home/lvuser/Straight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, 0.008);
-			cRLeft = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/RedLeft.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			cMid = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/middlePath.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			cRRight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/RedRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			cBLeft = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/BlueLeft.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			cBRight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/BlueRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -109,75 +84,21 @@ public class DriveTrain {
 	/**
 	 * Follows a path autonomously (red alliance)
 	 */
-	public void auto_balls_redDrive() {
+	public void auto_redDrive() {
 		resetEncodersAndNavX();
-		c_balls_red.reset();
-		mode = Mode_Type.AUTO_RED_BALLS;
+		c_red.reset();
+		mode = Mode_Type.AUTO_RED;
 	}
 	
 	/**
 	 * Follows a path autonomously (blue alliance)
 	 */
-	
-	public void resetGearSplinesRed(){
-		cRLeft.reset();
-		cMid.reset();
-		cRRight.reset();
-	}
-	
-	
-	public void resetGearSplinesBlue(){
-		cBLeft.reset();
-		cMid.reset();
-		cRRight.reset();
-	}
-	
-	public void auto_balls_blueDrive() {
+	public void auto_blueDrive() {
 		resetEncodersAndNavX();
-		c_balls_blue.reset();
-		mode = Mode_Type.AUTO_BLUE_BALLS;
+		c_blue.reset();
+		mode = Mode_Type.AUTO_BLUE;
 	}
 	
-	public void auto_gears_redDrive(){
-		resetEncodersAndNavX();
-		resetGearSplinesRed();
-		mode = Mode_Type.AUTO_RED_GEAR;
-	}
-	
-	public void auto_gears_blueDrive(){
-		resetEncodersAndNavX();
-		resetGearSplinesBlue();
-		mode = Mode_Type.AUTO_BLUE_GEAR;
-	}
-	
-	public void setSide(String side){
-		place=side;
-	}
-	
-	public boolean trajectoryFinished(){
-		if(c_balls_blue.onTarget() || c_balls_red.onTarget()){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	/**
-	 * drives to a certain distance
-	 * @param distance The distance to go
-	 */
-	public void driveTo(double distance) {
-		distancePID.set(distance);
-		mode = Mode_Type.DRIVE_TO;
-	}
-	/**
-	 * turns to an angle
-	 * @param angle The desired angle
-	 */
-	public void turnTo(double angle) {
-		turnPID.set(angle);
-		mode = Mode_Type.TURN_TO;
-	}
 	/**
 	 * Two-controller driving
 	 * 
@@ -211,97 +132,38 @@ public class DriveTrain {
 		reverseFrontBack = false;
 	}
 	
-	/**
-	 * Checks if we are within 1% of the distance we wanted
-	 * @param distance
-	 * @return
-	 */
-	public boolean atDistance(){
-		if(getDistance() <= 1.01*distancePID.getSetpoint() && getDistance() >= .99*distancePID.getSetpoint()){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks if we are within 1% of the angle we wanted
-	 * @param angle
-	 * @return
-	 */
-	public boolean atAngle(){
-		if(getAngle() <= 1.01*turnPID.getSetpoint() && getAngle() >= .99*turnPID.getSetpoint()){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	
 	public void update()
 	{
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
 
 		switch(mode) {
-		case AUTO_RED_BALLS:
+		case AUTO_RED:
 
 			double[] m_red = new double[2];
-			m_red = c_balls_red.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
-			//DriverStation.reportError("the angle is" + getAngle(), false);
+
+			m_red = c_red.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
+
+			DriverStation.reportError("" + m_red[0], false);
 
 			Mleft.set(-m_red[0]);
 			Mright.set(m_red[1]);
 			break;
 		
-		case AUTO_BLUE_BALLS:
+		case AUTO_BLUE:
 			
 			double[] m_blue = new double[2];
 
-			m_blue = c_balls_blue.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+			m_blue = c_blue.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
 
-			DriverStation.reportError("the angle is" + getAngle(), false);
+			DriverStation.reportError(""+m_blue[1], false);
 
 			Mleft.set(-m_blue[0]);
 			Mright.set(m_blue[1]);
 			break;
 		
-		case AUTO_BLUE_GEAR:
-			
-			double[] g_blue = new double[2];
-			
-			switch(place){
-			case "left":
-				g_blue = cBLeft.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			case "middle":
-				g_blue = cMid.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			case "right":
-				g_blue = cBRight.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			}
-		case AUTO_RED_GEAR:
-			
-			double[] g_red = new double[2];
-			
-			switch(place){
-			case "left":
-				g_red = cRLeft.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			case "middle":
-				g_red = cMid.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			case "right":
-				g_red = cRRight.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			}
-			
-			Mleft.set(g_red[0]);
-			Mright.set(g_red[1]);
-			break;
 
 		case TELEOP:
-
+			
 			if(reverseFrontBack) {
 			Mleft.set(-Lspeed);
 			Mright.set(-Rspeed);
@@ -311,21 +173,6 @@ public class DriveTrain {
 			Mright.set(Rspeed);
 			}
 
-			break;
-		case DRIVE_TO:
-			
-			double distanceOutput = distancePID.getOutput(getDistance());
-			Mleft.set(distanceOutput);
-			Mright.set(distanceOutput);
-			DriverStation.reportError("Distance is" + getDistance(), false);
-			
-			break;
-		case TURN_TO:
-			
-			double turnOutput = turnPID.getOutput(getAngle());
-			Mleft.set(turnOutput);
-			Mright.set(turnOutput);
-			DriverStation.reportError("Angle is " + getAngle(), false);
 			break;
 		}
 	}

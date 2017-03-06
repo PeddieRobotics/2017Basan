@@ -83,6 +83,7 @@ public class Turret {
 	 */
 	public void update() {
 		
+	
 		output = PID.getOutput(turret_encoder.getDistance());
 		
 		if (output > 0.25) {
@@ -93,15 +94,21 @@ public class Turret {
 			output = -0.25;
 		}
 
-		/*
-		if(limitSwitchLeft.get() && output > 0) {
+		
+		if(!limitSwitchLeft.get() && output > 0) {
 			output = 0;
 		}
-		if(limitSwitchRight.get() && output < 0) {
+		if(!limitSwitchRight.get() && output < 0) {
 			output = 0;
 		}	
-		*/
-		turret_motor.set(output);
 		
+		if((turret_encoder.getDistance() < - 90) && output > 0) {
+			output = 0;
+		}
+		if((turret_encoder.getDistance() > 90) && output < 0) {
+			output = 0;
+		}	
+		
+		turret_motor.set(output);
 	}
 }

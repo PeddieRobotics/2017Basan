@@ -18,9 +18,9 @@ public class TextFileDeserializer implements IPathDeserializer {
     int num_elements = Integer.parseInt(lines[1]);
     
     Trajectory left = new Trajectory(num_elements);
-    for (int i = 2; i < num_elements+2; i++) {
+    for (int i = 0; i < num_elements; i++) {
       Trajectory.Segment segment = new Trajectory.Segment();
-      String[] number = lines[i].split(" ");
+      String[] number = lines[i+2].split(" ");
       
       segment.pos = FastParser.parseFormattedDouble(number[0]);
       segment.vel = FastParser.parseFormattedDouble(number[1]);
@@ -34,9 +34,9 @@ public class TextFileDeserializer implements IPathDeserializer {
       left.setSegment(i, segment);
     }
     Trajectory right = new Trajectory(num_elements);
-    for (int i = num_elements+2; i < 2*num_elements+2; i++) {
+    for (int i = 0; i < num_elements; i++) {
       Trajectory.Segment segment = new Trajectory.Segment();
-      String[] number = lines[i].split(" ");
+      String[] number = lines[i+2+num_elements].split(" ");
       
       segment.pos = FastParser.parseFormattedDouble(number[0]);
       segment.vel = FastParser.parseFormattedDouble(number[1]);

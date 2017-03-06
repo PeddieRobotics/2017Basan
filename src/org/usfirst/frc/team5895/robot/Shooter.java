@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5895.robot;
 
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Talon;
 import org.usfirst.frc.team5895.robot.lib.PID;
@@ -42,7 +43,7 @@ public class Shooter {
 	 * Shoot continously
 	 */
 	public void shoot(){
-		conveyorSpeed = 1;
+		conveyorSpeed = 0.6;
 		tornadoSpeed = 1;
 		
 	}
@@ -59,7 +60,7 @@ public class Shooter {
 	 * Conveyor goes in reverse
 	 */
 	public void reverse() {
-		conveyorSpeed = -1;
+		conveyorSpeed = -0.6;
 		tornadoSpeed = -1;
 	}
 	
@@ -91,16 +92,23 @@ public class Shooter {
 	
 	public boolean atSpeed()
 	{
-		return ( getSpeed() < PID.getSetpoint() + 20 && getSpeed() > PID.getSetpoint() - 20 );	
+		return ( getSpeed() < PID.getSetpoint()*60 + 30 && getSpeed() > PID.getSetpoint()*60 - 30 );	
 	}
 	
 	public void update() {
+		DriverStation.reportError("The speed is" + getSpeed(), false);
+		
+		double output = -PID.getOutput(Counter.getRate());
+		if(output > 0) {
+			output = 0;
+			PID.resetIntegral();
+		}
 		if(noSpeed == true) {
 			flywheelMotor.set(0);
 		} else
-		flywheelMotor.set(-PID.getOutput(Counter.getRate()));
-		conveyorMotor.set(conveyorSpeed);
-		tornadoMotor.set(tornadoSpeed);
+			flywheelMotor.set(output);
+			conveyorMotor.set(conveyorSpeed);
+			tornadoMotor.set(tornadoSpeed);
 	}
 }
 

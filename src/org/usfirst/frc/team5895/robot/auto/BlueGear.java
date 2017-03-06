@@ -8,11 +8,12 @@ public class BlueGear {
 	
 	public static void run(DriveTrain drivetrain, GearReceiver gear) {
 		
-		
+	/*	
 		drivetrain.auto_gears_blueDrive();
-		Waiter.waitFor(drivetrain::trajectoryFinished,5000);
-		gear.open();
+//		Waiter.waitFor(drivetrain::trajectoryFinished,5000);
 		Waiter.waitFor(100);
-		drivetrain.driveTo(-10);
+		gear.open();
+		Waiter.waitFor(drivetrain::atDistance, 5000, 10);
+		drivetrain.setLeftRightPower(0.1, -0.1);*/
 	}
 }
