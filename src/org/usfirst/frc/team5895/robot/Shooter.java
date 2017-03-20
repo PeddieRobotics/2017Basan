@@ -43,7 +43,7 @@ public class Shooter {
 	 * Shoot continously
 	 */
 	public void shoot(){
-		conveyorSpeed = 0.6;
+		conveyorSpeed = 1;
 		tornadoSpeed = 1;
 		
 	}
@@ -60,7 +60,7 @@ public class Shooter {
 	 * Conveyor goes in reverse
 	 */
 	public void reverse() {
-		conveyorSpeed = -0.6;
+		conveyorSpeed = -1;
 		tornadoSpeed = -1;
 	}
 	
