@@ -12,12 +12,14 @@ public class DriveTrain {
 	private Talon Mright;
 	double Lspeed, Rspeed;
 	private String place;
-	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, AUTO_RED_GEAR, AUTO_BLUE_GEAR};
+	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, AUTO_RED_GEAR, AUTO_BLUE_GEAR, AUTO_RED_FAR, AUTO_BLUE_FAR};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
 	private TrajectoryDriveController c_red;
 	private TrajectoryDriveController c_blue;
+	private TrajectoryDriveController c_red_far;
+	private TrajectoryDriveController c_blue_far;
 	private TrajectoryDriveController c_red_gear;
 	private TrajectoryDriveController c_blue_gear;
 	private TrajectoryDriveController c_both_middle;
@@ -42,6 +44,8 @@ public class DriveTrain {
 			c_red_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/RedRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010); 
 			c_blue_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/BlueRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_both_middle = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/middlePath.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_far = new TrajectoryDriveController("",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue_far = new TrajectoryDriveController("",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -172,6 +176,28 @@ public class DriveTrain {
 			Mright.set(m_blue[1]);
 			break;
 		
+		case AUTO_RED_FAR:
+			double[] m_red_far = new double[2];
+			
+			m_red_far = c_red_far.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
+			
+			DriverStation.reportError(""+m_red_far[1], false);
+
+			Mleft.set(-m_red_far[0]);
+			Mright.set(m_red_far[1]);
+			break;
+		
+		case AUTO_BLUE_FAR:
+			double[] m_blue_far = new double[2];
+			
+			m_blue_far = c_blue_far.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
+			
+			DriverStation.reportError(""+m_blue_far[1], false);
+
+			Mleft.set(-m_blue_far[0]);
+			Mright.set(m_blue_far[1]);
+			break;
+			
 		case AUTO_RED_GEAR:
 			
 			double[] g_red = new double[2];
