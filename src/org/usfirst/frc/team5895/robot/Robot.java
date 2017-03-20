@@ -68,7 +68,7 @@ public class Robot extends IterativeRobot {
 		String gameplan = SmartDashboard.getString("DB/String 1", "nothing");
 		String place=SmartDashboard.getString("DB/String 2", "nothing");
 		
-		//drivetrain.setSide(place);
+		drivetrain.setSide(place);
 
 		if(routine.contains("blue")) {
 			if(gameplan.contains("balls")){

@@ -11,12 +11,16 @@ public class DriveTrain {
 	private Talon Mleft;
 	private Talon Mright;
 	double Lspeed, Rspeed;
+	private String place;
 	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, AUTO_RED_GEAR, AUTO_BLUE_GEAR};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
 	private TrajectoryDriveController c_red;
 	private TrajectoryDriveController c_blue;
+	private TrajectoryDriveController c_red_gear;
+	private TrajectoryDriveController c_blue_gear;
+	private TrajectoryDriveController c_both_middle;
 	private boolean reverseFrontBack = false;
 
 	public DriveTrain()
@@ -35,6 +39,9 @@ public class DriveTrain {
 		try {
 			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/RedRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010); 
+			c_blue_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/BlueRight.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_both_middle = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/middlePath.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -123,6 +130,10 @@ public class DriveTrain {
 		mode = Mode_Type.TELEOP;
 	}
 	
+	public void setSide(String side){
+		place=side;
+	}
+	
 	public void setGearFront() {
 		reverseFrontBack = true;
 		
@@ -162,9 +173,36 @@ public class DriveTrain {
 			break;
 		
 		case AUTO_RED_GEAR:
+			
+			double[] g_red = new double[2];
+			
+			switch(place){
+			case "middle":
+				g_red = c_both_middle.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			case "right":
+				g_red = c_red_gear.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			}
+			
+			Mleft.set(-g_red[0]);
+			Mright.set(g_red[1]);
 			break;
 			
-		case AUTO_BLUE_GEAR:	
+		case AUTO_BLUE_GEAR:
+			double[] g_blue = new double[2];
+			
+			switch(place){
+			case "middle":
+				g_blue = c_both_middle.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			case "right":
+				g_blue = c_blue_gear.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
+				break;
+			}
+			
+			Mleft.set(-g_blue[0]);
+			Mright.set(-g_blue[1]);
 			break;
 			
 		case TELEOP:
