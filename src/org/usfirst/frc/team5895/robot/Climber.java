@@ -31,14 +31,25 @@ public class Climber {
 		mode = Mode_Type.NOTHING;
 	}
 	
+	/**
+	 * State of robot once it reaches top of rope
+	 */
 	public void standing() {
 		mode = Mode_Type.STANDING;
 	}
-	
+
+	/**
+	 * @return value of current
+	 *
+	 */
 	public double getCurret() {
 		return pdp.getCurrent(ElectricalLayout.CLIMBER_PDB_PORT);
 	}
-
+	
+	/**
+	 * Switches between different climb states
+	 * Waiting, Climbing, Nothing, Standing 
+	 */
 	public void update() {
 		double current = pdp.getCurrent(ElectricalLayout.CLIMBER_PDB_PORT);
 		switch(mode) {

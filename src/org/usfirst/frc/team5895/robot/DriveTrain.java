@@ -134,19 +134,32 @@ public class DriveTrain {
 		mode = Mode_Type.TELEOP;
 	}
 	
+	/**
+	 * 	@param place The side of airship to hang auto gear
+	 */
 	public void setSide(String side){
 		place=side;
 	}
 	
+	/**
+	 * Positions gear in front of robot
+	 * 
+	 * @param reverseFrontBack Sets direction of wheel motors
+	 */
 	public void setGearFront() {
 		reverseFrontBack = true;
-		
 	}
 	
 	public void setIntakeFront() {
 		reverseFrontBack = false;
 	}
 	
+	/**
+	 * Red Auto, Blue Auto
+	 * Red Far Hopper, Blue Far Hopper
+	 * Red Gear, Blue Gear
+	 * Teleop
+	 */
 	public void update()
 	{
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
