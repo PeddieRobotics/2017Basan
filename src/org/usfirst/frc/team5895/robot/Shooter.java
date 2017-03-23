@@ -21,8 +21,11 @@ public class Shooter {
 	Counter Counter;
 
 	double Kp = 0.24;
-	double Ki = 0.000018;
+	double Ki = 0.0006;
 	double Kd = 0.00000005;
+//	double Kp = 1.0;
+//	double Ki = 0.0;
+//	double Kd = 0.0;
 	double dV = 1;
 
 	public Shooter()
@@ -32,7 +35,7 @@ public class Shooter {
 		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
 		tornadoMotor = new Talon(ElectricalLayout.TORNADO_MOTOR);
 
-		PID = new PID(Kp, Ki, Kd, dV, false);
+		PID = new PID(Kp, Ki, Kd, dV, false, 1, false);
 		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
 		Counter.setDistancePerPulse(1);
 		
@@ -96,19 +99,22 @@ public class Shooter {
 	}
 	
 	public void update() {
-		DriverStation.reportError("The speed is" + getSpeed(), false);
+		DriverStation.reportError("The speed is " + getSpeed(), false);
 		
 		double output = -PID.getOutput(Counter.getRate());
 		if(output > 0) {
 			output = 0;
-			PID.resetIntegral();
+	//		PID.resetIntegral();
 		}
 		if(noSpeed == true) {
 			flywheelMotor.set(0);
 		} else
 			flywheelMotor.set(output);
-			conveyorMotor.set(conveyorSpeed);
-			tornadoMotor.set(tornadoSpeed);
+		
+		conveyorMotor.set(conveyorSpeed);
+		tornadoMotor.set(tornadoSpeed);
+
 	}
+		
 }
 
