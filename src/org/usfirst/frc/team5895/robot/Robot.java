@@ -66,10 +66,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		String routine = SmartDashboard.getString("DB/String 0", "nothing");
 		String gameplan = SmartDashboard.getString("DB/String 1", "nothing");
-		String place=SmartDashboard.getString("DB/String 2", "nothing");
 		
-		drivetrain.setSide(place);
-
 		if(routine.contains("blue")) {
 			if(gameplan.contains("balls")){
 				BlueAuto.run(drivetrain, shooter, turret, table, vision, intake);

@@ -4,32 +4,33 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class GearReceiver {
 
-	private Solenoid myCylinder;
-	private boolean isClosed;
+	private Solenoid gateSol, holdingSol;
+	private boolean gateState;
 
 	public GearReceiver() {
-		myCylinder = new Solenoid(ElectricalLayout.GEAR_SOLENOID);
-		isClosed = false;
-
+		gateSol = new Solenoid(ElectricalLayout.GEAR_SOLENOID);
+		holdingSol = new Solenoid(ElectricalLayout.GEAR_HOLDER);
 	}
 
 	/**
 	 * Closes the gear receiver
 	 */
 	public void close() {
-		isClosed = false;
+		gateState=false;
 	}
 
 	/**
 	 * Opens the gear receiver
 	 */
 	public void open() {
-		isClosed = true;
+		gateState=true;
 	}
 
 	public void update() {
-		if(myCylinder.get() != isClosed)
-			myCylinder.set(isClosed);
+		if(gateSol.get() != gateState){
+			gateSol.set(gateState);
+			holdingSol.set(!gateState);
+		}
 	}
 
 }
