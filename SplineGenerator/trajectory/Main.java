@@ -120,7 +120,7 @@ public class Main {
         
         WaypointSequence p = new WaypointSequence(10);
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-        p.addWaypoint(new WaypointSequence.Waypoint(7.86, -8.525, -1.57));
+        p.addWaypoint(new WaypointSequence.Waypoint(8.1, -8.525, -1.57));
 
         Path path = PathGenerator.makePath(p, config,
             kWheelbaseWidth, path_name);
