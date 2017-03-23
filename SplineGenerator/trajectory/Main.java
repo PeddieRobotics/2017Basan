@@ -122,6 +122,35 @@ public class Main {
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
         p.addWaypoint(new WaypointSequence.Waypoint(8.25, -8.525, -1.57));
 
+
+        Path path = PathGenerator.makePath(p, config,
+            kWheelbaseWidth, path_name);
+
+        // Outputs to the directory supplied as the first argument.
+        TextFileSerializer js = new TextFileSerializer();
+        String serialized = js.serialize(path);
+        //System.out.print(serialized);
+        String fullpath = joinPath(directory, path_name + ".txt");
+        if (!writeFile(fullpath, serialized)) {
+          System.err.println(fullpath + " could not be written!!!!1");
+          System.exit(1);
+        } else {
+          System.out.println("Wrote " + fullpath);
+        }
+      }
+    
+    {
+        config.dt = .01;
+        config.max_acc = 80.0;
+        config.max_jerk = 60.0;
+        config.max_vel = 10.0;
+        
+        final String path_name = "Gears_Red";
+        
+        WaypointSequence p = new WaypointSequence(10);
+        p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+        p.addWaypoint(new WaypointSequence.Waypoint(-8, 5.4, 3.14159/6.0));
+
         Path path = PathGenerator.makePath(p, config,
             kWheelbaseWidth, path_name);
 

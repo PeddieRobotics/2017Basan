@@ -110,6 +110,18 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_BLUE;
 	}
 	
+	public void auto_gears_redDrive(){
+		resetEncodersAndNavX();
+		c_red_gear.reset();
+		mode = Mode_Type.AUTO_RED_GEAR;
+	}
+	
+	public void auto_gears_blueDrive(){
+		resetEncodersAndNavX();
+		c_blue_gear.reset();
+		mode = Mode_Type.AUTO_BLUE_GEAR;
+	}
+	
 	/**
 	 * Two-controller driving
 	 * 
