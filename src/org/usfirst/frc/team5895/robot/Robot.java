@@ -69,14 +69,19 @@ public class Robot extends IterativeRobot {
 		
 		String routine = SmartDashboard.getString("DB/String 0", "nothing");
 		String gameplan = SmartDashboard.getString("DB/String 1", "nothing");
+		String distance = SmartDashboard.getString("DB/String 2", "nothing");
 		
 		if(routine.contains("blue")) {
 			if(gameplan.contains("balls")){
-				BlueAuto.run(drivetrain, shooter, turret, table, vision, intake);
+				if(distance.contains("close")) {
+					BlueAutoClose.run(drivetrain, shooter, turret, table, vision, intake);
+				} else {
+					BlueAuto.run(drivetrain, shooter, turret, table, vision, intake);
+				}
 			}
 			else if(gameplan.contains("gear")){
 				BlueGear.run(drivetrain, gear);
-			}
+			}	
 			else{
 				DoNothing.run();
 			}

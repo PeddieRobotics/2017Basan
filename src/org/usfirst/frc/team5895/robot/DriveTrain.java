@@ -12,7 +12,7 @@ public class DriveTrain {
 	private Talon Mright;
 	double Lspeed, Rspeed;
 	private String place;
-	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, AUTO_RED_GEAR, AUTO_BLUE_GEAR, AUTO_RED_FAR, AUTO_BLUE_FAR};
+	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, AUTO_RED_GEAR, AUTO_BLUE_GEAR, AUTO_RED_FAR, AUTO_BLUE_FAR, AUTO_BLUE_CLOSE};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
@@ -20,6 +20,7 @@ public class DriveTrain {
 	private TrajectoryDriveController c_blue;
 	private TrajectoryDriveController c_red_far;
 	private TrajectoryDriveController c_blue_far;
+	private TrajectoryDriveController c_blue_close;
 	private TrajectoryDriveController c_red_gear;
 	private TrajectoryDriveController c_blue_gear;
 	private TrajectoryDriveController c_both_middle;
@@ -46,6 +47,7 @@ public class DriveTrain {
 			c_both_middle = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -108,6 +110,12 @@ public class DriveTrain {
 		resetEncodersAndNavX();
 		c_blue.reset();
 		mode = Mode_Type.AUTO_BLUE;
+	}
+	
+	public void auto_blue_closeDrive() {
+		resetEncodersAndNavX();
+		c_blue_close.reset();
+		mode = Mode_Type.AUTO_BLUE_CLOSE;
 	}
 	
 	public void auto_gears_redDrive(){
@@ -221,6 +229,17 @@ public class DriveTrain {
 
 			Mleft.set(-m_blue_far[0]);
 			Mright.set(m_blue_far[1]);
+			break;
+		
+		case AUTO_BLUE_CLOSE:
+			double[] m_blue_close = new double[2];
+			
+			m_blue_close = c_blue_close.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
+			
+			DriverStation.reportError(""+m_blue_close[1], false);
+
+			Mleft.set(-m_blue_close[0]);
+			Mright.set(m_blue_close[1]);
 			break;
 			
 		case AUTO_RED_GEAR:
