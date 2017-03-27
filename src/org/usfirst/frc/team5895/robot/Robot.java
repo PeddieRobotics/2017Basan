@@ -51,6 +51,7 @@ public class Robot extends IterativeRobot {
 
 		loopVision = new Looper(200);
 		loopVision.add(this::follow);
+		loopVision.start();
 		//start loop on first call to teleop
 
     	double[] RPM = {3000, 3100, 3125, 3125, 3190, 3225, 3250, 3275, 3300, 3325, 3375, 3400, 3425, 3465, 3500};
@@ -64,6 +65,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousInit() {
+		autoAim = false;
+		
 		String routine = SmartDashboard.getString("DB/String 0", "nothing");
 		String gameplan = SmartDashboard.getString("DB/String 1", "nothing");
 		
@@ -98,6 +101,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
+//		DriverStation.reportError("" + vision.getDist(), false);
+		
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), -Jright.getRawAxis(0));
 		
 		
@@ -120,13 +125,9 @@ public class Robot extends IterativeRobot {
 		
 		//if we are shooting or not
 		if(Jright.getRisingEdge(1)) {
-			if(table.get(vision.getDist()) == 0){
-				shooter.setSpeed(table.get(8));
-				shooting = true;
-			}else{
-				shooter.setSpeed(table.get(vision.getDist()));
-				shooting = true;
-			}
+			shooter.setSpeed(table.get(vision.getDist())-35);
+//			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
+			shooting = true;
 		} else if(Jright.getFallingEdge(1)) {
 			shooting = false;
 			shooter.setSpeed(0);
@@ -138,7 +139,19 @@ public class Robot extends IterativeRobot {
 			shooter.stopShoot();
 		}
 		
+		if(Jsecond.getRisingEdge(2)) {
+			intake.up();
+		} if(Jsecond.getRisingEdge(2)) {
+			intake.down();
+		}
 
+		if(Jsecond.getRisingEdge(1)) {
+			autoAim = false;
+			turret.turnTo(0);
+		} if(Jsecond.getFallingEdge(1)) {
+			autoAim = true;
+		}
+		
 		//Climber State
 		if(Jsecond.getRisingEdge(3)){
 			climber.climb();
@@ -149,10 +162,7 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit() {
 		
-		if (autoAim == false) {
-			loopVision.start();
-			autoAim = true;
-		} 
+		autoAim = true;
 		
 		drivetrain.arcadeDrive(0, 0);
 		shooter.setSpeed(0);
@@ -173,9 +183,9 @@ public class Robot extends IterativeRobot {
 		shooting = false;
 	}
 	
-	public void follow(){
-		if(shooter.getSpeed() < 200) { 
-			vision.update();
+	public void follow() {
+		vision.update();
+		if(autoAim && shooter.getSpeed() < 200) { 
 			turret.turnTo(turret.getAngle() + vision.getX());
 		}
 	}

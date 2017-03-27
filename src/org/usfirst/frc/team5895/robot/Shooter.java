@@ -99,7 +99,7 @@ public class Shooter {
 	}
 	
 	public void update() {
-		DriverStation.reportError("The speed is " + getSpeed(), false);
+//		DriverStation.reportError("The speed is " + getSpeed(), false);
 		
 		double output = -PID.getOutput(Counter.getRate());
 		if(output > 0) {
