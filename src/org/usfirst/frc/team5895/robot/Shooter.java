@@ -3,7 +3,11 @@ package org.usfirst.frc.team5895.robot;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team5895.robot.lib.PID;
 import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
 
@@ -12,9 +16,13 @@ public class Shooter {
 	private Talon flywheelMotor;
 	private Talon conveyorMotor;
 	private Talon tornadoMotor;
+	private Solenoid hopperSolenoid;
 	private double conveyorSpeed;
 	private double tornadoSpeed;
+	private double timestamp;
 	private boolean noSpeed;
+	private boolean hopperState = false;
+	private double lastFlip = 0;
 
 	PowerDistributionPanel pdp;
 	PID PID;
@@ -34,6 +42,7 @@ public class Shooter {
 		flywheelMotor = new Talon(ElectricalLayout.FLYWHEEL_MOTOR);
 		conveyorMotor = new Talon(ElectricalLayout.CONVEYOR_MOTOR);
 		tornadoMotor = new Talon(ElectricalLayout.TORNADO_MOTOR);
+		hopperSolenoid = new Solenoid(ElectricalLayout.HOPPER_SOLENOID);
 
 		PID = new PID(Kp, Ki, Kd, dV, false, 1, false);
 		Counter = new Counter(ElectricalLayout.FLYWHEEL_COUNTER);
@@ -47,8 +56,7 @@ public class Shooter {
 	 */
 	public void shoot(){
 		conveyorSpeed = 1;
-		tornadoSpeed = 1;
-		
+		tornadoSpeed = SmartDashboard.getNumber("DB/Slider 1", 0);
 	}
 	
 	/**
@@ -57,6 +65,7 @@ public class Shooter {
 	public void stopShoot() {
 		conveyorSpeed = 0;
 		tornadoSpeed = 0;
+		hopperState = false; 
 	}
 	
 	/**
@@ -84,7 +93,8 @@ public class Shooter {
 	public void setSpeed(double setpoint) {
 		if(setpoint == 0) {
 			noSpeed = true;
-		} else noSpeed = false;
+		} else
+			noSpeed = false;
 		PID.set(setpoint/60);
 	}
 	
@@ -95,21 +105,36 @@ public class Shooter {
 	
 	public boolean atSpeed()
 	{
-		return ( getSpeed() < PID.getSetpoint()*60 + 30 && getSpeed() > PID.getSetpoint()*60 - 30 );	
+		return ( getSpeed() < PID.getSetpoint()*60 + 60 && getSpeed() > PID.getSetpoint()*60 - 60 );	
 	}
+	
 	
 	public void update() {
 //		DriverStation.reportError("The speed is " + getSpeed(), false);
 		
 		double output = -PID.getOutput(Counter.getRate());
+//		DriverStation.reportError(""+output, false);
 		if(output > 0) {
 			output = 0;
 	//		PID.resetIntegral();
 		}
+		
 		if(noSpeed == true) {
 			flywheelMotor.set(0);
 		} else
 			flywheelMotor.set(output);
+//		flywheelMotor.set(0.25);
+		
+		DriverStation.reportError("" + (Timer.getFPGATimestamp() - lastFlip ),  false);
+		
+		if(conveyorSpeed > 0 && ((Timer.getFPGATimestamp() - lastFlip) > 1.0)) {
+			hopperState = !hopperState;
+			lastFlip = Timer.getFPGATimestamp();
+		}
+		
+		if(hopperSolenoid.get() != hopperState) {
+			hopperSolenoid.set(hopperState);
+		}
 		
 		conveyorMotor.set(conveyorSpeed);
 		tornadoMotor.set(tornadoSpeed);
