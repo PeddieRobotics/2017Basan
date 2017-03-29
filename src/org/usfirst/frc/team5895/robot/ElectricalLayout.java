@@ -13,7 +13,6 @@ public class ElectricalLayout {
 
 	//Solenoids
 	public static final int INTAKE_SOLENOID = 1;
-	public static final int FLYWHEEL_SOLENOID = 3; //Shooter Hood
 	public static final int GEAR_SOLENOID = 0;
 	public static final int GEAR_HOLDER = 2;
 	public static final int SPARE = 4;

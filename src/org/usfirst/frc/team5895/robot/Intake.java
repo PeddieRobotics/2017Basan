@@ -28,7 +28,7 @@ public class Intake {
 	}
 
 	public void update() {
-	   //controlCurrent(); don't need this for Intake
+	   
 	   if (myCylinder.get() != isDown)
 	       myCylinder.set(isDown);
 	}
