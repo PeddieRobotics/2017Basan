@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
 		
 		
 		loop = new Looper(10);
-		loop.add(drivetrain::update);
+//		loop.add(drivetrain::update);
 		loop.add(shooter::update);
 		loop.add(gear::update);
 		loop.add(turret::update);
@@ -106,7 +106,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-//		DriverStation.reportError("" + vision.getDist(), false);
+		DriverStation.reportError("" + vision.getDist(), false);
 		
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), -Jright.getRawAxis(0));
 		
@@ -117,7 +117,7 @@ public class Robot extends IterativeRobot {
 			gear.open();
 		}
 		else if(Jleft.getRisingEdge(2)) {
-			gear.close();
+			gear.close(); 
 		}
 
 		//Hopper Extendy Thing In or Out
@@ -130,8 +130,8 @@ public class Robot extends IterativeRobot {
 		
 		//if we are shooting or not
 		if(Jright.getRisingEdge(1)) {
-			shooter.setSpeed(table.get(vision.getDist())-35);
-//			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
+//			shooter.setSpeed(table.get(vision.getDist())-35);
+			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
 			shooting = true;
 		} else if(Jright.getFallingEdge(1)) {
 			shooting = false;

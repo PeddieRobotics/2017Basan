@@ -125,7 +125,7 @@ public class Shooter {
 			flywheelMotor.set(output);
 //		flywheelMotor.set(0.25);
 		
-		DriverStation.reportError("" + (Timer.getFPGATimestamp() - lastFlip ),  false);
+//		DriverStation.reportError("" + (Timer.getFPGATimestamp() - lastFlip ),  false);
 		
 		if(conveyorSpeed > 0 && ((Timer.getFPGATimestamp() - lastFlip) > 1.0)) {
 			hopperState = !hopperState;
