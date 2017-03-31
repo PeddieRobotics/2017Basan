@@ -40,14 +40,15 @@ public class DriveTrain {
 		Eright.setDistancePerPulse(4/12.0*3.14/360);
 
 		try {
-			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_red_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010); 
-			c_blue_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_both_middle = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			//Check back everything. generate the missing splines
+			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010); 
+			c_blue_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_both_middle = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			//c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
