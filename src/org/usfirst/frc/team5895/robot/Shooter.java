@@ -19,6 +19,7 @@ public class Shooter {
 	private Solenoid hopperSolenoid;
 	private double conveyorSpeed;
 	private double tornadoSpeed;
+	private double timestamp;
 	private boolean noSpeed;
 	private boolean hopperState = false;
 	private double lastFlip = 0;
@@ -30,6 +31,9 @@ public class Shooter {
 	double Kp = 0.24;
 	double Ki = 0.0006;
 	double Kd = 0.00000005;
+//	double Kp = 1.0;
+//	double Ki = 0.0;
+//	double Kd = 0.0;
 	double dV = 1;
 
 	public Shooter()
@@ -81,6 +85,7 @@ public class Shooter {
 		return flywheelSpeed;
 	}
 	
+
 	/**
 	 * Sets the target RPM of the flywheel
 	 * @param Setpoint angular speed set in RPM
@@ -97,6 +102,7 @@ public class Shooter {
 	 * Tells whether flywheel speed is close to the setpoint
 	 * @return Whether it's close or not
 	 */
+	
 	public boolean atSpeed()
 	{
 		return ( getSpeed() < PID.getSetpoint()*60 + 60 && getSpeed() > PID.getSetpoint()*60 - 60 );	
@@ -117,6 +123,7 @@ public class Shooter {
 			flywheelMotor.set(0);
 		} else
 			flywheelMotor.set(output);
+//		flywheelMotor.set(0.25);
 		
 //		DriverStation.reportError("" + (Timer.getFPGATimestamp() - lastFlip ),  false);
 		
