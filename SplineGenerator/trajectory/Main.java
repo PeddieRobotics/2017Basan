@@ -173,11 +173,11 @@ public class Main {
         config.max_jerk = 60.0;
         config.max_vel = 10.0;
         
-        final String path_name = "Balls_Blue_Close";
+        final String path_name = "Balls_Red_Close";
         
         WaypointSequence p = new WaypointSequence(10);
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-        p.addWaypoint(new WaypointSequence.Waypoint(4.27, 8.75, 1.57));
+        p.addWaypoint(new WaypointSequence.Waypoint(6.5, -8.75, -1.57));
 
         Path path = PathGenerator.makePath(p, config,
             kWheelbaseWidth, path_name);

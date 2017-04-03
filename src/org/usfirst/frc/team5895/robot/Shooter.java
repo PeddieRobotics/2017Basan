@@ -28,12 +28,12 @@ public class Shooter {
 	PID PID;
 	Counter Counter;
 
-	double Kp = 0.24;
+	double Kp = 0.55;
 	double Ki = 0.0006;
 	double Kd = 0.00000005;
-//	double Kp = 1.0;
-//	double Ki = 0.0;
-//	double Kd = 0.0;
+//	double Kp = 0.24;
+//	double Ki = 0.0006;
+//	double Kd = 0.00000005;
 	double dV = 1;
 
 	public Shooter()
@@ -111,6 +111,7 @@ public class Shooter {
 	
 	public void update() {
 //		DriverStation.reportError("The speed is " + getSpeed(), false);
+		DriverStation.reportError("the error is " + (getSpeed() - PID.getSetpoint()*60), false);
 		
 		double output = -PID.getOutput(Counter.getRate());
 //		DriverStation.reportError(""+output, false);

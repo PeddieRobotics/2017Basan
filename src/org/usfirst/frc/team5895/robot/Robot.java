@@ -75,6 +75,8 @@ public class Robot extends IterativeRobot {
 			if(gameplan.contains("balls")){
 				if(distance.contains("close")) {
 					BlueAutoClose.run(drivetrain, shooter, turret, table, vision, intake);
+				} else if(distance.contains("far")) {
+					BlueAutoFar.run(drivetrain, shooter, turret, table, vision, intake);
 				} else {
 					BlueAuto.run(drivetrain, shooter, turret, table, vision, intake);
 				}
@@ -86,9 +88,16 @@ public class Robot extends IterativeRobot {
 				DoNothing.run();
 			}
 		}
+		
 		if(routine.contains("red")) {
 			if(gameplan.contains("balls")){
-				RedAuto.run(drivetrain, shooter, turret, table, vision, intake);
+				if(distance.contains("close")){
+					RedAutoClose.run(drivetrain, shooter, turret, table, vision, intake);
+				} else if(distance.contains("far")) {
+					RedAutoFar.run(drivetrain, shooter, turret, table, vision, intake);
+				} else{
+					RedAuto.run(drivetrain, shooter, turret, table, vision, intake);
+				}
 			}
 			else if(gameplan.contains("gear")){
 				RedGear.run(drivetrain, gear);
@@ -106,7 +115,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		DriverStation.reportError("" + vision.getDist(), false);
+//		DriverStation.reportError("" + vision.getDist(), false);
 		
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), -Jright.getRawAxis(0));
 		
@@ -130,7 +139,7 @@ public class Robot extends IterativeRobot {
 		
 		//if we are shooting or not
 		if(Jright.getRisingEdge(1)) {
-//			shooter.setSpeed(table.get(vision.getDist())-35);
+//			shooter.setSpeed(table.get(vision.getDist()));
 			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
 			shooting = true;
 		} else if(Jright.getFallingEdge(1)) {

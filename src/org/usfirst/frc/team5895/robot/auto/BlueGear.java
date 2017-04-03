@@ -8,8 +8,6 @@ public class BlueGear {
 	
 	public static void run(DriveTrain drivetrain, GearReceiver gear) {
 		
-		
-		drivetrain.auto_gears_blueDrive();
 		Waiter.waitFor(5000);
 		drivetrain.arcadeDrive(0, 0);
 	}

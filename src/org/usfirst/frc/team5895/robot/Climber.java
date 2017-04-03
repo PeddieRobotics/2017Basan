@@ -42,7 +42,7 @@ public class Climber {
 	 * @return value of current
 	 *
 	 */
-	public double getCurrent() {
+	public double getCurret() {
 		return pdp.getCurrent(ElectricalLayout.CLIMBER_PDB_PORT);
 	}
 	

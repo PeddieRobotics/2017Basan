@@ -3,7 +3,7 @@ package org.usfirst.frc.team5895.robot;
 import org.usfirst.frc.team5895.robot.lib.NavX;
 import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
 
-import edu.wpi.first.wpilibj.DriverStation; //test change
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 
@@ -12,7 +12,7 @@ public class DriveTrain {
 	private Talon Mright;
 	double Lspeed, Rspeed;
 	private String place;
-	private enum Mode_Type {TELEOP, AUTO_RED, AUTO_BLUE, AUTO_RED_GEAR, AUTO_BLUE_GEAR, AUTO_RED_FAR, AUTO_BLUE_FAR, AUTO_BLUE_CLOSE};
+	private enum Mode_Type {TELEOP, AUTO_SPLINE};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
@@ -21,10 +21,8 @@ public class DriveTrain {
 	private TrajectoryDriveController c_red_far;
 	private TrajectoryDriveController c_blue_far;
 	private TrajectoryDriveController c_blue_close;
-	private TrajectoryDriveController c_red_gear;
-	private TrajectoryDriveController c_blue_gear;
-	private TrajectoryDriveController c_both_middle;
-	private boolean reverseFrontBack = false;
+	private TrajectoryDriveController c_red_close;
+	private TrajectoryDriveController c_in_use;
 
 	public DriveTrain()
 	{
@@ -41,14 +39,12 @@ public class DriveTrain {
 
 		try {
 			//Check back everything. generate the missing splines
-			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_red_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010); 
-			c_blue_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_both_middle = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			//c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -60,10 +56,7 @@ public class DriveTrain {
 	 * @return The distance in feet
 	 */
 	public double getDistance() {
-
-		double distance = (Eleft.getDistance() + Eright.getDistance())/2;
-
-		return distance;
+		return (Eleft.getDistance() + Eright.getDistance())/2;
 	}
 
 	/**
@@ -81,9 +74,7 @@ public class DriveTrain {
 	 * @return The angle of the robot in degrees
 	 */
 	public double getAngle(){
-		double angle = NavX.getAngle();
-
-		return angle;
+		return NavX.getAngle();
 	}
 	
 	/**
@@ -101,7 +92,8 @@ public class DriveTrain {
 	public void auto_redDrive() {
 		resetEncodersAndNavX();
 		c_red.reset();
-		mode = Mode_Type.AUTO_RED;
+		c_in_use = c_red;
+		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
 	/**
@@ -110,25 +102,36 @@ public class DriveTrain {
 	public void auto_blueDrive() {
 		resetEncodersAndNavX();
 		c_blue.reset();
-		mode = Mode_Type.AUTO_BLUE;
+		c_in_use = c_blue;
+		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
 	public void auto_blue_closeDrive() {
 		resetEncodersAndNavX();
 		c_blue_close.reset();
-		mode = Mode_Type.AUTO_BLUE_CLOSE;
+		c_in_use = c_blue_close;
+		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
-	public void auto_gears_redDrive(){
+	public void auto_red_closeDrive(){
 		resetEncodersAndNavX();
-		c_red_gear.reset();
-		mode = Mode_Type.AUTO_RED_GEAR;
+		c_red_close.reset();
+		c_in_use = c_red_close;
+		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
-	public void auto_gears_blueDrive(){
+	public void auto_red_farDrive() {
 		resetEncodersAndNavX();
-		c_blue_gear.reset();
-		mode = Mode_Type.AUTO_BLUE_GEAR;
+		c_red_far.reset();
+		c_in_use = c_red_far;
+		mode = Mode_Type.AUTO_SPLINE;
+	}
+	
+	public void auto_blue_farDrive() {
+		resetEncodersAndNavX();
+		c_blue_far.reset();
+		c_in_use = c_blue_far;
+		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
 	/**
@@ -155,25 +158,6 @@ public class DriveTrain {
 		mode = Mode_Type.TELEOP;
 	}
 	
-	/**
-	 * 	@param place The side of airship to hang auto gear
-	 */
-	public void setSide(String side){
-		place=side;
-	}
-	
-	/**
-	 * Positions gear in front of robot
-	 * 
-	 * @param reverseFrontBack Sets direction of wheel motors
-	 */
-	public void setGearFront() {
-		reverseFrontBack = true;
-	}
-	
-	public void setIntakeFront() {
-		reverseFrontBack = false;
-	}
 	
 	/**
 	 * Red Auto, Blue Auto
@@ -186,107 +170,21 @@ public class DriveTrain {
 		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
 
 		switch(mode) {
-		case AUTO_RED:
+		case AUTO_SPLINE:
+			
+			double[] m = new double[2];
 
-			double[] m_red = new double[2];
+			m = c_in_use.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
 
-			m_red = c_red.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
-
-			DriverStation.reportError("" + m_red[0], false);
-
-			Mleft.set(-m_red[0]);
-			Mright.set(m_red[1]);
+			Mleft.set(-m[0]);
+			Mright.set(m[1]);
 			break;
 		
-		case AUTO_BLUE:
-			
-			double[] m_blue = new double[2];
-
-			m_blue = c_blue.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
-
-			DriverStation.reportError(""+m_blue[1], false);
-
-			Mleft.set(-m_blue[0]);
-			Mright.set(m_blue[1]);
-			break;
 		
-		case AUTO_RED_FAR:
-			double[] m_red_far = new double[2];
-			
-			m_red_far = c_red_far.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
-			
-			DriverStation.reportError(""+m_red_far[1], false);
-
-			Mleft.set(-m_red_far[0]);
-			Mright.set(m_red_far[1]);
-			break;
-		
-		case AUTO_BLUE_FAR:
-			double[] m_blue_far = new double[2];
-			
-			m_blue_far = c_blue_far.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
-			
-			DriverStation.reportError(""+m_blue_far[1], false);
-
-			Mleft.set(-m_blue_far[0]);
-			Mright.set(m_blue_far[1]);
-			break;
-		
-		case AUTO_BLUE_CLOSE:
-			double[] m_blue_close = new double[2];
-			
-			m_blue_close = c_blue_close.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
-			
-			DriverStation.reportError(""+m_blue_close[1], false);
-
-			Mleft.set(-m_blue_close[0]);
-			Mright.set(m_blue_close[1]);
-			break;
-			
-		case AUTO_RED_GEAR:
-			
-			double[] g_red = new double[2];
-			
-			switch(place){
-			case "middle":
-				g_red = c_both_middle.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			case "right":
-				g_red = c_red_gear.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			}
-			
-			Mleft.set(-g_red[0]);
-			Mright.set(g_red[1]);
-			break;
-			
-		case AUTO_BLUE_GEAR:
-			double[] g_blue = new double[2];
-			
-			switch(place){
-			case "middle":
-				g_blue = c_both_middle.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			case "right":
-				g_blue = c_blue_gear.getOutput(Eleft.getDistance(), Eright.getDistance(), getAngle()*3.14/180);
-				break;
-			}
-			
-			Mleft.set(-g_blue[0]);
-			Mright.set(-g_blue[1]);
-			break;
-			
 		case TELEOP:
 			
-			if(reverseFrontBack) {
-			Mleft.set(-Lspeed);
-			Mright.set(-Rspeed);
-			}
-			else {
 			Mleft.set(Lspeed);
 			Mright.set(Rspeed);
-			}
-
 			break;
 		}
 	}

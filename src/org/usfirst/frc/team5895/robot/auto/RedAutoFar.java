@@ -8,28 +8,27 @@ import org.usfirst.frc.team5895.robot.Vision;
 import org.usfirst.frc.team5895.robot.framework.LookupTable;
 import org.usfirst.frc.team5895.robot.framework.Waiter;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-public class BlueAutoClose {
-
+public class RedAutoFar {
+	
 	public static void run(DriveTrain drivetrain, Shooter shooter, Turret turret, LookupTable table, Vision vision, Intake intake) {
-		
-		turret.turnTo(-80);
-		intake.down();
-		//drivetrain.auto_blue_closeDrive();
+	
+		turret.turnTo(80);
+		Waiter.waitFor(1000);
+/*		intake.down();
+		drivetrain.auto_red_farDrive();
 		Waiter.waitFor(4000);
-		//drivetrain.arcadeDrive(0, 0);
-		vision.update();
-		turret.turnTo(turret.getAngle()+vision.getX());
+		drivetrain.arcadeDrive(0, 0);
+*/		vision.update();
+		turret.turnTo(turret.getAngle()+vision.getX()-1);
 		Waiter.waitFor(200);
 		vision.update();
-		turret.turnTo(turret.getAngle()+vision.getX());
-		shooter.setSpeed(2985);
+		turret.turnTo(turret.getAngle()+vision.getX()-1);
+		shooter.setSpeed(3250);
 //		shooter.setSpeed(table.get(vision.getDist()));
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();
 		}
 	}
+
 }

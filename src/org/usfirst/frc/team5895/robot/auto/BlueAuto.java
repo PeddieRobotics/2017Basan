@@ -30,12 +30,6 @@ public class BlueAuto {
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();
-			Waiter.waitFor(5000);
-			drivetrain.arcadeDrive(0.5, 0);
-			Waiter.waitFor(60);
-			drivetrain.arcadeDrive(-0.5,0);
-			Waiter.waitFor(60);
-			drivetrain.arcadeDrive(0,0);
 		}
 	}
 	
