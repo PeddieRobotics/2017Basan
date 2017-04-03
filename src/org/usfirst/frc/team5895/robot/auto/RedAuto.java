@@ -17,17 +17,17 @@ public class RedAuto {
 	
 		turret.turnTo(80);
 		Waiter.waitFor(1000);
-/*		intake.down();
-		drivetrain.auto_redDrive();
-		Waiter.waitFor(4000);
-*/		drivetrain.arcadeDrive(0, 0);
+//		intake.down();
+//		drivetrain.auto_redDrive();
+		shooter.setSpeed(3125);
+//		Waiter.waitFor(drivetrain::isFinished, 4000);
+//		DriverStation.reportError("" + drivetrain.isFinished(), false);
+		drivetrain.arcadeDrive(0, 0);
 		vision.update();
 		turret.turnTo(turret.getAngle()+vision.getX()-2);
 		Waiter.waitFor(200);
 		vision.update();
 		turret.turnTo(turret.getAngle()+vision.getX()-2);
-		shooter.setSpeed(3125);
-//		shooter.setSpeed(table.get(vision.getDist()));
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();

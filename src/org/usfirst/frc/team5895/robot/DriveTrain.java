@@ -39,7 +39,7 @@ public class DriveTrain {
 
 		try {
 			//Check back everything. generate the missing splines
-			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.1, 0, 0, 1.0/13.0, 1.0/45.0, -0.005);
 			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
@@ -56,7 +56,7 @@ public class DriveTrain {
 	 * @return The distance in feet
 	 */
 	public double getDistance() {
-		return (Eleft.getDistance() + Eright.getDistance())/2;
+		return Eleft.getDistance();
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class DriveTrain {
 	 * @return The speed in feet per second
 	 */
 	public double getSpeed() {
-		return (Eleft.getRate() + Eright.getRate())/2;
+		return Eleft.getRate();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class DriveTrain {
 	 * 
 	 * @return The angle of the robot in degrees
 	 */
-	public double getAngle(){
+	public double getAngle() {
 		return NavX.getAngle();
 	}
 	
@@ -156,6 +156,10 @@ public class DriveTrain {
 		Lspeed = l;
 		Rspeed = r;
 		mode = Mode_Type.TELEOP;
+	}
+	
+	public boolean isFinished() {
+		return c_in_use.isFinished();
 	}
 	
 	

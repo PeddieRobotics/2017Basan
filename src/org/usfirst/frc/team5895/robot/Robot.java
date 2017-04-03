@@ -25,7 +25,7 @@ public class Robot extends IterativeRobot {
 	boolean shooting = false;
 	boolean autoAim = false;
 	Recorder recorder;
-
+	
 	public void robotInit() {
 
 		Jleft = new BetterJoystick(0);
@@ -38,6 +38,7 @@ public class Robot extends IterativeRobot {
 		climber = new Climber();
 		intake = new Intake();
 		vision = new Vision();
+		recorder = new Recorder(drivetrain);
 		
 		
 		loop = new Looper(10);
@@ -47,6 +48,7 @@ public class Robot extends IterativeRobot {
 		loop.add(turret::update);
 		loop.add(climber::update);
 		loop.add(intake::update);
+		loop.add(recorder::record);
 		loop.start();
 
 		loopVision = new Looper(200);
@@ -65,6 +67,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void autonomousInit() {
+	//	recorder.startRecording("Auto.csv");
 		autoAim = false;
 		
 		String routine = SmartDashboard.getString("DB/String 0", "nothing");
@@ -188,6 +191,7 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void disabledInit() {
+		recorder.stopRecording();
 		drivetrain.arcadeDrive(0, 0);
 //		shooter.setSpeed(0);
 		shooter.stopShoot();

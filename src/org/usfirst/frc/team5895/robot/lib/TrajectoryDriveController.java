@@ -39,7 +39,7 @@ public class TrajectoryDriveController {
 		  this.kTurn = kTurn;
 	  }
 
-	  public boolean onTarget() {
+	  public boolean isFinished() {
 		  return followerLeft.isFinishedTrajectory();
 	  }
 
@@ -69,7 +69,7 @@ public class TrajectoryDriveController {
 	  public double[] getOutput(double leftEncDist, double rightEncDist, double angleRads) {
 		  double[] output = new double[2];
 
-		  if (onTarget()) {
+		  if (isFinished()) {
 			  output[0] = 0;
 			  output[1] = 0;
 			  return output;

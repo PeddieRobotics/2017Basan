@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 
 public class Recorder {	
-	private Climber drive;
+	private DriveTrain drive;
 	
 	private boolean recordFile;
 	private Formatter f;
@@ -22,7 +22,7 @@ public class Recorder {
 	 * @param fy the flywheel 
 	 * @param in the intake
 	 */
-	public Recorder(Climber d){
+	public Recorder(DriveTrain d){
 		this.drive = d;
 		recordFile = false;
 	}
@@ -65,9 +65,10 @@ public class Recorder {
      */
     public void record() {
     	if (recordFile==true) {
-    		f.format("%f,%f\r\n",
+    		f.format("%f,%f,%f\r\n",
     				Timer.getFPGATimestamp(),
-    				drive.getCurret());
+    				drive.getDistance(),
+    				drive.getSpeed());
     	}
     }
     

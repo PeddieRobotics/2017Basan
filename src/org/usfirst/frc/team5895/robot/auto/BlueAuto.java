@@ -18,6 +18,7 @@ public class BlueAuto {
 		turret.turnTo(-80);
 		intake.down();
 		drivetrain.auto_blueDrive();
+		shooter.setSpeed(3240);
 		Waiter.waitFor(4000);
 		drivetrain.arcadeDrive(0, 0);
 		vision.update();
@@ -25,8 +26,6 @@ public class BlueAuto {
 		Waiter.waitFor(200);
 		vision.update();
 		turret.turnTo(turret.getAngle()+vision.getX());
-		shooter.setSpeed(3240);
-//		shooter.setSpeed(table.get(vision.getDist()));
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();

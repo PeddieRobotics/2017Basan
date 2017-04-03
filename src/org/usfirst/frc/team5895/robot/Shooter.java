@@ -111,7 +111,7 @@ public class Shooter {
 	
 	public void update() {
 //		DriverStation.reportError("The speed is " + getSpeed(), false);
-		DriverStation.reportError("the error is " + (getSpeed() - PID.getSetpoint()*60), false);
+//		DriverStation.reportError("the error is " + (getSpeed() - PID.getSetpoint()*60), false);
 		
 		double output = -PID.getOutput(Counter.getRate());
 //		DriverStation.reportError(""+output, false);
