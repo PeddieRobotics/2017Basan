@@ -1,5 +1,7 @@
 package org.usfirst.frc.team5895.robot;
 
+import org.usfirst.frc.team5895.robot.framework.Waiter;
+
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class GearReceiver {
