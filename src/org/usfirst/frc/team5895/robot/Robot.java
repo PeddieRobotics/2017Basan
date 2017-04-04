@@ -203,7 +203,7 @@ public class Robot extends IterativeRobot {
 	
 	public void follow() {
 		vision.update();
-		if(autoAim && shooter.getSpeed() < 200) { 
+		if(autoAim) { 
 			turret.turnTo(turret.getAngle() + vision.getX());
 		}
 	}
