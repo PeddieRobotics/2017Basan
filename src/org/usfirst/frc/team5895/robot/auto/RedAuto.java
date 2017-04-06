@@ -16,11 +16,10 @@ public class RedAuto {
 	public static void run(DriveTrain drivetrain, Shooter shooter, Turret turret, LookupTable table, Vision vision, Intake intake) {
 	
 		turret.turnTo(80);
-		Waiter.waitFor(1000);
-//		intake.down();
-//		drivetrain.auto_redDrive();
+		intake.down();
+		drivetrain.auto_redDrive();
 		shooter.setSpeed(3125);
-//		Waiter.waitFor(drivetrain::isFinished, 4000);
+		Waiter.waitFor(drivetrain::isFinished, 4000);
 //		DriverStation.reportError("" + drivetrain.isFinished(), false);
 		drivetrain.arcadeDrive(0, 0);
 		vision.update();
@@ -31,6 +30,10 @@ public class RedAuto {
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();
+			Waiter.waitFor(5000);
+			intake.down();
+			Waiter.waitFor(500);
+			intake.up();
 		}
 	}
 

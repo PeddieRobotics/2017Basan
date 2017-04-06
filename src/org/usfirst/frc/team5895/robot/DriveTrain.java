@@ -40,9 +40,9 @@ public class DriveTrain {
 		try {
 			//Check back everything. generate the missing splines
 			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.1, 0, 0, 1.0/13.0, 1.0/45.0, -0.005);
-			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Far.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Far.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_red_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
