@@ -19,7 +19,7 @@ public class BlueAuto {
 		intake.down();
 		drivetrain.auto_blueDrive();
 		shooter.setSpeed(3240);
-		Waiter.waitFor(4000);
+		Waiter.waitFor(drivetrain::isFinished, 4000);
 		drivetrain.arcadeDrive(0, 0);
 		vision.update();
 		turret.turnTo(turret.getAngle()+vision.getX());

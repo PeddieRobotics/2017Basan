@@ -18,17 +18,23 @@ public class GearReceiver {
 	/**
 	 * Closes the gear receiver
 	 */
-	public void close() {
-		gateState=false;
-		holdingState = true; 
+	public void closeFlap() {
+		gateState=false; 
 	}
 
 	/**
 	 * Opens the gear receiver
 	 */
-	public void open() {
+	public void openFlap() {
 		gateState=true;
+	}
+	
+	public void closeGear(){
 		holdingState = false;
+	}
+	
+	public void openGear(){
+		holdingState = true;
 	}
 
 	public void toggleHolder() {
@@ -38,6 +44,8 @@ public class GearReceiver {
 	public void update() {
 		if(gateSol.get() != gateState){
 			gateSol.set(gateState);
+		}
+		if(holdingSol.get() != holdingState) {
 			holdingSol.set(holdingState);
 		}
 	}

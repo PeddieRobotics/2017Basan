@@ -118,7 +118,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-//		DriverStation.reportError("" + vision.getDist(), false);
+		DriverStation.reportError("" + vision.getDist(), false);
 		
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), -Jright.getRawAxis(0));
 		
@@ -126,17 +126,24 @@ public class Robot extends IterativeRobot {
 		//From here on this is the joysticks controls of the main driver
 		//Open or close the gear intake
 		if(Jleft.getRisingEdge(1)){
-			gear.open();
+			gear.openGear();
 		}
-		else if(Jleft.getRisingEdge(2)) {
-			gear.close();
+		else if(Jleft.getFallingEdge(1)) {
+			gear.closeGear();
 		}
 
 		//Hopper Extendy Thing In or Out
 		if(Jleft.getRisingEdge(3)) {
-			intake.down();
+			gear.openFlap();
 		}
 		else if(Jleft.getRisingEdge(4)) {
+			gear.closeFlap();
+		}
+		
+		if(Jright.getRisingEdge(3)){
+			intake.down();
+		}
+		else if(Jright.getRisingEdge(4)){
 			intake.up();
 		}
 		
@@ -186,7 +193,8 @@ public class Robot extends IterativeRobot {
 		shooter.stopShoot();
 		climber.stopClimbing();
 		turret.turnTo(turret.getAngle());
-		gear.close();
+		gear.closeFlap();
+		gear.closeGear();
 		shooting = false;
 	}
 	
@@ -197,7 +205,8 @@ public class Robot extends IterativeRobot {
 		shooter.stopShoot();
 		climber.stopClimbing();
 		turret.turnTo(turret.getAngle());
-		gear.close();
+		gear.closeFlap();
+		gear.closeGear();
 		shooting = false;
 	}
 	
