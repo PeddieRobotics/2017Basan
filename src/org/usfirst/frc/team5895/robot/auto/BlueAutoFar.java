@@ -16,7 +16,7 @@ public class BlueAutoFar {
 	public static void run(DriveTrain drivetrain, Shooter shooter, Turret turret, LookupTable table, Vision vision, Intake intake) {
 		
 		turret.turnTo(-80);
-		intake.down();
+		intake.open();
 		drivetrain.auto_blue_farDrive();
 		shooter.setSpeed(3240);
 		Waiter.waitFor(drivetrain::isFinished, 4000);
@@ -30,9 +30,9 @@ public class BlueAutoFar {
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();
 			Waiter.waitFor(5000);
-			intake.down();
+			intake.close();
 			Waiter.waitFor(500);
-			intake.up();
+			intake.open();
 		}
 	}
 	

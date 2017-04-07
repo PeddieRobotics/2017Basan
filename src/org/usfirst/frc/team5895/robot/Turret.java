@@ -55,7 +55,6 @@ public class Turret {
 		}
 		
 		PID.set(angle);
-	
 	}
 	
 	/**
@@ -93,14 +92,14 @@ public class Turret {
 			output = -0.25;
 		}
 
-		
+/*		
 		if(!limitSwitchLeft.get() && output < 0) {
 			output = 0;
 		}
 		if(!limitSwitchRight.get() && output > 0) {
 			output = 0;
 		}	
-/*		
+		
 		if((turret_encoder.getDistance() < - 90) && output < 0) {
 			output = 0;
 		}
@@ -110,6 +109,8 @@ public class Turret {
 */		
 		turret_motor.set(output);
 		
+//		DriverStation.reportError("" + PID.getSetpoint() + " , " + getAngle(), false);
+		DriverStation.reportError("" + turret_encoder.getDistance(), false);
 //		DriverStation.reportError("" + output, false);
 	}
 }

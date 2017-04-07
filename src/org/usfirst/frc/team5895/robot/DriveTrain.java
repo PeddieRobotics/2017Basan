@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5895.robot;
 
 import org.usfirst.frc.team5895.robot.lib.NavX;
+import org.usfirst.frc.team5895.robot.lib.PID;
 import org.usfirst.frc.team5895.robot.lib.TrajectoryDriveController;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,14 +17,25 @@ public class DriveTrain {
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
+	
 	private TrajectoryDriveController c_red;
 	private TrajectoryDriveController c_blue;
 	private TrajectoryDriveController c_red_far;
 	private TrajectoryDriveController c_blue_far;
 	private TrajectoryDriveController c_blue_close;
 	private TrajectoryDriveController c_red_close;
+	private TrajectoryDriveController c_straight;
 	private TrajectoryDriveController c_in_use;
 
+	private static final double TURN_KP = 0.004;
+	private static final double TURN_KI = 0.00005;
+	
+	private static final double DRIVE_KP = 0.04;
+	private static final double DRIVE_KI = 0.0000001;
+	
+	private PID turnPID;
+	private PID drivePID;
+	
 	public DriveTrain()
 	{
 		NavX=new NavX();
@@ -39,15 +51,19 @@ public class DriveTrain {
 
 		try {
 			//Check back everything. generate the missing splines
-			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.1, 0, 0, 1.0/13.0, 1.0/45.0, -0.005);
+			c_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red.txt", 0.1, 0, 0, 1.0/13.0, 1.0/45.0, -0.010);
 			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Far.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Far.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_red_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_straight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Straight.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
+		
+		turnPID = new PID(TURN_KP, TURN_KI, 0, 1);
+		drivePID = new PID(DRIVE_KP, DRIVE_KI, 0, 1);
 	}
 
 	/**
@@ -134,6 +150,13 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	public void auto_straightDrive() {
+		resetEncodersAndNavX();
+		c_straight.reset();
+		c_in_use = c_straight;
+		mode = Mode_Type.AUTO_SPLINE;
+	}
+	
 	/**
 	 * Two-controller driving
 	 * 
@@ -155,6 +178,18 @@ public class DriveTrain {
 	public void setLeftRightPower(double l, double r) {
 		Lspeed = l;
 		Rspeed = r;
+		mode = Mode_Type.TELEOP;
+	}
+	
+	public void turnTo(double angle) {
+		turnPID.set(angle);
+		Lspeed = Rspeed = turnPID.getOutput(NavX.getAngle());
+	}
+	
+	public void driveStraight(double distance) {
+		drivePID.set(distance);
+		Lspeed = -drivePID.getOutput(getDistance());
+		Rspeed = drivePID.getOutput(getDistance());
 		mode = Mode_Type.TELEOP;
 	}
 	

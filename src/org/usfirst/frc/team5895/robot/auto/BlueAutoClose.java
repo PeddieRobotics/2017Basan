@@ -16,16 +16,13 @@ public class BlueAutoClose {
 	public static void run(DriveTrain drivetrain, Shooter shooter, Turret turret, LookupTable table, Vision vision, Intake intake) {
 		
 		turret.turnTo(-80);
-		intake.down();
-		//drivetrain.auto_blue_closeDrive();
-		Waiter.waitFor(4000);
-		//drivetrain.arcadeDrive(0, 0);
-		vision.update();
-		turret.turnTo(turret.getAngle()+vision.getX());
-		Waiter.waitFor(200);
-		vision.update();
-		turret.turnTo(turret.getAngle()+vision.getX());
+		intake.open();
+		drivetrain.auto_blue_closeDrive();
 		shooter.setSpeed(2985);
+		Waiter.waitFor(4000);
+		drivetrain.arcadeDrive(0, 0);
+		Waiter.waitFor(200);
+		turret.turnTo(turret.getAngle()+vision.getX());
 //		shooter.setSpeed(table.get(vision.getDist()));
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {

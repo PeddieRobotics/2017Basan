@@ -12,12 +12,15 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class StraightShoot {
 	
 	public static void run(DriveTrain drivetrain, Turret turret, Shooter shooter, LookupTable table, Vision vision) {
-
-		drivetrain.arcadeDrive(0.5, 0);
-		Waiter.waitFor(1500);
+		
+		drivetrain.auto_straightDrive();
+		shooter.setSpeed(3125);
+		Waiter.waitFor(drivetrain::isFinished, 4000);
 		drivetrain.arcadeDrive(0, 0);
-		turret.turnTo(turret.getAngle()+vision.getX());
-		shooter.setSpeed(table.get(vision.getDist()));
+		turret.turnTo(turret.getAngle()+vision.getX()-2);
+		Waiter.waitFor(200);
+		vision.update();
+		turret.turnTo(turret.getAngle()+vision.getX()-2);
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();

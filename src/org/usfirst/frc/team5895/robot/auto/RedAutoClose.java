@@ -16,7 +16,7 @@ public class RedAutoClose {
 	public static void run(DriveTrain drivetrain, Shooter shooter, Turret turret, LookupTable table, Vision vision, Intake intake) {
 		
 		turret.turnTo(80);
-		intake.down();
+		intake.open();
 		drivetrain.auto_red_closeDrive();
 		Waiter.waitFor(4000);
 		drivetrain.arcadeDrive(0, 0);

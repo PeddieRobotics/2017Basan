@@ -6,47 +6,47 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class GearReceiver {
 
-	private Solenoid gateSol, holdingSol;
-	private boolean gateState;
-	private boolean holdingState;
+	private Solenoid flapSolenoid, dropSolenoid;
+	private boolean flapState;
+	private boolean dropState;
 
 	public GearReceiver() {
-		gateSol = new Solenoid(ElectricalLayout.GEAR_SOLENOID);
-		holdingSol = new Solenoid(ElectricalLayout.GEAR_HOLDER);
+		flapSolenoid = new Solenoid(ElectricalLayout.GEAR_FLAP_SOLENOID);
+		dropSolenoid = new Solenoid(ElectricalLayout.GEAR_DROP_SOLENOID);
 	}
 
 	/**
 	 * Closes the gear receiver
 	 */
 	public void closeFlap() {
-		gateState=false; 
+		flapState=false; 
 	}
 
 	/**
 	 * Opens the gear receiver
 	 */
 	public void openFlap() {
-		gateState=true;
+		flapState=true;
 	}
 	
 	public void closeGear(){
-		holdingState = false;
+		dropState = false;
 	}
 	
 	public void openGear(){
-		holdingState = true;
+		dropState = true;
 	}
 
 	public void toggleHolder() {
-		holdingState = !holdingState;
+		dropState = !dropState;
 	}
 	
 	public void update() {
-		if(gateSol.get() != gateState){
-			gateSol.set(gateState);
+		if(flapSolenoid.get() != flapState){
+			flapSolenoid.set(flapState);
 		}
-		if(holdingSol.get() != holdingState) {
-			holdingSol.set(holdingState);
+		if(dropSolenoid.get() != dropState) {
+			dropSolenoid.set(dropState);
 		}
 	}
 

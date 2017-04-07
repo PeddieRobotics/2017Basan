@@ -24,7 +24,7 @@ public class Main {
     try {
       File file = new File(path);
 
-      // if file doesnt exists, then create it
+      // if file doesn't exists, then create it
       if (!file.exists()) {
           file.createNewFile();
       }
@@ -63,7 +63,7 @@ public class Main {
       
       WaypointSequence p = new WaypointSequence(10);
       p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-      p.addWaypoint(new WaypointSequence.Waypoint(8.0, 0, 0));
+      p.addWaypoint(new WaypointSequence.Waypoint(-8.0, 0, 0));
 
       Path path = PathGenerator.makePath(p, config,
           kWheelbaseWidth, path_name);
@@ -92,7 +92,7 @@ public class Main {
         
         WaypointSequence p = new WaypointSequence(10);
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-        p.addWaypoint(new WaypointSequence.Waypoint(8.25, 8.75, 1.57));
+        p.addWaypoint(new WaypointSequence.Waypoint(8.1, 8.75, 1.57));
 
         Path path = PathGenerator.makePath(p, config,
             kWheelbaseWidth, path_name);
@@ -120,7 +120,7 @@ public class Main {
         
         WaypointSequence p = new WaypointSequence(10);
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-        p.addWaypoint(new WaypointSequence.Waypoint(8.25, -8.75, -1.57));
+        p.addWaypoint(new WaypointSequence.Waypoint(8.25, -9.0, -1.57));
 
 
         Path path = PathGenerator.makePath(p, config,
@@ -178,6 +178,90 @@ public class Main {
         WaypointSequence p = new WaypointSequence(10);
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
         p.addWaypoint(new WaypointSequence.Waypoint(6.5, -8.75, -1.57));
+
+        Path path = PathGenerator.makePath(p, config,
+            kWheelbaseWidth, path_name);
+
+        // Outputs to the directory supplied as the first argument.
+        TextFileSerializer js = new TextFileSerializer();
+        String serialized = js.serialize(path);
+        //System.out.print(serialized);
+        String fullpath = joinPath(directory, path_name + ".txt");
+        if (!writeFile(fullpath, serialized)) {
+          System.err.println(fullpath + " could not be written!!!!1");
+          System.exit(1);
+        } else {
+          System.out.println("Wrote " + fullpath);
+        }
+      }
+    
+    {
+        config.dt = .01;
+        config.max_acc = 80.0;
+        config.max_jerk = 60.0;
+        config.max_vel = 10.0;
+        
+        final String path_name = "Balls_Blue_Close";
+        
+        WaypointSequence p = new WaypointSequence(10);
+        p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+        p.addWaypoint(new WaypointSequence.Waypoint(5.55, 8.5, 1.57));
+
+        Path path = PathGenerator.makePath(p, config,
+            kWheelbaseWidth, path_name);
+
+        // Outputs to the directory supplied as the first argument.
+        TextFileSerializer js = new TextFileSerializer();
+        String serialized = js.serialize(path);
+        //System.out.print(serialized);
+        String fullpath = joinPath(directory, path_name + ".txt");
+        if (!writeFile(fullpath, serialized)) {
+          System.err.println(fullpath + " could not be written!!!!1");
+          System.exit(1);
+        } else {
+          System.out.println("Wrote " + fullpath);
+        }
+      }
+    
+    {
+        config.dt = .01;
+        config.max_acc = 80.0;
+        config.max_jerk = 60.0;
+        config.max_vel = 10.0;
+        
+        final String path_name = "Balls_Blue_Far";
+        
+        WaypointSequence p = new WaypointSequence(10);
+        p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+        p.addWaypoint(new WaypointSequence.Waypoint(8.9, 9, 1.57));
+
+        Path path = PathGenerator.makePath(p, config,
+            kWheelbaseWidth, path_name);
+
+        // Outputs to the directory supplied as the first argument.
+        TextFileSerializer js = new TextFileSerializer();
+        String serialized = js.serialize(path);
+        //System.out.print(serialized);
+        String fullpath = joinPath(directory, path_name + ".txt");
+        if (!writeFile(fullpath, serialized)) {
+          System.err.println(fullpath + " could not be written!!!!1");
+          System.exit(1);
+        } else {
+          System.out.println("Wrote " + fullpath);
+        }
+      }
+    
+    {
+        config.dt = .01;
+        config.max_acc = 80.0;
+        config.max_jerk = 60.0;
+        config.max_vel = 10.0;
+        
+        final String path_name = "Balls_Red_Far";
+        
+        WaypointSequence p = new WaypointSequence(10);
+        p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+        p.addWaypoint(new WaypointSequence.Waypoint(8.75, -9, -1.57));
 
         Path path = PathGenerator.makePath(p, config,
             kWheelbaseWidth, path_name);

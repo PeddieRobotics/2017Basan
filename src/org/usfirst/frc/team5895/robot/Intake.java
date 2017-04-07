@@ -16,14 +16,14 @@ public class Intake {
 	/**
 	 * Lift intake up and stop taking balls
 	 */
-	public void up() {
+	public void close() {
 	   isDown = false;
 	}
 	
 	/**
 	 * Puts the intake down and start taking balls
 	 */
-	public void down() {
+	public void open() {
 	   isDown = true;
 	}
 

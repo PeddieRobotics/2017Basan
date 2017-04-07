@@ -106,6 +106,11 @@ public class Robot extends IterativeRobot {
 				RedGear.run(drivetrain, gear);
 			}
 		}
+		if(routine.contains("straight")) {
+			if(gameplan.contains("balls")) {
+				StraightShoot.run(drivetrain, turret, shooter, table, vision);
+			}
+		}
 		else {
 			DoNothing.run();
 		}
@@ -118,7 +123,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		DriverStation.reportError("" + vision.getDist(), false);
+//		DriverStation.reportError("" + vision.getDist(), false);
+//		DriverStation.reportError("" + turret.getAngle(), false);
 		
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), -Jright.getRawAxis(0));
 		
@@ -132,25 +138,24 @@ public class Robot extends IterativeRobot {
 			gear.closeGear();
 		}
 
-		//Hopper Extendy Thing In or Out
-		if(Jleft.getRisingEdge(3)) {
+		if(Jleft.getRisingEdge(2)) {
 			gear.openFlap();
 		}
-		else if(Jleft.getRisingEdge(4)) {
+		else if(Jleft.getFallingEdge(2)) {
 			gear.closeFlap();
 		}
 		
 		if(Jright.getRisingEdge(3)){
-			intake.down();
+			intake.open();
 		}
 		else if(Jright.getRisingEdge(4)){
-			intake.up();
+			intake.close();
 		}
 		
 		//if we are shooting or not
 		if(Jright.getRisingEdge(1)) {
-//			shooter.setSpeed(table.get(vision.getDist()));
-			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
+			shooter.setSpeed(table.get(vision.getDist()));
+//			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
 			shooting = true;
 		} else if(Jright.getFallingEdge(1)) {
 			shooting = false;
@@ -161,12 +166,6 @@ public class Robot extends IterativeRobot {
 			shooter.shoot();
 		} else {
 			shooter.stopShoot();
-		}
-		
-		if(Jsecond.getRisingEdge(2)) {
-			intake.up();
-		} if(Jsecond.getRisingEdge(2)) {
-			intake.down();
 		}
 
 		if(Jsecond.getRisingEdge(1)) {
@@ -179,6 +178,7 @@ public class Robot extends IterativeRobot {
 		//Climber State
 		if(Jsecond.getRisingEdge(3)){
 			climber.climb();
+			intake.close();
 		}else if (Jsecond.getRisingEdge(4)){
 			climber.standing();
 		}

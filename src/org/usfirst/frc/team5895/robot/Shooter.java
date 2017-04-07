@@ -56,7 +56,8 @@ public class Shooter {
 	 */
 	public void shoot(){
 		conveyorSpeed = 1;
-		tornadoSpeed = SmartDashboard.getNumber("DB/Slider 1", 0);
+//		tornadoSpeed = SmartDashboard.getNumber("DB/Slider 1", 0);
+		tornadoSpeed = 1;
 	}
 	
 	/**
