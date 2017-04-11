@@ -18,21 +18,14 @@ public class BlueAutoFar {
 		turret.turnTo(-80);
 		intake.open();
 		drivetrain.auto_blue_farDrive();
-		shooter.setSpeed(3240);
+		shooter.setSpeed(3415);
 		Waiter.waitFor(drivetrain::isFinished, 4000);
 		drivetrain.arcadeDrive(0, 0);
-		vision.update();
-		turret.turnTo(turret.getAngle()+vision.getX());
 		Waiter.waitFor(200);
-		vision.update();
-		turret.turnTo(turret.getAngle()+vision.getX());
+		turret.turnTo(turret.getAngle()+vision.getX()-1);
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();
-			Waiter.waitFor(5000);
-			intake.close();
-			Waiter.waitFor(500);
-			intake.open();
 		}
 	}
 	

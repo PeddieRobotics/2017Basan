@@ -110,7 +110,7 @@ public class Turret {
 		turret_motor.set(output);
 		
 //		DriverStation.reportError("" + PID.getSetpoint() + " , " + getAngle(), false);
-		DriverStation.reportError("" + turret_encoder.getDistance(), false);
+//		DriverStation.reportError("" + turret_encoder.getDistance(), false);
 //		DriverStation.reportError("" + output, false);
 	}
 }

@@ -18,11 +18,17 @@ public class BlueAutoClose {
 		turret.turnTo(-80);
 		intake.open();
 		drivetrain.auto_blue_closeDrive();
-		shooter.setSpeed(2985);
-		Waiter.waitFor(4000);
+//		drivetrain.driveStraight(9.0);
+		shooter.setSpeed(2950);
+//		Waiter.waitFor(drivetrain::atDistance, 4500);
+//		drivetrain.turnTo(-90);
+//		Waiter.waitFor(drivetrain::atAngle, 3000);
+//		drivetrain.driveStraight(7.6);
+//		Waiter.waitFor(drivetrain::atDistance, 1500);
+		Waiter.waitFor(drivetrain::isFinished, 4000);
 		drivetrain.arcadeDrive(0, 0);
 		Waiter.waitFor(200);
-		turret.turnTo(turret.getAngle()+vision.getX());
+		turret.turnTo(turret.getAngle()+vision.getX() + 2);
 //		shooter.setSpeed(table.get(vision.getDist()));
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {

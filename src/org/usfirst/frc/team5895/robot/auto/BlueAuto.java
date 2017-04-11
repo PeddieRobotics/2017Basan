@@ -15,7 +15,6 @@ public class BlueAuto {
 
 	public static void run(DriveTrain drivetrain, Shooter shooter, Turret turret, LookupTable table, Vision vision, Intake intake) {
 		
-		
 		turret.turnTo(-80);
 		intake.open();
 		drivetrain.auto_blueDrive();
@@ -23,7 +22,8 @@ public class BlueAuto {
 		Waiter.waitFor(drivetrain::isFinished, 4000);
 		drivetrain.arcadeDrive(0, 0);
 		Waiter.waitFor(200);
-		turret.turnTo(turret.getAngle()+vision.getX());
+		turret.turnTo(turret.getAngle()+vision.getX() + 2);
+		Waiter.waitFor(200);
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();

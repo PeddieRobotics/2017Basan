@@ -18,7 +18,7 @@ public class RedAuto {
 		turret.turnTo(80);
 		intake.open();
 		drivetrain.auto_redDrive();
-		shooter.setSpeed(3175);
+		shooter.setSpeed(3185);
 		Waiter.waitFor(drivetrain::isFinished, 4000);
 //		DriverStation.reportError("" + drivetrain.isFinished(), false);
 		drivetrain.arcadeDrive(0, 0);

@@ -13,7 +13,7 @@ public class DriveTrain {
 	private Talon Mright;
 	double Lspeed, Rspeed;
 	private String place;
-	private enum Mode_Type {TELEOP, AUTO_SPLINE};
+	private enum Mode_Type {TELEOP, AUTO_SPLINE, AUTO_DRIVE, AUTO_TURN};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
@@ -30,7 +30,7 @@ public class DriveTrain {
 	private static final double TURN_KP = 0.004;
 	private static final double TURN_KI = 0.00005;
 	
-	private static final double DRIVE_KP = 0.04;
+	private static final double DRIVE_KP = 0.08;
 	private static final double DRIVE_KI = 0.0000001;
 	
 	private PID turnPID;
@@ -55,15 +55,15 @@ public class DriveTrain {
 			c_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue.txt", 0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_red_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Far.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_blue_far = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Far.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.020);
 			c_red_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_straight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Straight.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
 		
-		turnPID = new PID(TURN_KP, TURN_KI, 0, 1);
-		drivePID = new PID(DRIVE_KP, DRIVE_KI, 0, 1);
+		turnPID = new PID(TURN_KP, TURN_KI, 0, 6);
+		drivePID = new PID(DRIVE_KP, DRIVE_KI, 0, 6);
 	}
 
 	/**
@@ -183,14 +183,22 @@ public class DriveTrain {
 	
 	public void turnTo(double angle) {
 		turnPID.set(angle);
-		Lspeed = Rspeed = turnPID.getOutput(NavX.getAngle());
+		mode = Mode_Type.AUTO_TURN;
 	}
 	
 	public void driveStraight(double distance) {
+		resetEncodersAndNavX();
 		drivePID.set(distance);
-		Lspeed = -drivePID.getOutput(getDistance());
-		Rspeed = drivePID.getOutput(getDistance());
-		mode = Mode_Type.TELEOP;
+		mode = Mode_Type.AUTO_DRIVE;
+		DriverStation.reportError("" + getDistance(), false);
+	}
+	
+	public boolean atAngle() {
+		return (Math.abs(turnPID.getSetpoint() - getDistance()) <= 2);
+	}
+	
+	public boolean atDistance() {
+		return (Math.abs(drivePID.getSetpoint() - getDistance()) <= 2);
 	}
 	
 	public boolean isFinished() {
@@ -219,6 +227,19 @@ public class DriveTrain {
 			Mright.set(m[1]);
 			break;
 		
+		case AUTO_TURN:
+			Lspeed = -turnPID.getOutput(NavX.getAngle());
+			Rspeed = -turnPID.getOutput(NavX.getAngle());
+			Mleft.set(Lspeed);
+			Mright.set(Rspeed);	
+		break;
+			
+		case AUTO_DRIVE:
+			Lspeed = -drivePID.getOutput(getDistance());
+			Rspeed = drivePID.getOutput(getDistance());
+			Mleft.set(Lspeed);
+			Mright.set(Rspeed);
+		break;
 		
 		case TELEOP:
 			

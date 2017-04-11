@@ -13,14 +13,12 @@ public class StraightShoot {
 	
 	public static void run(DriveTrain drivetrain, Turret turret, Shooter shooter, LookupTable table, Vision vision) {
 		
-		drivetrain.auto_straightDrive();
-		shooter.setSpeed(3125);
-		Waiter.waitFor(drivetrain::isFinished, 4000);
-		drivetrain.arcadeDrive(0, 0);
-		turret.turnTo(turret.getAngle()+vision.getX()-2);
+		drivetrain.driveStraight(-8.0);
+		shooter.setSpeed(3150);
+		Waiter.waitFor(3000);
+		drivetrain.setLeftRightPower(0, 0);
 		Waiter.waitFor(200);
-		vision.update();
-		turret.turnTo(turret.getAngle()+vision.getX()-2);
+		turret.turnTo(turret.getAngle()+vision.getX());
 		Waiter.waitFor(shooter::atSpeed, 2000);
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();

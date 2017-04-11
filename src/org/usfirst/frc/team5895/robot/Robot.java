@@ -114,12 +114,6 @@ public class Robot extends IterativeRobot {
 		else {
 			DoNothing.run();
 		}
-		if(routine.contains("straight")) {
-			StraightShoot.run(drivetrain, turret, shooter, table, vision);
-		}
-		else {
-			DoNothing.run();
-		}
 	}
 
 	public void teleopPeriodic() {
@@ -140,9 +134,12 @@ public class Robot extends IterativeRobot {
 
 		if(Jleft.getRisingEdge(2)) {
 			gear.openFlap();
+			autoAim = false;
+			turret.turnTo(0);
 		}
 		else if(Jleft.getFallingEdge(2)) {
 			gear.closeFlap();
+			autoAim = true;
 		}
 		
 		if(Jright.getRisingEdge(3)){
