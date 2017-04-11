@@ -13,7 +13,7 @@ public class DriveTrain {
 	private Talon Mright;
 	double Lspeed, Rspeed;
 	private String place;
-	private enum Mode_Type {TELEOP, AUTO_SPLINE, AUTO_DRIVE, AUTO_TURN};
+	private enum Mode_Type {TELEOP, AUTO_SPLINE, AUTO_BACKWARDS_SPLINE, AUTO_DRIVE, AUTO_TURN};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
 	private NavX NavX;
@@ -26,6 +26,9 @@ public class DriveTrain {
 	private TrajectoryDriveController c_red_close;
 	private TrajectoryDriveController c_straight;
 	private TrajectoryDriveController c_in_use;
+	private TrajectoryDriveController c_center_gear;
+	private TrajectoryDriveController c_red_gear;
+	private TrajectoryDriveController c_blue_gear;
 
 	private static final double TURN_KP = 0.004;
 	private static final double TURN_KI = 0.00005;
@@ -58,6 +61,9 @@ public class DriveTrain {
 			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.020);
 			c_red_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_straight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Straight.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_center_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Center.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_blue_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Blue.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
 		}
@@ -157,6 +163,27 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	public void auto_center_gearDrive() {
+		resetEncodersAndNavX();
+		c_center_gear.reset();
+		c_in_use = c_center_gear;
+		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
+	}
+	
+	public void auto_red_gearDrive() {
+		resetEncodersAndNavX();
+		c_red_gear.reset();
+		c_in_use = c_red_gear;
+		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
+	}
+	
+	public void auto_blue_gearDrive() {
+		resetEncodersAndNavX();
+		c_blue_gear.reset();
+		c_in_use = c_blue_gear;
+		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
+	}
+	
 	/**
 	 * Two-controller driving
 	 * 
@@ -226,7 +253,17 @@ public class DriveTrain {
 			Mleft.set(-m[0]);
 			Mright.set(m[1]);
 			break;
-		
+		case AUTO_BACKWARDS_SPLINE:
+			
+			double[] m_back = new double[2];
+
+			m_back = c_in_use.getOutput(-Eleft.getDistance(), -Eright.getDistance(), getAngle()*3.14/180);
+
+			Mleft.set(m_back[0]);
+			Mright.set(-m_back[1]);
+			
+			break;
+			
 		case AUTO_TURN:
 			Lspeed = -turnPID.getOutput(NavX.getAngle());
 			Rspeed = -turnPID.getOutput(NavX.getAngle());
