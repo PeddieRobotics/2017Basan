@@ -85,7 +85,7 @@ public class Robot extends IterativeRobot {
 				}
 			}
 			else if(gameplan.contains("gear")){
-				BlueGear.run(drivetrain, gear);
+				BlueGear.run(drivetrain, gear, turret, shooter, vision);
 			}	
 			else{
 				DoNothing.run();
@@ -103,12 +103,17 @@ public class Robot extends IterativeRobot {
 				}
 			}
 			else if(gameplan.contains("gear")){
-				RedGear.run(drivetrain, gear);
+				RedGear.run(drivetrain, gear, turret, shooter, vision);
 			}
 		}
 		if(routine.contains("straight")) {
 			if(gameplan.contains("balls")) {
 				StraightShoot.run(drivetrain, turret, shooter, table, vision);
+			}
+		}
+		if(routine.contains("center")) {
+			if(gameplan.contains("gear")) {
+				CenterGear.run(drivetrain, gear, turret, shooter, vision);
 			}
 		}
 		else {
