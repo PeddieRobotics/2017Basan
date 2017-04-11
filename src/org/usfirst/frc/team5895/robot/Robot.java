@@ -106,12 +106,12 @@ public class Robot extends IterativeRobot {
 				RedGear.run(drivetrain, gear, turret, shooter, vision);
 			}
 		}
-		if(routine.contains("straight")) {
+		else if(routine.contains("straight")) {
 			if(gameplan.contains("balls")) {
 				StraightShoot.run(drivetrain, turret, shooter, table, vision);
 			}
 		}
-		if(routine.contains("center")) {
+		else if(routine.contains("center")) {
 			if(gameplan.contains("gear")) {
 				CenterGear.run(drivetrain, gear, turret, shooter, vision);
 			}
