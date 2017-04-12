@@ -14,7 +14,7 @@ public class RedGear {
 		drivetrain.auto_red_gearDrive();
 		Waiter.waitFor(drivetrain::isFinished, 4000);
 		drivetrain.arcadeDrive(0, 0);
-		gear.openGear();
+/*		gear.openGear();
 		shooter.setSpeed(3200);
 		Waiter.waitFor(200);
 		drivetrain.driveStraight(2);
@@ -26,5 +26,5 @@ public class RedGear {
 		if(shooter.getSpeed() > 10) {
 			shooter.shoot();
 		}
-	}
+*/	}
 }
