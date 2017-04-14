@@ -16,8 +16,8 @@ public class CenterGear {
 		drivetrain.arcadeDrive(0, 0);
 		gear.openGear();
 		Waiter.waitFor(200);
-		drivetrain.driveStraight(2);
-		Waiter.waitFor(drivetrain::atDistance, 2000);
+		drivetrain.arcadeDrive(-0.2, 0);
+		Waiter.waitFor(2000);
 		drivetrain.arcadeDrive(0, 0);
 	}
 }
