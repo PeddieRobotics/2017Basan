@@ -56,9 +56,11 @@ public class Robot extends IterativeRobot {
 		loopVision.start();
 		//start loop on first call to teleop
 
-    	double[] RPM = {2950, 2975, 3000, 3025, 3050, 3065, 3115, 3125, 3165, 3185, 3225, 3275, 3300, 3325, 3370};
-    	double[] dist = {7, 7.3, 7.7, 8.1, 8.5, 8.9, 9.3, 9.7, 10.1, 10.5, 10.9, 11.3, 11.7, 12.1,12.5};
-    	try {
+//    	double[] RPM = {2950, 2975, 3000, 3025, 3050, 3065, 3115, 3125, 3165, 3185, 3225, 3275, 3300, 3325, 3370};
+//    	double[] dist = {7, 7.3, 7.7, 8.1, 8.5, 8.9, 9.3, 9.7, 10.1, 10.5, 10.9, 11.3, 11.7, 12.1,12.5};
+		double[] dist = {6.2, 6.5, 6.9, 7.5, 8.5, 9.7};
+		double[] RPM = {2900, 2950, 2950, 3050, 3200, 3675};
+		try {
 			table = new LookupTable(dist, RPM);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,8 +124,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-//		DriverStation.reportError("" + vision.getDist(), false);
+		DriverStation.reportError("" + vision.getDist(), false);
 //		DriverStation.reportError("" + turret.getAngle(), false);
+//		DriverStation.reportError("" + table.get(vision.getDist()), false);
 		
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), -Jright.getRawAxis(0));
 		
