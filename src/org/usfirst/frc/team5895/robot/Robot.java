@@ -132,9 +132,12 @@ public class Robot extends IterativeRobot {
 		//Open or close the gear intake
 		if(Jleft.getRisingEdge(1)){
 			gear.openGear();
+			Waiter.waitFor(200);
+			gear.pushGear();
 		}
 		else if(Jleft.getFallingEdge(1)) {
 			gear.closeGear();
+			gear.pushBack();
 		}
 
 		if(Jleft.getRisingEdge(2)) {
@@ -156,8 +159,8 @@ public class Robot extends IterativeRobot {
 		
 		//if we are shooting or not
 		if(Jright.getRisingEdge(1)) {
-			shooter.setSpeed(table.get(vision.getDist()));
-//			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
+//			shooter.setSpeed(table.get(vision.getDist()));
+			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
 			shooting = true;
 		} else if(Jright.getFallingEdge(1)) {
 			shooting = false;
@@ -215,7 +218,7 @@ public class Robot extends IterativeRobot {
 	public void follow() {
 		vision.update();
 		if(autoAim) { 
-			turret.turnTo(turret.getAngle() + vision.getX());
+			turret.turnTo(turret.getAngle() + vision.getX() + SmartDashboard.getNumber("DB/Slider 2", 0));
 		}
 	}
 }

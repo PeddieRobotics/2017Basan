@@ -149,9 +149,9 @@ public class Main {
         
         WaypointSequence p = new WaypointSequence(10);
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-        p.addWaypoint(new WaypointSequence.Waypoint(7.8, 0, -3.14159/3.0));
-        p.addWaypoint(new WaypointSequence.Waypoint(9.0, -2, -(3.14159/3.0 + 0.175)));
-
+        p.addWaypoint(new WaypointSequence.Waypoint(5.5, 0, -(3.14159*60/180)));
+        p.addWaypoint(new WaypointSequence.Waypoint(6.25, -1.75, -(3.14159*60/180)));
+ 
         Path path = PathGenerator.makePath(p, config,
             kWheelbaseWidth, path_name);
 
@@ -178,8 +178,8 @@ public class Main {
         
         WaypointSequence p = new WaypointSequence(10);
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
-        p.addWaypoint(new WaypointSequence.Waypoint(10.3, 0, -3.14159/6.0));
-        p.addWaypoint(new WaypointSequence.Waypoint(10.8, -2.5, -3.14159/6.0));
+        p.addWaypoint(new WaypointSequence.Waypoint(5.5, 0, (3.14159*60/180)));
+        p.addWaypoint(new WaypointSequence.Waypoint(6.25, 1.75, (3.14159*60/180)));
 
         Path path = PathGenerator.makePath(p, config,
             kWheelbaseWidth, path_name);
@@ -203,11 +203,69 @@ public class Main {
         config.max_jerk = 60.0;
         config.max_vel = 10.0;
         
-        final String path_name = "Gear_Center";
+        final String path_name = "Gear_Center_Drive";
         
         WaypointSequence p = new WaypointSequence(10);
         p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
         p.addWaypoint(new WaypointSequence.Waypoint(7.25, 0, 0));
+
+        Path path = PathGenerator.makePath(p, config,
+            kWheelbaseWidth, path_name);
+
+        // Outputs to the directory supplied as the first argument.
+        TextFileSerializer js = new TextFileSerializer();
+        String serialized = js.serialize(path);
+        //System.out.print(serialized);
+        String fullpath = joinPath(directory, path_name + ".txt");
+        if (!writeFile(fullpath, serialized)) {
+          System.err.println(fullpath + " could not be written!!!!1");
+          System.exit(1);
+        } else {
+          System.out.println("Wrote " + fullpath);
+        }
+      }
+    
+    {
+        config.dt = .01;
+        config.max_acc = 80.0;
+        config.max_jerk = 60.0;
+        config.max_vel = 10.0;
+        
+        final String path_name = "Gear_Center_Red";
+        
+        WaypointSequence p = new WaypointSequence(10);
+        p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+        p.addWaypoint(new WaypointSequence.Waypoint(2, 0, 0));
+        p.addWaypoint(new WaypointSequence.Waypoint(3, -2, -(3.14159/3)));
+
+        Path path = PathGenerator.makePath(p, config,
+            kWheelbaseWidth, path_name);
+
+        // Outputs to the directory supplied as the first argument.
+        TextFileSerializer js = new TextFileSerializer();
+        String serialized = js.serialize(path);
+        //System.out.print(serialized);
+        String fullpath = joinPath(directory, path_name + ".txt");
+        if (!writeFile(fullpath, serialized)) {
+          System.err.println(fullpath + " could not be written!!!!1");
+          System.exit(1);
+        } else {
+          System.out.println("Wrote " + fullpath);
+        }
+      }
+    
+    {
+        config.dt = .01;
+        config.max_acc = 80.0;
+        config.max_jerk = 60.0;
+        config.max_vel = 10.0;
+        
+        final String path_name = "Gear_Center_Blue";
+        
+        WaypointSequence p = new WaypointSequence(10);
+        p.addWaypoint(new WaypointSequence.Waypoint(0, 0, 0));
+        p.addWaypoint(new WaypointSequence.Waypoint(2, 0, 0));
+        p.addWaypoint(new WaypointSequence.Waypoint(3, 2, 3.14159/3));
 
         Path path = PathGenerator.makePath(p, config,
             kWheelbaseWidth, path_name);

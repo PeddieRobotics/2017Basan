@@ -15,8 +15,10 @@ public class CenterGear {
 		Waiter.waitFor(drivetrain::isFinished, 4000);
 		drivetrain.arcadeDrive(0, 0);
 		gear.openGear();
-		Waiter.waitFor(200);
-		drivetrain.arcadeDrive(-0.2, 0);
+		Waiter.waitFor(500);
+		gear.pushGear();
+		Waiter.waitFor(1000);
+		drivetrain.arcadeDrive(0.5, 0.5);
 		Waiter.waitFor(2000);
 		drivetrain.arcadeDrive(0, 0);
 	}

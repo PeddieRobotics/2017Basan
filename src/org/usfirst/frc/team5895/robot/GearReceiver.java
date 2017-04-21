@@ -6,13 +6,15 @@ import edu.wpi.first.wpilibj.Solenoid;
 
 public class GearReceiver {
 
-	private Solenoid flapSolenoid, dropSolenoid;
+	private Solenoid flapSolenoid, dropSolenoid, pushSolenoid;
 	private boolean flapState;
 	private boolean dropState;
+	private boolean pushState;
 
 	public GearReceiver() {
 		flapSolenoid = new Solenoid(ElectricalLayout.GEAR_FLAP_SOLENOID);
 		dropSolenoid = new Solenoid(ElectricalLayout.GEAR_DROP_SOLENOID);
+		pushSolenoid = new Solenoid(ElectricalLayout.SPARE);
 	}
 
 	/**
@@ -36,6 +38,14 @@ public class GearReceiver {
 	public void openGear(){
 		dropState = true;
 	}
+	
+	public void pushGear(){
+		pushState = true;
+	}
+	
+	public void pushBack(){
+		pushState = false;
+	}
 
 	public void toggleHolder() {
 		dropState = !dropState;
@@ -47,6 +57,9 @@ public class GearReceiver {
 		}
 		if(dropSolenoid.get() != dropState) {
 			dropSolenoid.set(dropState);
+		}
+		if(pushSolenoid.get() != pushState){
+			pushSolenoid.set(pushState);
 		}
 	}
 

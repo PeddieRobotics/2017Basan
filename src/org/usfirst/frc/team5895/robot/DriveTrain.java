@@ -26,7 +26,9 @@ public class DriveTrain {
 	private TrajectoryDriveController c_red_close;
 	private TrajectoryDriveController c_straight;
 	private TrajectoryDriveController c_in_use;
-	private TrajectoryDriveController c_center_gear;
+	private TrajectoryDriveController c_center_gear_drive;
+	private TrajectoryDriveController c_center_gear_red;
+	private TrajectoryDriveController c_center_gear_blue;
 	private TrajectoryDriveController c_red_gear;
 	private TrajectoryDriveController c_blue_gear;
 
@@ -61,8 +63,10 @@ public class DriveTrain {
 			c_blue_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Blue_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.020);
 			c_red_close = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Balls_Red_Close.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 			c_straight = new TrajectoryDriveController("/home/lvuser/AutoFiles/Shoot/Straight.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_center_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Center.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
-			c_red_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_center_gear_drive = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Center_Drive.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_center_gear_red = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Center_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_center_gear_blue = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Center_Blue.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
+			c_red_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Red.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.005);
 			c_blue_gear = new TrajectoryDriveController("/home/lvuser/AutoFiles/Gear/Gear_Blue.txt",0.2, 0, 0, 1.0/13.0, 1.0/50.0, -0.010);
 		} catch (Exception e){
 			DriverStation.reportError("Auto files not on robot!", false);
@@ -165,8 +169,22 @@ public class DriveTrain {
 	
 	public void auto_center_gearDrive() {
 		resetEncodersAndNavX();
-		c_center_gear.reset();
-		c_in_use = c_center_gear;
+		c_center_gear_drive.reset();
+		c_in_use = c_center_gear_drive;
+		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
+	}
+	
+	public void auto_center_gear_redDrive() {
+		resetEncodersAndNavX();
+		c_center_gear_red.reset();
+		c_in_use = c_center_gear_red;
+		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
+	}
+	
+	public void auto_center_gear_blueDrive() {
+		resetEncodersAndNavX();
+		c_center_gear_blue.reset();
+		c_in_use = c_center_gear_blue;
 		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
 	}
 	
