@@ -143,9 +143,10 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
-		DriverStation.reportError("" + vision.getDist(), false);
+//		DriverStation.reportError("" + vision.getDist(), false);
 //		DriverStation.reportError("" + turret.getAngle(), false);
-//		DriverStation.reportError("" + table.get(vision.getDist()), false);
+//		DriverStation.reportError("" + redTable.get(vision.getDist()), false);
+//		DriverStation.reportError("" + blueTable.get(vision.getDist()), false);
 		
 //		visionOffset = SmartDashboard.getNumber("DB/Slider 2", 0);
 		visionOffset = 2.35;
@@ -192,6 +193,7 @@ public class Robot extends IterativeRobot {
 				shooting = true;
 			}
 //			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
+			shooting = true;
 		} else if(Jright.getFallingEdge(1)) {
 			shooting = false;
 			shooter.setSpeed(0);
@@ -266,6 +268,7 @@ public class Robot extends IterativeRobot {
 			} else {
 				turret.turnTo(turret.getAngle() + vision.getX() + 1);
 			}
+			turret.turnTo(turret.getAngle() + vision.getX() - 0);
 		}
 	}
 }
