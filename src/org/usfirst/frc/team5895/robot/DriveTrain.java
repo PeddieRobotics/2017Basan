@@ -178,14 +178,14 @@ public class DriveTrain {
 		resetEncodersAndNavX();
 		c_center_gear_red.reset();
 		c_in_use = c_center_gear_red;
-		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
+		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
 	public void auto_center_gear_blueDrive() {
 		resetEncodersAndNavX();
 		c_center_gear_blue.reset();
 		c_in_use = c_center_gear_blue;
-		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
+		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
 	public void auto_red_gearDrive() {

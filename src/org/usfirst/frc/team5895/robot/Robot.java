@@ -21,10 +21,13 @@ public class Robot extends IterativeRobot {
 	Climber climber;
 	Intake intake;
 	Vision vision;
-	LookupTable table;
+//	LookupTable table;
+	LookupTable redTable;
+	LookupTable blueTable;
 	boolean shooting = false;
 	boolean autoAim = false;
 	Recorder recorder;
+	double visionOffset;
 	
 	public void robotInit() {
 
@@ -55,13 +58,19 @@ public class Robot extends IterativeRobot {
 		loopVision.add(this::follow);
 		loopVision.start();
 		//start loop on first call to teleop
-
+		
 //    	double[] RPM = {2950, 2975, 3000, 3025, 3050, 3065, 3115, 3125, 3165, 3185, 3225, 3275, 3300, 3325, 3370};
 //    	double[] dist = {7, 7.3, 7.7, 8.1, 8.5, 8.9, 9.3, 9.7, 10.1, 10.5, 10.9, 11.3, 11.7, 12.1,12.5};
-		double[] dist = {6.2, 6.5, 6.9, 7.5, 8.5, 9.7};
-		double[] RPM = {2900, 2950, 2950, 3050, 3200, 3675};
+//		double[] dist = {6.2, 6.5, 6.9, 7.5, 8.5, 9.7};
+//		double[] RPM = {2900, 2950, 2950, 3050, 3200, 3675};
+		double[] redDist = {0, 6.3, 7, 8, 9, 15};
+		double[] redRPM = {2800, 2950, 2990, 3095, 3230, 3300};
+		double[] blueDist = {0, 6.2, 6.5, 6.9, 7.5, 8.5, 9.7, 15};
+		double[] blueRPM = {2800, 2900, 2950, 2950, 3050, 3200, 3675, 3800};
 		try {
-			table = new LookupTable(dist, RPM);
+//			table = new LookupTable(dist, RPM);
+			redTable = new LookupTable(redDist, redRPM);
+			blueTable = new LookupTable(blueDist, blueRPM);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -79,15 +88,19 @@ public class Robot extends IterativeRobot {
 		if(routine.contains("blue")) {
 			if(gameplan.contains("balls")){
 				if(distance.contains("close")) {
-					BlueAutoClose.run(drivetrain, shooter, turret, table, vision, intake);
+					BlueAutoClose.run(drivetrain, shooter, turret, blueTable, vision, intake);
 				} else if(distance.contains("far")) {
-					BlueAutoFar.run(drivetrain, shooter, turret, table, vision, intake);
+					BlueAutoFar.run(drivetrain, shooter, turret, blueTable, vision, intake);
 				} else {
-					BlueAuto.run(drivetrain, shooter, turret, table, vision, intake);
+					BlueAuto.run(drivetrain, shooter, turret, blueTable, vision, intake);
 				}
 			}
 			else if(gameplan.contains("gear")){
+				if(distance.contains("center")) {
+					BlueCenterGear.run(drivetrain, gear, blueTable, turret, shooter, vision);
+				} else {
 				BlueGear.run(drivetrain, gear, turret, shooter, vision);
+				}	
 			}	
 			else{
 				DoNothing.run();
@@ -97,20 +110,26 @@ public class Robot extends IterativeRobot {
 		if(routine.contains("red")) {
 			if(gameplan.contains("balls")){
 				if(distance.contains("close")){
-					RedAutoClose.run(drivetrain, shooter, turret, table, vision, intake);
+					RedAutoClose.run(drivetrain, shooter, turret, redTable, vision, intake);
 				} else if(distance.contains("far")) {
-					RedAutoFar.run(drivetrain, shooter, turret, table, vision, intake);
+					RedAutoFar.run(drivetrain, shooter, turret, redTable, vision, intake);
 				} else{
-					RedAuto.run(drivetrain, shooter, turret, table, vision, intake);
+					RedAuto.run(drivetrain, shooter, turret, redTable, vision, intake);
 				}
 			}
 			else if(gameplan.contains("gear")){
+				if(distance.contains("center")) {
+					RedCenterGear.run(drivetrain, gear, redTable, turret, shooter, vision);
+				}
+				else {
 				RedGear.run(drivetrain, gear, turret, shooter, vision);
 			}
+			}
 		}
+		
 		else if(routine.contains("straight")) {
 			if(gameplan.contains("balls")) {
-				StraightShoot.run(drivetrain, turret, shooter, table, vision);
+				StraightShoot.run(drivetrain, turret, shooter, redTable, vision);
 			}
 		}
 		else if(routine.contains("center")) {
@@ -127,6 +146,9 @@ public class Robot extends IterativeRobot {
 		DriverStation.reportError("" + vision.getDist(), false);
 //		DriverStation.reportError("" + turret.getAngle(), false);
 //		DriverStation.reportError("" + table.get(vision.getDist()), false);
+		
+//		visionOffset = SmartDashboard.getNumber("DB/Slider 2", 0);
+		visionOffset = 2.35;
 		
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), -Jright.getRawAxis(0));
 		
@@ -162,12 +184,30 @@ public class Robot extends IterativeRobot {
 		
 		//if we are shooting or not
 		if(Jright.getRisingEdge(1)) {
-//			shooter.setSpeed(table.get(vision.getDist()));
-			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
-			shooting = true;
+			if(turret.getAngle() < 0) {
+				shooter.setSpeed(blueTable.get(vision.getDist() - visionOffset));
+				shooting = true;
+			} else {
+				shooter.setSpeed(redTable.get(vision.getDist() - visionOffset));
+				shooting = true;
+			}
+//			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
 		} else if(Jright.getFallingEdge(1)) {
 			shooting = false;
 			shooter.setSpeed(0);
+		}
+		
+		else if(Jright.getRisingEdge(2)) {
+			if(SmartDashboard.getString("DB/String 0", "nothing").contains("red")) {
+				shooter.setSpeed(3160);
+				shooting = true;
+			} else if(SmartDashboard.getString("DB/String 0", "nothing").contains("blue")) {
+				shooter.setSpeed(2965);
+				shooting = true;
+			}
+		} else if(Jright.getFallingEdge(2)) {
+			shooter.setSpeed(0);
+			shooting = false;
 		}
 		
 		if(shooting && shooter.atSpeed()) {
@@ -221,7 +261,11 @@ public class Robot extends IterativeRobot {
 	public void follow() {
 		vision.update();
 		if(autoAim) { 
-			turret.turnTo(turret.getAngle() + vision.getX() + SmartDashboard.getNumber("DB/Slider 2", 0));
+			if(SmartDashboard.getString("DB/String 0", "nothing").contains("red")) {
+			turret.turnTo(turret.getAngle() + vision.getX() - 1);
+			} else {
+				turret.turnTo(turret.getAngle() + vision.getX() + 1);
+			}
 		}
 	}
 }
