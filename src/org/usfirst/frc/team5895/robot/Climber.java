@@ -7,9 +7,8 @@ public class Climber {
 
 	PowerDistributionPanel pdp;
 	private Talon climbMotor;
-	private enum Mode_Type {WAITING, CLIMBING, NOTHING, STANDING};
+	private enum Mode_Type {CLIMBING, NOTHING, STANDING};
 	private Mode_Type mode = Mode_Type.NOTHING;
-	private double climbTimeStamp = Double.MIN_VALUE;
 
 	public Climber() {
 		climbMotor = new Talon(ElectricalLayout.CLIMBER_MOTOR);
@@ -20,8 +19,7 @@ public class Climber {
 	 * Start climbing
 	 */
 	public void climb() {
-		climbTimeStamp = Timer.getFPGATimestamp();
-		mode = Mode_Type.WAITING;
+		mode = Mode_Type.CLIMBING;
 	}
 	
 	/**
@@ -48,18 +46,11 @@ public class Climber {
 	
 	/**
 	 * Switches between different climb states
-	 * Waiting, Climbing, Nothing, Standing 
+	 * Climbing, Nothing, Standing 
 	 */
 	public void update() {
 		double current = pdp.getCurrent(ElectricalLayout.CLIMBER_PDB_PORT);
 		switch(mode) {
-		case WAITING:
-			if (Timer.getFPGATimestamp() - climbTimeStamp < 1) {
-				climbMotor.set(1);
-			}
-			else mode = Mode_Type.CLIMBING;
-			break;
-
 		case CLIMBING:
 			climbMotor.set(1);
 			if (current > 80) {

@@ -18,38 +18,46 @@ public class GearReceiver {
 	}
 
 	/**
-	 * Closes the gear receiver
+	 * Closes the gear flap
 	 */
 	public void closeFlap() {
 		flapState=false; 
 	}
 
 	/**
-	 * Opens the gear receiver
+	 * Opens the gear flap
 	 */
 	public void openFlap() {
 		flapState=true;
 	}
 	
+	/**
+	 * Closes the gear drop
+	 */
 	public void closeGear(){
 		dropState = false;
 	}
 	
+	/**
+	 * opens the gear drop
+	 */
 	public void openGear(){
 		dropState = true;
 	}
 	
+	/**
+	 * pushes gear forward
+	 */
 	public void pushGear(){
 		pushState = true;
 	}
 	
+	/**
+	 * puts back the gear push
+	 */
 	public void pushBack(){
 		pushState = false;
-	}
-
-	public void toggleHolder() {
-		dropState = !dropState;
-	}
+ 	}
 	
 	public void update() {
 		if(flapSolenoid.get() != flapState){

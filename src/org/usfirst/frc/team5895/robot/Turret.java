@@ -17,8 +17,6 @@ public class Turret {
 	private Talon turret_motor; //left is positive
 	private PID PID;
 	private Encoder turret_encoder;
-	private DigitalInput limitSwitchLeft;
-	private DigitalInput limitSwitchRight;
 	double output;
 	
 	/**
@@ -33,9 +31,6 @@ public class Turret {
 
 	turret_encoder = new Encoder(ElectricalLayout.TURRET_ENCODER, ElectricalLayout.TURRET_ENCODER2,  true, Encoder.EncodingType.k4X);
 	turret_encoder.setDistancePerPulse(1.0/13);
-	
-	limitSwitchLeft = new DigitalInput(ElectricalLayout.LIMIT_SWITCHLEFT);
-	limitSwitchRight = new DigitalInput(ElectricalLayout.LIMIT_SWITCHRIGHT);
 
 	}
 
@@ -91,26 +86,7 @@ public class Turret {
 		if (output < -0.25) {
 			output = -0.25;
 		}
-
-/*		
-		if(!limitSwitchLeft.get() && output < 0) {
-			output = 0;
-		}
-		if(!limitSwitchRight.get() && output > 0) {
-			output = 0;
-		}	
 		
-		if((turret_encoder.getDistance() < - 90) && output < 0) {
-			output = 0;
-		}
-		if((turret_encoder.getDistance() > 90) && output > 0) {
-			output = 0;
-		}	
-*/		
 		turret_motor.set(output);
-		
-//		DriverStation.reportError("" + PID.getSetpoint() + " , " + getAngle(), false);
-//		DriverStation.reportError("" + turret_encoder.getDistance(), false);
-//		DriverStation.reportError("" + output, false);
 	}
 }

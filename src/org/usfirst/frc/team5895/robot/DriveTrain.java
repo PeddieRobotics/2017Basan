@@ -12,7 +12,6 @@ public class DriveTrain {
 	private Talon Mleft;
 	private Talon Mright;
 	double Lspeed, Rspeed;
-	private String place;
 	private enum Mode_Type {TELEOP, AUTO_SPLINE, AUTO_BACKWARDS_SPLINE, AUTO_DRIVE, AUTO_TURN};
 	private Mode_Type mode = Mode_Type.TELEOP;
 	private Encoder Eleft, Eright;
@@ -113,7 +112,7 @@ public class DriveTrain {
 	}
 	
 	/**
-	 * Follows a path autonomously (red alliance)
+	 * Red far hopper, hits touchpad
 	 */
 	public void auto_redDrive() {
 		resetEncodersAndNavX();
@@ -123,7 +122,7 @@ public class DriveTrain {
 	}
 	
 	/**
-	 * Follows a path autonomously (blue alliance)
+	 * Blue far hopper, hits touchpad
 	 */
 	public void auto_blueDrive() {
 		resetEncodersAndNavX();
@@ -132,6 +131,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	/**
+	 * blue close hopper
+	 */
 	public void auto_blue_closeDrive() {
 		resetEncodersAndNavX();
 		c_blue_close.reset();
@@ -139,6 +141,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	/**
+	 * red close hopper
+	 */
 	public void auto_red_closeDrive(){
 		resetEncodersAndNavX();
 		c_red_close.reset();
@@ -146,6 +151,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	/**
+	 * red far hopper, doesn't hit touchpad
+	 */
 	public void auto_red_farDrive() {
 		resetEncodersAndNavX();
 		c_red_far.reset();
@@ -153,6 +161,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	/**
+	 * blue far hopper, doesn't hit touchpad
+	 */
 	public void auto_blue_farDrive() {
 		resetEncodersAndNavX();
 		c_blue_far.reset();
@@ -160,6 +171,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	/**
+	 * cross baseline
+	 */
 	public void auto_straightDrive() {
 		resetEncodersAndNavX();
 		c_straight.reset();
@@ -167,6 +181,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	/**
+	 * drives to center gear
+	 */
 	public void auto_center_gearDrive() {
 		resetEncodersAndNavX();
 		c_center_gear_drive.reset();
@@ -174,6 +191,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
 	}
 	
+	/**
+	 * goes from center gear shoots 10 (red)
+	 */
 	public void auto_center_gear_redDrive() {
 		resetEncodersAndNavX();
 		c_center_gear_red.reset();
@@ -181,6 +201,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	/**
+	 * goes from center gear shoots 10 (blue)
+	 */
 	public void auto_center_gear_blueDrive() {
 		resetEncodersAndNavX();
 		c_center_gear_blue.reset();
@@ -188,6 +211,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_SPLINE;
 	}
 	
+	/**
+	 * theoretical red side gear
+	 */
 	public void auto_red_gearDrive() {
 		resetEncodersAndNavX();
 		c_red_gear.reset();
@@ -195,6 +221,9 @@ public class DriveTrain {
 		mode = Mode_Type.AUTO_BACKWARDS_SPLINE;
 	}
 	
+	/**
+	 * theoretical blue side gear
+	 */
 	public void auto_blue_gearDrive() {
 		resetEncodersAndNavX();
 		c_blue_gear.reset();
@@ -226,11 +255,19 @@ public class DriveTrain {
 		mode = Mode_Type.TELEOP;
 	}
 	
+	/**
+	 * turns to angle with a PID
+	 * @param angle The angle to turn to
+	 */
 	public void turnTo(double angle) {
 		turnPID.set(angle);
 		mode = Mode_Type.AUTO_TURN;
 	}
 	
+	/**
+	 * drives in a line with PID
+	 * @param distance The distance to drive to
+	 */
 	public void driveStraight(double distance) {
 		resetEncodersAndNavX();
 		drivePID.set(distance);
@@ -238,29 +275,40 @@ public class DriveTrain {
 		DriverStation.reportError("" + getDistance(), false);
 	}
 	
+	/**
+	 * tells whether it's at turnPID set angle
+	 * @return whether it's at angle
+	 */
 	public boolean atAngle() {
 		return (Math.abs(turnPID.getSetpoint() - getDistance()) <= 2);
 	}
 	
+	/**
+	 * tells whether it's at the drivePID set distance
+	 * @return whether it's at distance
+	 */
 	public boolean atDistance() {
 		return (Math.abs(drivePID.getSetpoint() - getDistance()) <= 2);
 	}
 	
+	/**
+	 * tells whether the current spline is finished
+	 * @return whether the spline is done
+	 */
 	public boolean isFinished() {
 		return c_in_use.isFinished();
 	}
 	
 	
 	/**
-	 * Red Auto, Blue Auto
-	 * Red Far Hopper, Blue Far Hopper
-	 * Red Gear, Blue Gear
+	 * All hopper autos plus center gear shooting
+	 * Gear auto drives
+	 * Turn PID
+	 * Distance PID
 	 * Teleop
 	 */
 	public void update()
 	{
-		//DriverStation.reportError("distance = " + getDistance()+"\n", false);
-
 		switch(mode) {
 		case AUTO_SPLINE:
 			

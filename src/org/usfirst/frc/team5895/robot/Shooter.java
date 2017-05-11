@@ -19,7 +19,6 @@ public class Shooter {
 	private Solenoid hopperSolenoid;
 	private double conveyorSpeed;
 	private double tornadoSpeed;
-	private double timestamp;
 	private boolean noSpeed;
 	private boolean hopperState = false;
 	private double lastFlip = 0;
@@ -27,11 +26,6 @@ public class Shooter {
 	PID PID;
 	Counter Counter;
 
-//	double Kp = 5.0;
-//	double Kp = SmartDashboard.getNumber("DB/Slider 3", 0);
-//	double Ki = 0.0;
-//	double Ki = 0.05;
-//	double Kd = 0.00000005;
 	double Kp = 0.55;
 	double Ki = 0.0006;
 	double Kd = 0.00000005;
@@ -57,7 +51,6 @@ public class Shooter {
 	 */
 	public void shoot(){
 		conveyorSpeed = 1;
-//		tornadoSpeed = SmartDashboard.getNumber("DB/Slider 1", 0);
 		tornadoSpeed = 1;
 	}
 	
@@ -112,15 +105,10 @@ public class Shooter {
 	
 	
 	public void update() {
-		DriverStation.reportError("The speed is " + getSpeed(), false);
-//		DriverStation.reportError("the error is " + (getSpeed() - PID.getSetpoint()*60), false);
-//		DriverStation.reportError("" + pdp.getCurrent(11), false);
 		
 		double output = -PID.getOutput(Counter.getRate());
-//		DriverStation.reportError(""+output, false);
 		if(output > 0) {
 			output = 0;
-	//		PID.resetIntegral();
 		}
 		
 		if(output < -0.75) {
@@ -131,9 +119,6 @@ public class Shooter {
 			flywheelMotor.set(0);
 		} else
 			flywheelMotor.set(output);
-//		flywheelMotor.set(0.25);
-		
-//		DriverStation.reportError("" + (Timer.getFPGATimestamp() - lastFlip ),  false);
 		
 		if(conveyorSpeed > 0 && ((Timer.getFPGATimestamp() - lastFlip) > 1.0)) {
 			hopperState = !hopperState;

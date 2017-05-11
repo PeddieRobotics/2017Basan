@@ -12,7 +12,7 @@ public class ElectricalLayout {
 	public static final int CLIMBER_MOTOR = 6;
 
 	//Solenoids
-	public static final int INTAKE_SOLENOID = 1;
+	public static final int EXPAND_SOLENOID = 1;
 	public static final int HOPPER_SOLENOID = 4; //3 on real bot
 	public static final int GEAR_FLAP_SOLENOID = 3;
 	public static final int GEAR_DROP_SOLENOID = 2;

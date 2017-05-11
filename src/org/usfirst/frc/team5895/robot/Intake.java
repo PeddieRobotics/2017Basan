@@ -5,23 +5,23 @@ import edu.wpi.first.wpilibj.Talon;
 
 public class Intake {
 
-    private Solenoid myCylinder;
+    private Solenoid expandSolenoid;
     private boolean isDown;
 
 	public Intake() {
-	    myCylinder = new Solenoid(ElectricalLayout.INTAKE_SOLENOID);
+	    expandSolenoid = new Solenoid(ElectricalLayout.EXPAND_SOLENOID);
 	    isDown = false;
 	}
 	
 	/**
-	 * Lift intake up and stop taking balls
+	 * Retracts hopper
 	 */
 	public void close() {
 	   isDown = false;
 	}
 	
 	/**
-	 * Puts the intake down and start taking balls
+	 * Extends hopper
 	 */
 	public void open() {
 	   isDown = true;
@@ -29,8 +29,8 @@ public class Intake {
 
 	public void update() {
 	   
-	   if (myCylinder.get() != isDown)
-	       myCylinder.set(isDown);
+	   if (expandSolenoid.get() != isDown)
+	       expandSolenoid.set(isDown);
 	}
 
 }

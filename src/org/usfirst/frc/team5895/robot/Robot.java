@@ -21,13 +21,11 @@ public class Robot extends IterativeRobot {
 	Climber climber;
 	Intake intake;
 	Vision vision;
-//	LookupTable table;
 	LookupTable redTable;
 	LookupTable blueTable;
 	boolean shooting = false;
 	boolean autoAim = false;
 	Recorder recorder;
-	double visionOffset;
 	
 	public void robotInit() {
 
@@ -57,18 +55,13 @@ public class Robot extends IterativeRobot {
 		loopVision = new Looper(200);
 		loopVision.add(this::follow);
 		loopVision.start();
-		//start loop on first call to teleop
 		
-//    	double[] RPM = {2950, 2975, 3000, 3025, 3050, 3065, 3115, 3125, 3165, 3185, 3225, 3275, 3300, 3325, 3370};
-//    	double[] dist = {7, 7.3, 7.7, 8.1, 8.5, 8.9, 9.3, 9.7, 10.1, 10.5, 10.9, 11.3, 11.7, 12.1,12.5};
-//		double[] dist = {6.2, 6.5, 6.9, 7.5, 8.5, 9.7};
-//		double[] RPM = {2900, 2950, 2950, 3050, 3200, 3675};
+		//lookup tables
 		double[] redDist = {0, 6.3, 7, 8, 9, 15};
 		double[] redRPM = {2800, 2950, 2990, 3095, 3230, 3300};
 		double[] blueDist = {0, 6.2, 6.5, 6.9, 7.5, 8.5, 9.7, 15};
 		double[] blueRPM = {2800, 2900, 2950, 2950, 3050, 3200, 3675, 3800};
 		try {
-//			table = new LookupTable(dist, RPM);
 			redTable = new LookupTable(redDist, redRPM);
 			blueTable = new LookupTable(blueDist, blueRPM);
 		} catch (Exception e) {
@@ -142,19 +135,12 @@ public class Robot extends IterativeRobot {
 		}
 	}
 
-	public void teleopPeriodic() {
-//		DriverStation.reportError("" + vision.getDist(), false);
-//		DriverStation.reportError("" + turret.getAngle(), false);
-//		DriverStation.reportError("" + redTable.get(vision.getDist()), false);
-//		DriverStation.reportError("" + blueTable.get(vision.getDist()), false);
-		
-//		visionOffset = SmartDashboard.getNumber("DB/Slider 2", 0);
-		visionOffset = 2.35;
-		
+	public void teleopPeriodic() {		
+		//normal teleop drive
 		drivetrain.arcadeDrive(Jleft.getRawAxis(1), -Jright.getRawAxis(0));
 		
-		
 		//From here on this is the joysticks controls of the main driver
+		
 		//Open or close the gear intake
 		if(Jleft.getRisingEdge(1)){
 			gear.openGear();
@@ -165,7 +151,8 @@ public class Robot extends IterativeRobot {
 			gear.closeGear();
 			gear.pushBack();
 		}
-
+		
+		//open and close gear flap, also centers turret
 		if(Jleft.getRisingEdge(2)) {
 			gear.openFlap();
 			autoAim = false;
@@ -176,6 +163,7 @@ public class Robot extends IterativeRobot {
 			autoAim = true;
 		}
 		
+		//expands and retracts hopper
 		if(Jright.getRisingEdge(3)){
 			intake.open();
 		}
@@ -183,22 +171,22 @@ public class Robot extends IterativeRobot {
 			intake.close();
 		}
 		
-		//if we are shooting or not
+		//shooting with lookup tables
 		if(Jright.getRisingEdge(1)) {
 			if(turret.getAngle() < 0) {
-				shooter.setSpeed(blueTable.get(vision.getDist() - visionOffset));
+				shooter.setSpeed(blueTable.get(vision.getDist() - 2.35));
 				shooting = true;
 			} else {
-				shooter.setSpeed(redTable.get(vision.getDist() - visionOffset));
+				shooter.setSpeed(redTable.get(vision.getDist() - 2.35));
 				shooting = true;
 			}
-//			shooter.setSpeed(SmartDashboard.getNumber("DB/Slider 0", 0));
 			shooting = true;
 		} else if(Jright.getFallingEdge(1)) {
 			shooting = false;
 			shooter.setSpeed(0);
 		}
 		
+		//set speed override
 		else if(Jright.getRisingEdge(2)) {
 			if(SmartDashboard.getString("DB/String 0", "nothing").contains("red")) {
 				shooter.setSpeed(3160);
@@ -212,12 +200,14 @@ public class Robot extends IterativeRobot {
 			shooting = false;
 		}
 		
+		//only shoots if at speed
 		if(shooting && shooter.atSpeed()) {
 			shooter.shoot();
 		} else {
 			shooter.stopShoot();
 		}
 
+		//turns turret to center
 		if(Jsecond.getRisingEdge(1)) {
 			autoAim = false;
 			turret.turnTo(0);
@@ -251,7 +241,6 @@ public class Robot extends IterativeRobot {
 	public void disabledInit() {
 		recorder.stopRecording();
 		drivetrain.arcadeDrive(0, 0);
-//		shooter.setSpeed(0);
 		shooter.stopShoot();
 		climber.stopClimbing();
 		turret.turnTo(turret.getAngle());
@@ -260,6 +249,9 @@ public class Robot extends IterativeRobot {
 		shooting = false;
 	}
 	
+	/**
+	 * turret tracking
+	 */
 	public void follow() {
 		vision.update();
 		if(autoAim) { 
@@ -268,7 +260,7 @@ public class Robot extends IterativeRobot {
 			} else {
 				turret.turnTo(turret.getAngle() + vision.getX() + 1);
 			}
-			turret.turnTo(turret.getAngle() + vision.getX() - 0);
+			turret.turnTo(turret.getAngle() + vision.getX());
 		}
 	}
 }
