@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Talon;
 
 public class DriveTrain {
-	private Talon Mleft;
-	private Talon Mright;
-	double Lspeed, Rspeed;
+	private Talon leftMotor;
+	private Talon rightMotor;
+	double leftSpeed, rightSpeed;
 	private enum Mode_Type {TELEOP, AUTO_SPLINE, AUTO_BACKWARDS_SPLINE, AUTO_DRIVE, AUTO_TURN};
 	private Mode_Type mode = Mode_Type.TELEOP;
-	private Encoder Eleft, Eright;
+	private Encoder leftEncoder, rightEncoder;
 	private NavX NavX;
 	
 	private TrajectoryDriveController c_red;
@@ -44,14 +44,14 @@ public class DriveTrain {
 	{
 		NavX=new NavX();
 
-		Mleft = new Talon(ElectricalLayout.DRIVE_LEFTMOTOR);
-		Mright = new Talon(ElectricalLayout.DRIVE_RIGHTMOTOR);
+		leftMotor = new Talon(ElectricalLayout.DRIVE_LEFTMOTOR);
+		rightMotor = new Talon(ElectricalLayout.DRIVE_RIGHTMOTOR);
 
-		Eleft = new Encoder(ElectricalLayout.DRIVE_LEFTENCODER,ElectricalLayout.DRIVE_LEFTENCODER2, true, Encoder.EncodingType.k4X);
-		Eright = new Encoder(ElectricalLayout.DRIVE_RIGHTENCODER,ElectricalLayout.DRIVE_RIGHTENCODER2, false, Encoder.EncodingType.k4X);
+		leftEncoder = new Encoder(ElectricalLayout.DRIVE_LEFTENCODER,ElectricalLayout.DRIVE_LEFTENCODER2, true, Encoder.EncodingType.k4X);
+		rightEncoder = new Encoder(ElectricalLayout.DRIVE_RIGHTENCODER,ElectricalLayout.DRIVE_RIGHTENCODER2, false, Encoder.EncodingType.k4X);
 
-		Eleft.setDistancePerPulse(4/12.0*3.14/360);
-		Eright.setDistancePerPulse(4/12.0*3.14/360);
+		leftEncoder.setDistancePerPulse(4/12.0*3.14/360);
+		rightEncoder.setDistancePerPulse(4/12.0*3.14/360);
 
 		try {
 			//Check back everything. generate the missing splines
@@ -81,7 +81,7 @@ public class DriveTrain {
 	 * @return The distance in feet
 	 */
 	public double getDistance() {
-		return Eleft.getDistance();
+		return leftEncoder.getDistance();
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class DriveTrain {
 	 * @return The speed in feet per second
 	 */
 	public double getSpeed() {
-		return Eleft.getRate();
+		return leftEncoder.getRate();
 	}
 
 	/**
@@ -106,8 +106,8 @@ public class DriveTrain {
 	 * Resets encoders and NavX
 	 */
 	public void resetEncodersAndNavX(){
-		Eleft.reset();
-		Eright.reset();
+		leftEncoder.reset();
+		rightEncoder.reset();
 		NavX.reset();
 	}
 	
@@ -238,8 +238,8 @@ public class DriveTrain {
 	 * @param turn The left/right turning motion
 	 */
 	public void arcadeDrive( double speed, double turn) {
-		Lspeed = speed + turn;
-		Rspeed = -speed + turn;
+		leftSpeed = speed + turn;
+		rightSpeed = -speed + turn;
 		mode = Mode_Type.TELEOP;
 	}
 	
@@ -250,8 +250,8 @@ public class DriveTrain {
 	 * @param r The speed of the right side
 	 */
 	public void setLeftRightPower(double l, double r) {
-		Lspeed = l;
-		Rspeed = r;
+		leftSpeed = l;
+		rightSpeed = r;
 		mode = Mode_Type.TELEOP;
 	}
 	
@@ -299,7 +299,6 @@ public class DriveTrain {
 		return c_in_use.isFinished();
 	}
 	
-	
 	/**
 	 * All hopper autos plus center gear shooting
 	 * Gear auto drives
@@ -314,40 +313,40 @@ public class DriveTrain {
 			
 			double[] m = new double[2];
 
-			m = c_in_use.getOutput(Eleft.getDistance(), Eright.getDistance(), -getAngle()*3.14/180);
+			m = c_in_use.getOutput(leftEncoder.getDistance(), rightEncoder.getDistance(), -getAngle()*3.14/180);
 
-			Mleft.set(-m[0]);
-			Mright.set(m[1]);
+			leftMotor.set(-m[0]);
+			rightMotor.set(m[1]);
 			break;
 		case AUTO_BACKWARDS_SPLINE:
 			
 			double[] m_back = new double[2];
 
-			m_back = c_in_use.getOutput(-Eleft.getDistance(), -Eright.getDistance(), getAngle()*3.14/180);
+			m_back = c_in_use.getOutput(-leftEncoder.getDistance(), -rightEncoder.getDistance(), getAngle()*3.14/180);
 
-			Mleft.set(m_back[0]);
-			Mright.set(-m_back[1]);
+			leftMotor.set(m_back[0]);
+			rightMotor.set(-m_back[1]);
 			
 			break;
 			
 		case AUTO_TURN:
-			Lspeed = -turnPID.getOutput(NavX.getAngle());
-			Rspeed = -turnPID.getOutput(NavX.getAngle());
-			Mleft.set(Lspeed);
-			Mright.set(Rspeed);	
+			leftSpeed = -turnPID.getOutput(NavX.getAngle());
+			rightSpeed = -turnPID.getOutput(NavX.getAngle());
+			leftMotor.set(leftSpeed);
+			rightMotor.set(rightSpeed);	
 		break;
 			
 		case AUTO_DRIVE:
-			Lspeed = -drivePID.getOutput(getDistance());
-			Rspeed = drivePID.getOutput(getDistance());
-			Mleft.set(Lspeed);
-			Mright.set(Rspeed);
+			leftSpeed = -drivePID.getOutput(getDistance());
+			rightSpeed = drivePID.getOutput(getDistance());
+			leftMotor.set(leftSpeed);
+			rightMotor.set(rightSpeed);
 		break;
 		
 		case TELEOP:
 			
-			Mleft.set(Lspeed);
-			Mright.set(Rspeed);
+			leftMotor.set(leftSpeed);
+			rightMotor.set(rightSpeed);
 			break;
 		}
 	}

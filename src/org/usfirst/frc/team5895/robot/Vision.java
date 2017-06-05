@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class Vision {
 	
+	//camera specs
 	private static final int W = 640;
 	private static final int H = 360;
 	private static final double W_FOV = 70.42;
@@ -74,9 +75,11 @@ public class Vision {
 			
 			p.process(mat);
 			
+			//finds contour center point
 			ArrayList<MatOfPoint> mop = p.filterContoursOutput();
 			Imgproc.fillPoly(mat, mop, new Scalar(177, 112, 9));
 			Point c = p.centerPoint();
+			//find angle and distance
 			if (c != null) {
 				Imgproc.circle(mat, c, 4, new Scalar(104, 208, 232), 3);
 				xAngle = ((c.x-(W/2))/W)*W_FOV;
